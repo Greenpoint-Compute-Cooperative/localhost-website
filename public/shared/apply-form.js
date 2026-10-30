@@ -58,7 +58,16 @@ export function wireApplyForm(form, msg, { scrollTo } = {}) {
       body.x = x;
     }
     const btn = form.querySelector("button[type=submit]");
-    btn.disabled = true; msg.textContent = "sending…";
+    btn.disabled = true;
+    // Turnstile runs invisibly and fills cf-turnstile-response when done. A fast applicant can click
+    // before it has: wait for it, and if Cloudflare wants a click (the checkbox appears), say so.
+    const token = () => form.querySelector('[name="cf-turnstile-response"]')?.value || "";
+    if (!token()) {
+      msg.textContent = "checking you're human…";
+      for (const t0 = Date.now(); !token() && Date.now() - t0 < 20000; ) await new Promise((r) => setTimeout(r, 250));
+      if (!token()) { msg.textContent = "Tick the Cloudflare box below, then Apply again."; btn.disabled = false; return; }
+    }
+    msg.textContent = "sending…";
     try {
       const res = await fetch(FORMS_API + "/api/f/localhost-hacker", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...body, ...SOURCE }) });
       const data = await res.json().catch(() => ({}));
@@ -68,8 +77,8 @@ export function wireApplyForm(form, msg, { scrollTo } = {}) {
       form.innerHTML = doneHTML(/^[a-z2-7]{8}$/.test(data.ref || "") ? data.ref : "");
       (scrollTo || form).scrollIntoView({ block: "start", behavior: "smooth" });
     } catch (err) {
-      msg.textContent = err.message || "Something broke. Try again in a moment.";
-      window.turnstile?.reset(form.querySelector(".cf-turnstile"));
+      msg.textContent = /spam check/i.test(err.message) ? "Cloudflare wants a click: tick the box below, then Apply again." : err.message || "Something broke. Try again in a moment.";
+      if (!/spam check/i.test(err.message)) window.turnstile?.reset(form.querySelector(".cf-turnstile"));
       btn.disabled = false;
     }
   });
