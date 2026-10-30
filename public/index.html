@@ -68,6 +68,12 @@
   .b { font: 13px var(--mono); letter-spacing: .06em; text-transform: uppercase; padding: 10px 14px; background: var(--pg); color: var(--fg); border: 1px solid var(--ln); text-decoration: none; cursor: pointer; }
   .b:hover { background: var(--fg); color: var(--pg); }
   .b.pri { background: var(--pri); color: var(--prifg); }
+  .sponsors { margin-top: 26px; padding-top: 16px; border-top: 1px dashed var(--ln); }
+  .sponsors .k { display: block; font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--dim); }
+  .sponsors .logos { --h: 19px; margin-top: 14px; display: flex; flex-wrap: wrap; align-items: center; gap: 14px 22px; }
+  .sponsors a { display: block; line-height: 0; opacity: .82; transition: opacity .15s; }
+  .sponsors a:hover { opacity: 1; }
+  .sponsors img { display: block; height: calc(var(--h) * var(--s)); width: calc(var(--h) * var(--w) * var(--s)); }
   .pre, .post { padding: 12px 26px 0; font-size: 12px; line-height: 1.6; white-space: pre-wrap; color: var(--dim); }
   .post { padding-top: 18px; }
   .list { font-size: 13px; overflow: auto; max-height: min(420px, 52vh); }
@@ -250,6 +256,8 @@
   [data-t="9"] .meta .v { font-family: var(--read); font-weight: 500; font-size: 15px; letter-spacing: 0; text-transform: none; color: var(--hi); white-space: nowrap; padding-right: 22px; }
   /* actions in three tiers: filled, outlined, text */
   [data-t="9"] .ctas { margin-top: 24px; gap: 12px; }
+  [data-t="9"] .sponsors { margin-top: 28px; border-top-color: #2a3038; }
+  [data-t="9"] .sponsors .k { color: var(--lo); }
   [data-t="9"] .b { font-size: 13px; letter-spacing: .1em; padding: 12px 18px; border-color: #3a424c; color: var(--hi); }
   [data-t="9"] .b.pri { border-color: #c8ff00; color: #0b0b0c; }
   [data-t="9"] .b.ghost { border-color: transparent; background: none; color: var(--mid); padding: 12px 6px; }
@@ -275,6 +283,7 @@
     .line1 { font-size: 18px; }
     [data-t="9"] .line1 { font-size: 21px; margin-top: 24px; } [data-t="9"] .line2 { font-size: 15px; } [data-t="9"] .copy { padding: 0 18px; }
     [data-t="9"] .meta { grid-template-columns: auto 1fr; }
+    .sponsors .logos { --h: 18px; gap: 14px 22px; }
     .ctas .sp { flex-basis: 100%; height: 0; }
     .win.pop { left: 10px !important; right: 10px; top: 70px !important; width: auto !important; }
     .switch { top: 40px; }
@@ -343,6 +352,14 @@ const red = (s) => `<span class="rx">${s}</span>`;
 const L2 = V === 8
   ? `Come hack on ${red("open weights")}, ${red("open harnesses")}, ${red("open memory")}, and ${red("open hardware")} to ${red("accelerate the future")}.`
   : "Come hack on open weights, open harnesses, open memory, and open hardware to accelerate the future.";
+// root tier: name and logo on the front page. w = aspect ratio of the file; s = scale so the wordmarks read at one size.
+const SPONSORS = [
+  { id: "variant", name: "Variant", host: "variant.fund", w: 5.5, s: 1 },
+  { id: "darkbloom", name: "Darkbloom", host: "darkbloom.ai", w: 8.1, s: .9 },
+  { id: "tinfoil", name: "Tinfoil", host: "tinfoil.sh", w: 3.9, s: 1.05 },
+  { id: "cognee", name: "cognee", host: "cognee.ai", w: 4.0, s: 1 },
+  { id: "superlinked", name: "Superlinked", host: "superlinked.com", w: 4.3, s: 1.65 },
+];
 const pageHTML = `
   ${TH.pre ? `<div class="pre">${TH.pre()}</div>` : ""}
   ${V === 5 ? '<div class="banner"><canvas class="hero" id="hero"></canvas></div>' : '<canvas class="hero" id="hero"></canvas>'}
@@ -355,6 +372,10 @@ const pageHTML = `
       <a class="b pri" href="apply.html" data-c>Apply to hack</a><a class="b" href="sponsor.html" data-c>Sponsor a track</a>
       <span class="sp"></span>
       <button class="b ghost" data-open="tracks" data-c>Tracks →</button><button class="b ghost" data-open="schedule" data-c>Schedule →</button>
+    </div>
+    <div class="sponsors" data-c>
+      <span class="k">Root sponsors</span>
+      <div class="logos">${SPONSORS.map((s) => `<a href="https://${s.host}" target="_blank" rel="noopener" aria-label="${s.name}" title="${s.name} · ${s.host}"><img src="img/sponsors/${s.id}.svg" alt="${s.name}" style="--w:${s.w};--s:${s.s}"></a>`).join("")}</div>
     </div>
   </div>
   ${TH.post ? `<div class="post">${TH.post()}</div>` : ""}`;
