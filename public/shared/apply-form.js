@@ -38,9 +38,20 @@ export function doneHTML(code) {
 /** Wires a form holding inputs named email, github, x (+ the Turnstile widget). `msg` shows errors. */
 export function wireApplyForm(form, msg, { scrollTo } = {}) {
   if (REF) form.insertAdjacentHTML("beforeend", `<input type="hidden" name="ref" value="${REF}">`);
-  // Site key before Turnstile renders: Cloudflare's always-pass test key on localhost (see forms.js).
+  // Turnstile is rendered explicitly (api.js?render=explicit): the home page builds its form after
+  // api.js may already have scanned the page, so implicit rendering could miss it and no token ever
+  // arrived. Cloudflare's always-pass test key on localhost (see forms.js).
   const ts = form.querySelector(".cf-turnstile");
-  if (ts && !ts.dataset.sitekey) ts.dataset.sitekey = /^(localhost|127\.0\.0\.1)$/.test(location.hostname) ? "1x00000000000000000000AA" : "0x4AAAAAAFLsrU-_juvQUw02";
+  let widget = null;
+  const renderTurnstile = () => {
+    if (!ts || widget !== null || !window.turnstile) return;
+    widget = window.turnstile.render(ts, {
+      sitekey: /^(localhost|127\.0\.0\.1)$/.test(location.hostname) ? "1x00000000000000000000AA" : "0x4AAAAAAFLsrU-_juvQUw02",
+      action: ts.dataset.action, theme: ts.dataset.theme || "dark", size: ts.dataset.size || "flexible", appearance: ts.dataset.appearance || "always",
+    });
+  };
+  renderTurnstile();
+  if (widget === null) { const t = setInterval(() => { renderTurnstile(); if (widget !== null) clearInterval(t); }, 100); setTimeout(() => clearInterval(t), 30000); }
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -78,7 +89,7 @@ export function wireApplyForm(form, msg, { scrollTo } = {}) {
       (scrollTo || form).scrollIntoView({ block: "start", behavior: "smooth" });
     } catch (err) {
       msg.textContent = /spam check/i.test(err.message) ? "Cloudflare wants a click: tick the box below, then Apply again." : err.message || "Something broke. Try again in a moment.";
-      if (!/spam check/i.test(err.message)) window.turnstile?.reset(form.querySelector(".cf-turnstile"));
+      if (!/spam check/i.test(err.message) && widget !== null) window.turnstile?.reset(widget);
       btn.disabled = false;
     }
   });
