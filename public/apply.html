@@ -84,7 +84,7 @@
   .foot { position: relative; z-index: 10; display: flex; gap: 22px; margin: 22px 0 28px; }
   .foot a { text-decoration: none; } .foot a:hover { color: var(--pri); }
   .foot { flex-wrap: wrap; justify-content: center; }
-  .host { display: inline-flex; align-items: center; gap: 7px; } .host canvas { width: 18px; height: 18px; display: block; }
+  .host { display: inline-flex; align-items: center; gap: 7px; } .host a { display: inline-flex; align-items: center; gap: 7px; } .host canvas { width: 18px; height: 18px; display: block; }
   @media (max-width: 640px) {
     .corner.tr, .ch .k { display: none; }
     .win { margin-top: 58px; }
@@ -129,7 +129,7 @@
     <div class="row2"><button class="b pri" type="submit">Apply</button><span class="msg" id="apmsg" role="status"></span></div>
   </form>
 </main>
-<nav class="foot hud"><a href="/">← localhost</a><a href="https://theschool.nyc" target="_blank" rel="noopener">The School, NYC ↗</a><a class="host" href="https://x.com/DistributedMarz" target="_blank" rel="noopener">Hosted by <canvas id="mark" aria-hidden="true"></canvas> dmarz</a></nav>
+<nav class="foot hud"><a href="/">← localhost</a><a href="https://theschool.nyc" target="_blank" rel="noopener">The School, NYC ↗</a><span class="host">Hosted by <a href="https://x.com/DistributedMarz" target="_blank" rel="noopener"><canvas id="mark" aria-hidden="true"></canvas> dmarz</a> &amp; <a href="https://x.com/BrennerSpear" target="_blank" rel="noopener">Brenner</a></span></nav>
 
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 <script type="module">
