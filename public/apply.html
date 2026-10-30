@@ -47,6 +47,10 @@
   .head .when { margin-top: 6px; font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--lo); }
   .apf { padding: 18px 20px 22px; }
   .apf .row2 .b { min-width: 140px; text-align: center; }
+  .b { font: 13px var(--mono); letter-spacing: .1em; text-transform: uppercase; padding: 12px 18px; background: var(--pg); color: var(--hi); border: 1px solid #3a424c; text-decoration: none; cursor: pointer; }
+  .b.pri { background: var(--pri); color: var(--prifg); border-color: var(--pri); }
+  .b:hover { background: var(--pri); color: var(--prifg); }
+  .b:disabled { opacity: .6; cursor: wait; }
   .foot { position: relative; z-index: 10; display: flex; gap: 22px; margin: 22px 0 28px; }
   .foot a { text-decoration: none; } .foot a:hover { color: var(--pri); }
   .foot { flex-wrap: wrap; justify-content: center; }
