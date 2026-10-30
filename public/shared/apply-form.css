@@ -1,0 +1,32 @@
+/* The application form and its "packet delivered" state. Shared by index.html and apply.html.
+   Expects the ciphertext theme tokens: --pg --fg --ln --pri --prifg --hi --mid --lo --read --mono. */
+.apf { display: grid; gap: 12px; font-family: var(--read); font-size: 14px; }
+.apf label { display: grid; gap: 6px; }
+.apf .k { font-family: var(--mono); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--lo); }
+.apf input { font: 14px var(--read); padding: 10px; background: #000; color: var(--fg); border: 1px solid var(--ln); border-radius: 0; width: 100%; }
+.apf input:focus { outline: 1px solid var(--pri); border-color: var(--pri); }
+.apf ::placeholder { color: var(--lo); opacity: 1; }
+.apf .hp { position: absolute; left: -9999px; width: 1px; height: 1px; }
+.apf .row2 { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.apf .msg { font-size: 13px; color: var(--mid); }
+.apf .msg:empty { display: none; }
+.apf .note { font-size: 13px; color: var(--mid); }
+.apf .cf-turnstile:empty { display: none; }
+/* success */
+.apf .done { font: 600 20px/1.35 var(--read); color: var(--pri); }
+.apf .lead { font-size: 16px; line-height: 1.5; color: var(--hi); }
+.apf .tweet { font-size: 13px; line-height: 1.55; padding: 10px; border: 1px dashed var(--ln); color: var(--mid); overflow-wrap: anywhere; white-space: pre-wrap; }
+.accel { display: grid; grid-template-columns: 1fr auto; gap: 8px 12px; align-items: center; font: 11px var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--lo); }
+.accel .lbl { grid-column: 1 / -1; }
+.accel .bar { height: 14px; padding: 2px; border: 1px solid #3a424c; }
+.accel .bar i { position: relative; display: block; height: 100%; width: 0; background: repeating-linear-gradient(90deg, var(--pri) 0 6px, transparent 6px 8px);
+  animation: accel-in 1.4s steps(12, end) forwards, accel-creep 300s linear 1.4s forwards; }
+.accel .bar i::after { content: ""; position: absolute; top: 0; right: -8px; width: 6px; height: 100%; background: var(--pri); animation: accel-blink 1.1s steps(2, jump-none) infinite; }
+.accel .st { color: var(--pri); animation: accel-blink 1.1s steps(2, jump-none) infinite; }
+@keyframes accel-in { to { width: 58%; } }
+@keyframes accel-creep { from { width: 58%; } to { width: 92%; } }
+@keyframes accel-blink { from { opacity: 1; } to { opacity: .25; } }
+@media (prefers-reduced-motion: reduce) {
+  .accel .bar i { animation: none; width: 62%; }
+  .accel .bar i::after, .accel .st { animation: none; }
+}

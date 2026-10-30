@@ -23,6 +23,7 @@
 <link rel="apple-touch-icon" sizes="180x180" href="https://localhostai.nyc/apple-touch-icon.png">
 <meta name="theme-color" content="#0c0e11">
 <link rel="stylesheet" href="shared/base.css">
+<link rel="stylesheet" href="shared/apply-form.css">
 <style>
   @font-face { font-family: "IBM Plex Mono"; src: url("fonts/IBMPlexMono-400.woff2") format("woff2"); font-weight: 400; font-display: swap; }
   @font-face { font-family: "IBM Plex Mono"; src: url("fonts/IBMPlexMono-500.woff2") format("woff2"); font-weight: 500; font-display: swap; }
@@ -255,7 +256,16 @@
   [data-t="9"] .meta .k { font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--lo); }
   [data-t="9"] .meta .v { font-family: var(--read); font-weight: 500; font-size: 15px; letter-spacing: 0; text-transform: none; color: var(--hi); white-space: nowrap; padding-right: 22px; }
   /* actions in three tiers: filled, outlined, text */
-  [data-t="9"] .ctas { margin-top: 24px; gap: 12px; }
+  [data-t="9"] .ctas { margin-top: 18px; gap: 12px; }
+  /* the application, right under the first line: email + GitHub, then X + Apply */
+  [data-t="9"] .apf { margin-top: 22px; grid-template-columns: 1fr 1fr; gap: 12px 14px; }
+  [data-t="9"] .apf .row2 { align-items: end; }
+  [data-t="9"] .apf .row2 .b { flex: none; height: 38px; padding: 0 22px; }
+  [data-t="9"] .apf .hp, [data-t="9"] .apf .cf-turnstile, [data-t="9"] .apf .msg, [data-t="9"] .apf .sent-wide, [data-t="9"] .apf.sent > * { grid-column: 1 / -1; }
+  [data-t="9"] .apf .msg { margin-top: -4px; }
+  [data-t="9"] .sponsors .ask { margin: 14px 0 0; font-family: var(--read); font-size: 13px; color: var(--lo); }
+  [data-t="9"] .sponsors .ask a { display: inline; line-height: inherit; color: var(--mid); text-decoration: underline; text-underline-offset: 3px; }
+  [data-t="9"] .sponsors .ask a:hover { color: #c8ff00; }
   [data-t="9"] .sponsors { margin-top: 28px; border-top-color: #2a3038; }
   [data-t="9"] .sponsors .k { color: var(--lo); }
   [data-t="9"] .b { font-size: 13px; letter-spacing: .1em; padding: 12px 18px; border-color: #3a424c; color: var(--hi); }
@@ -270,6 +280,14 @@
   [data-t="9"] .list, [data-t="9"] .info { font-family: var(--read); }
   [data-t="9"] .info { font-size: 14px; }
   .info a { color: var(--pri); }
+  /* short desktop viewports (laptops): the window is taller than the screen with the form in it, so the page scrolls */
+  @media (min-width: 641px) and (max-height: 940px) {
+    body { overflow-x: hidden; overflow-y: auto; display: flex; flex-direction: column; min-height: 100svh; }
+    #root { order: 1; padding: 64px 16px 0; }
+    #main { position: relative; left: auto !important; top: auto !important; transform: none !important; margin: 0 auto; }
+    .credits { order: 2; position: static; transform: none; align-self: center; margin: 26px 12px 30px; }
+    .reticle { display: none; }
+  }
   @media (max-width: 640px) {
     .corner.tr, .reticle { display: none; }
     /* phones: the page scrolls; the main window sits in the flow below the REC label */
@@ -285,6 +303,8 @@
     [data-t="9"] .meta { grid-template-columns: auto 1fr; }
     .sponsors .logos { --h: 18px; gap: 14px 22px; }
     .ctas .sp { flex-basis: 100%; height: 0; }
+    [data-t="9"] .apf { grid-template-columns: 1fr; }
+    [data-t="9"] .apf .row2 .b { flex: 1 1 100%; }
     .win.pop { left: 10px !important; right: 10px; top: 70px !important; width: auto !important; }
     .switch { top: 40px; }
     [data-t="2"] .menu, [data-t="9"] .ch .k { display: none; }
@@ -299,6 +319,7 @@
 <div class="credits hud"><a href="https://theschool.nyc" target="_blank" rel="noopener">The School, NYC ↗</a><span class="sep">·</span><span class="host">Hosted by <a href="https://x.com/DistributedMarz" target="_blank" rel="noopener"><canvas id="mark" aria-hidden="true"></canvas> dmarz</a> &amp; <a href="https://x.com/BrennerSpear" target="_blank" rel="noopener">Brenner</a></span></div>
 <div id="root"></div>
 
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 <script type="module">
 import { thermal } from "./shared/thermal.js";
 import { mosh } from "./shared/mosh.js";
@@ -306,6 +327,7 @@ import { cube } from "./shared/cube.js";
 cube(document.getElementById("mark"));
 import "./shared/forms.js"; // keeps a ?ref= share code for apply.html
 import "./shared/track.js"; // keeps where the visitor came from (utm tags, ad clicks); ad tags
+import { wireApplyForm } from "./shared/apply-form.js"; // the application under the first line
 
 const N = 10;
 const V = 9;
@@ -366,16 +388,24 @@ const pageHTML = `
   <div class="copy">
     <p class="sub" data-c>New York's Sovereign AI <span style="white-space:nowrap">Hackathon <span class="ny" aria-hidden="true">🗽</span></span></p>
     <p class="line1" data-c>No one should own your AI except for you.</p>
+    <form class="apf" id="apf" autocomplete="on">
+      <label><span class="k" data-c>Email</span><input name="email" type="email" required autocomplete="email" placeholder="you@example.com"></label>
+      <label><span class="k" data-c>GitHub</span><input name="github" required maxlength="300" placeholder="username or github.com/you" autocomplete="off" autocapitalize="off" spellcheck="false"></label>
+      <label><span class="k" data-c>X</span><input name="x" maxlength="300" placeholder="@handle (optional)" autocomplete="off" autocapitalize="off" spellcheck="false"></label>
+      <div class="row2"><button class="b pri" type="submit" data-c>Apply to hack</button></div>
+      <input type="text" name="field_hp" tabindex="-1" autocomplete="off" aria-hidden="true" class="hp">
+      <div class="cf-turnstile" data-action="localhost-hacker" data-theme="dark" data-size="flexible" data-appearance="interaction-only"></div>
+      <span class="msg" id="apmsg" role="status"></span>
+    </form>
     <p class="line2" data-c>${L2}</p>
     <div class="meta"><span class="k">When</span><span class="v" data-c>Sat, Nov 7, 2026</span><span class="k">Who</span><span class="v" data-c>50–100 hackers</span><span class="k">Where</span><span class="v" data-c>Williamsburg, NYC</span></div>
     <div class="ctas">
-      <a class="b pri" href="apply.html" data-c>Apply to hack</a><a class="b" href="sponsor.html" data-c>Sponsor a track</a>
-      <span class="sp"></span>
       <button class="b ghost" data-open="tracks" data-c>Tracks →</button><button class="b ghost" data-open="schedule" data-c>Schedule →</button>
     </div>
     <div class="sponsors" data-c>
       <span class="k">Root sponsors</span>
       <div class="logos">${SPONSORS.map((s) => `<a href="https://${s.host}" target="_blank" rel="noopener" aria-label="${s.name}" title="${s.name} · ${s.host}"><img src="img/sponsors/${s.id}.svg" alt="${s.name}" style="--w:${s.w};--s:${s.s}"></a>`).join("")}</div>
+      <p class="ask">Companies: a track and a prize of your own, <a href="sponsor.html">sponsor LOCALHOST →</a></p>
     </div>
   </div>
   ${TH.post ? `<div class="post">${TH.post()}</div>` : ""}`;
@@ -405,6 +435,7 @@ document.getElementById("root").innerHTML = `
   <div class="info" id="info"><span class="k">Encrypted.</span> Tracks are set with our sponsors and decrypt closer to the day.</div>${TH.foot ? TH.foot(true) : ""}</div>
 <div class="win pop" id="schedule" hidden style="width:min(380px,calc(100vw - 32px))">${TH.chrome("Schedule", true)}
   <div class="txt">${sched}</div>${TH.foot ? TH.foot(true) : ""}</div>`;
+wireApplyForm(document.getElementById("apf"), document.getElementById("apmsg"), { scrollTo: document.getElementById("main") });
 
 const t = thermal(document.getElementById("c"), { block: 5 });
 
