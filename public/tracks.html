@@ -56,7 +56,7 @@ h1 span { color: var(--acid); }
 .g-body { flex: 1; display: grid; gap: 6px; padding: 10px; border: 1px solid rgba(255,255,255,.18); box-shadow: 0 0 0 1px rgba(0,0,0,.6), 0 30px 60px -30px rgba(0,0,0,.9); }
 .g1 .g-body, .g2 .g-body { min-height: 236px; }
 .g1 .g-body { grid-template-columns: 1750fr 1000fr; }
-.g2 .g-body { grid-template-columns: repeat(3, 1fr); grid-template-rows: 1fr 1fr; }
+.g2 .g-body { grid-template-columns: repeat(2, 1fr); grid-template-rows: 1fr 1fr; }
 .g3 .g-body { grid-template-columns: repeat(4, 1fr); min-height: 118px; }
 .g3 .g-head { margin-top: 10px; }
 .p { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; min-width: 0; text-align: center; text-decoration: none; color: #fff; text-shadow: 0 1px 12px rgba(0,0,0,.85), 0 0 2px rgba(0,0,0,.6); transition: transform .2s cubic-bezier(.2,.7,.2,1); }
@@ -103,10 +103,10 @@ h3 { font: 500 16px/1.45 var(--read); letter-spacing: -.01em; }
 .statement .ex { margin-top: 16px; font: 400 14px/1.7 var(--read); letter-spacing: 0; color: var(--mid); }
 
 
-.subs { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--line); }
+.subs { display: grid; grid-template-columns: repeat(2, 1fr); border: 1px solid var(--line); }
 .sub { min-width: 0; padding: 24px 24px 26px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); display: flex; flex-direction: column; }
-.sub:nth-child(3n) { border-right: 0; }
-.sub:nth-last-child(-n+3) { border-bottom: 0; }
+.sub:nth-child(2n) { border-right: 0; }
+.sub:nth-last-child(-n+2) { border-bottom: 0; }
 .sub-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 14px; }
 .sub-top .k { color: var(--acid); }
 .sub-top .amt { font: 400 18px/1 var(--mono); }
@@ -215,8 +215,8 @@ footer a { text-decoration: none; }
         <div class="g g2">
           <a class="g-head" href="#intelligence"><span class="n"><i>02</i>Sovereign Intelligence</span><span class="tot">$3,000</span></a>
           <div class="g-body">
-            <a class="p" data-amt="500" href="#intelligence"><span class="amt">$500</span><span class="lbl">Production-ready</span></a><a class="p" data-amt="500" href="#intelligence"><span class="amt">$500</span><span class="lbl">Distillation</span></a><a class="p" data-amt="500" href="#intelligence"><span class="amt">$500</span><span class="lbl">TEE router</span></a>
-            <a class="p" data-amt="500" href="#intelligence"><span class="amt">$500</span><span class="lbl">Combining traces</span></a><a class="p" data-amt="500" href="#intelligence"><span class="amt">$500</span><span class="lbl">Fine-tune</span></a><a class="p" data-amt="500" href="#intelligence"><span class="amt">$500</span><span class="lbl">Swapped model</span></a>
+            <a class="p" data-amt="750" href="#intelligence"><span class="amt">$750</span><span class="lbl">Production-ready</span></a><a class="p" data-amt="750" href="#intelligence"><span class="amt">$750</span><span class="lbl">Own the model</span></a>
+            <a class="p" data-amt="750" href="#intelligence"><span class="amt">$750</span><span class="lbl">Checkable inference</span></a><a class="p" data-amt="750" href="#intelligence"><span class="amt">$750</span><span class="lbl">Private cooperation</span></a>
           </div>
         </div>
         <div class="g g3">
@@ -253,39 +253,29 @@ footer a { text-decoration: none; }
       <div class="purse"><b>$3,000</b></div>
     </div>
     <div class="statement">
-      <p>Intelligence you own: a model you run yourself, a model running privately where its operator can't read your inputs, or open weights anyone can download. Pick one of the six sub-tracks below. Each pays $500.</p>
+      <p>Intelligence you own: a model you run yourself, a model running privately where its operator can't read your inputs, or open weights anyone can download. Pick one of the four sub-tracks below. Each pays $750.</p>
       <p class="ex">The gap is small enough now. Open-weight models have trailed the best closed models by about four months this year (<a href="https://epoch.ai/data-insights/open-closed-eci-gap">Epoch AI</a>), and private inference can be checked instead of trusted: Tinfoil's Modelwrap puts a hash of the served weights into the enclave's attestation (<a href="https://tinfoil.sh/blog/2026-02-03-proving-model-identity">Tinfoil</a>).</p>
     </div>
     <div class="subs">
       <article class="sub">
-        <div class="sub-top"><span class="k">2.1</span><span class="amt">$500</span></div>
+        <div class="sub-top"><span class="k">2.1</span><span class="amt">$750</span></div>
         <h3>Most production-ready product</h3>
         <p>A product someone outside your team could start using on Monday, built on local, private or open-source AI.</p>
       </article>
       <article class="sub">
-        <div class="sub-top"><span class="k">2.2</span><span class="amt">$500</span></div>
-        <h3>Distillation</h3>
-        <p>Anything that shows real impact through a distillation technique. For example, train a small open model to do one job you hand a frontier model today, from a teacher whose license allows it (<a href="https://github.com/openai/gpt-oss">gpt-oss-120b</a> is Apache 2.0), using <a href="https://github.com/unslothai/unsloth">Unsloth</a> or <a href="https://huggingface.co/docs/trl/distillation_trainer">TRL</a>.</p>
+        <div class="sub-top"><span class="k">2.2</span><span class="amt">$750</span></div>
+        <h3>Own the model</h3>
+        <p>Distill or fine-tune an open-weight model into something it couldn't do before: a job you hand a frontier model today, a voice, a skill, a domain. LoRA on a laptop counts. Distill only from a teacher whose license allows it (<a href="https://github.com/openai/gpt-oss">gpt-oss-120b</a> is Apache 2.0); <a href="https://github.com/unslothai/unsloth">Unsloth</a> and <a href="https://huggingface.co/docs/trl/distillation_trainer">TRL</a> both work.</p>
       </article>
       <article class="sub">
-        <div class="sub-top"><span class="k">2.3</span><span class="amt">$500</span></div>
-        <h3>An inference router in a TEE</h3>
-        <p>Route each request between private providers (Tinfoil, Darkbloom, your own Macs) on price and latency. The router runs in an enclave (<a href="https://github.com/Dstack-TEE/dstack">dstack</a> or a <a href="https://docs.tinfoil.sh/containers/overview">Tinfoil container</a>), so its operator can't read prompts either.</p>
+        <div class="sub-top"><span class="k">2.3</span><span class="amt">$750</span></div>
+        <h3>Private inference you can check</h3>
+        <p>Route requests between private providers (Tinfoil, Darkbloom, your own Macs) from inside an enclave (<a href="https://github.com/Dstack-TEE/dstack">dstack</a> or a <a href="https://docs.tinfoil.sh/containers/overview">Tinfoil container</a>), so the router's operator can't read prompts either. Or catch a host serving a smaller or more heavily quantized model than it claims, from outputs and log-probabilities alone.</p>
       </article>
       <article class="sub">
-        <div class="sub-top"><span class="k">2.4</span><span class="amt">$500</span></div>
-        <h3>Combining traces</h3>
-        <p>Agent traces are the best training data most people have, and the most private. Pool traces from several people into one dataset, eval or fine-tune, without any of them showing raw traces to the others.</p>
-      </article>
-      <article class="sub">
-        <div class="sub-top"><span class="k">2.5</span><span class="amt">$500</span></div>
-        <h3>Coolest fine-tune on open weights</h3>
-        <p>Fine-tune an open-weight model into something it couldn't do before: a voice, a skill, a domain. LoRA on a laptop counts.</p>
-      </article>
-      <article class="sub">
-        <div class="sub-top"><span class="k">2.6</span><span class="amt">$500</span></div>
-        <h3>Catch a swapped model</h3>
-        <p>A host says it serves model X. From outputs and log-probabilities alone, tell whether it's really serving a smaller or more heavily quantized model.</p>
+        <div class="sub-top"><span class="k">2.4</span><span class="amt">$750</span></div>
+        <h3>Private cooperation</h3>
+        <p>Several people's agents, each with its own private context, climb one leaderboard together: a speedrun, a <a href="https://cooperbench.com">CooperBench</a> task, an open puzzle. No one hands over raw context or traces, and the score before and after each contribution shows who added what.</p>
       </article>
     </div>
   </section>
