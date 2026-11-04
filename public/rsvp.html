@@ -159,7 +159,7 @@ function show(answer) {
   ask.hidden = true;
   done.hidden = false;
   done.innerHTML = DONE[answer] + `<p class="chg"><a href="#" id="chg">change my answer</a></p>`;
-  document.getElementById("chg").addEventListener("click", (e) => { e.preventDefault(); done.hidden = true; ask.hidden = false; msg.textContent = ""; });
+  document.getElementById("chg").addEventListener("click", (e) => { e.preventDefault(); done.hidden = true; ask.hidden = false; msg.textContent = ""; buttons.forEach((x) => (x.disabled = false)); try { window.turnstile?.reset(); } catch {} });
 }
 </script>
 </body>
