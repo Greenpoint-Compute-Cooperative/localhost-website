@@ -70,6 +70,18 @@
   .ok .link { display: flex; gap: 8px; }
   .ok .link input { flex: 1; min-width: 0; font: 13px var(--read); padding: 10px; background: #000; color: var(--hi); border: 1px dashed var(--ln); }
   .ok .row { display: flex; gap: 10px; flex-wrap: wrap; }
+  /* demo upload */
+  .up { display: grid; gap: 8px; }
+  .drop { display: flex !important; align-items: center; gap: 10px; padding: 14px 12px; border: 1px dashed #4a525c; cursor: pointer; font-size: 13px; color: var(--mid); }
+  .drop:hover, .drop.has { border-color: var(--pri); color: var(--hi); }
+  .drop input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+  .drop .ic { flex: none; font: 16px var(--mono); color: var(--pri); }
+  .prog { height: 14px; padding: 2px; border: 1px solid #3a424c; }
+  .prog i { display: block; height: 100%; width: 0; background: repeating-linear-gradient(90deg, var(--pri) 0 6px, transparent 6px 8px); transition: width .3s steps(8, end); }
+  .upt { font: 12px var(--mono); letter-spacing: .06em; color: var(--mid); min-height: 1.4em; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+  .upt.okk { color: var(--pri); } .upt.err { color: var(--bad); }
+  .upt button { font: 11px var(--mono); letter-spacing: .1em; text-transform: uppercase; padding: 5px 10px; background: none; color: var(--hi); border: 1px solid #3a424c; cursor: pointer; }
+  .upt button:hover { border-color: var(--pri); color: var(--pri); }
   .foot { position: relative; z-index: 10; display: flex; gap: 22px; margin: 22px 0 28px; flex-wrap: wrap; justify-content: center; }
   .foot a { text-decoration: none; } .foot a:hover { color: var(--pri); }
   @media (max-width: 640px) {
@@ -101,7 +113,14 @@
     </fieldset>
     <label><span class="k">Email <i>the edit link goes here</i></span><input name="email" type="email" required autocomplete="email" placeholder="you@example.com"></label>
     <label><span class="k">Public GitHub repo</span><input name="repo" required maxlength="300" placeholder="github.com/team/project" autocomplete="off" autocapitalize="off" spellcheck="false"></label>
-    <label><span class="k">2-minute demo video <i>add it by 5:00</i></span><input name="video" maxlength="300" placeholder="YouTube, Loom or any public link" autocomplete="off" autocapitalize="off" spellcheck="false"></label>
+    <fieldset><legend class="k">2-minute demo video <i>upload by 4:30, the wifi slows at 5</i></legend>
+      <div class="up" id="upbox">
+        <label class="drop" id="drop"><input type="file" id="file" accept="video/mp4,video/quicktime,video/webm,.mp4,.mov,.webm,.m4v"><span class="ic">↑</span><span id="fileTxt">Choose the video file · mp4, mov or webm, up to 500 MB</span></label>
+        <div class="prog" id="prog" hidden><i id="bar"></i></div>
+        <div class="upt" id="upt" role="status"></div>
+      </div>
+      <input name="video" maxlength="300" placeholder="or paste a YouTube / Loom link" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Demo video link">
+    </fieldset>
     <label><span class="k">One line <span class="n" id="cnt">0/140</span></span><input name="pitch" required maxlength="140" placeholder="What it does, in one line" autocomplete="off"></label>
     <fieldset><legend class="k">Open track <i>pick one</i></legend>
       <div class="opts" id="tracks"></div>
@@ -122,12 +141,15 @@
 import { thermal } from "./shared/thermal.js";
 import { FORMS_API } from "./shared/forms.js";
 import { TRACKS, BOUNTIES, ghUser, repoUrl, videoUrl } from "./shared/projects.js";
+import { checkFile, uploadDemo } from "./shared/demo-upload.js";
 thermal(document.getElementById("c"), { block: 5 });
 const $ = (id) => document.getElementById(id);
 const esc = (x) => String(x).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
 const DEADLINE = Date.parse("2026-11-07T17:00:00-05:00");
 const STORE = "localhost-project-edit";
 const form = $("form"), msg = $("msg"), go = $("go");
+let picked = null, haveFile = 0, uploading = false;
+const mb = (n) => (n >= 1048576 ? Math.round(n / 1048576) + " MB" : Math.max(1, Math.round(n / 1024)) + " KB");
 
 $("tracks").innerHTML = TRACKS.map((t) => `<label class="opt"><input type="radio" name="track" value="${t.value}" required><span class="t">${t.n}</span>${esc(t.name)}</label>`).join("");
 $("bounties").innerHTML = BOUNTIES.map((b) => `<label class="opt"><input type="checkbox" name="bounties" value="${b.value}">${esc(b.name)}</label>`).join("");
@@ -193,6 +215,7 @@ if (key) {
     if (r.ok && j.ok) {
       fill(j.answers);
       editMode(j.answers.team || "your project");
+      if (j.file) { haveFile = j.file.size; upStatus(`✓ File uploaded (${mb(j.file.size)}). Pick another to replace it.`, "okk"); }
       try { localStorage.setItem(STORE, key); } catch {}
       if (!j.open) closed();
     } else {
@@ -277,6 +300,41 @@ form.addEventListener("submit", async (e) => {
   }
 });
 
+// --- demo file ---------------------------------------------------------------------------------
+function upStatus(text, cls = "", retry = false) {
+  const u = $("upt");
+  u.className = "upt " + cls;
+  u.innerHTML = esc(text) + (retry ? ' <button type="button" id="retry">Retry</button>' : "");
+  if (retry) $("retry").onclick = () => startUpload();
+}
+$("file").addEventListener("change", () => {
+  const file = $("file").files[0];
+  if (!file) return;
+  const bad = checkFile(file);
+  if (bad) { picked = null; $("file").value = ""; return upStatus(bad, "err"); }
+  picked = file;
+  $("drop").classList.add("has");
+  $("fileTxt").textContent = `${file.name} · ${mb(file.size)}`;
+  if (key) startUpload();
+  else upStatus("Uploads as soon as you submit.");
+});
+async function startUpload() {
+  if (!picked || !key || uploading) return;
+  uploading = true;
+  $("prog").hidden = false;
+  try {
+    const r = await uploadDemo(key, picked, (f, t) => { $("bar").style.width = Math.round(f * 100) + "%"; upStatus(`Uploading ${Math.round(f * 100)}% · ${t} · keep this tab open`); });
+    haveFile = r.size;
+    upStatus(`✓ Uploaded (${mb(r.size)}). Pick another to replace it.`, "okk");
+    picked = null;
+    $("file").value = "";
+    $("fileTxt").textContent = "Replace the video file";
+  } catch (err) {
+    upStatus(`Upload paused: ${err.message} Your progress is kept.`, "err", true);
+  } finally { uploading = false; }
+}
+window.addEventListener("beforeunload", (e) => { if (uploading) { e.preventDefault(); e.returnValue = ""; } });
+
 function done(body, edited) {
   const link = `https://localhostai.nyc/submit?e=${key}`;
   form.hidden = true;
@@ -284,11 +342,14 @@ function done(body, edited) {
   const ok = $("ok");
   ok.hidden = false;
   ok.innerHTML = `<h2>${edited ? "Saved" : "Submitted"} 🗽</h2>
-    <p>${esc(body.team)} · ${esc(TRACKS.find((t) => t.value === body.track)?.name || "")}${body.video ? "" : " · <span style='color:var(--bad)'>no video yet</span>"}</p>
+    <p>${esc(body.team)} · ${esc(TRACKS.find((t) => t.value === body.track)?.name || "")}${body.video || haveFile || picked ? "" : " · <span style='color:var(--bad)'>no video yet</span>"}</p>
+    <div id="upslot"></div>
     <p>Your edit link, until 5:00 PM. Also sent to ${esc(body.email)}.</p>
     <div class="link"><input id="lnk" readonly value="${esc(link)}" aria-label="Edit link"><button class="b" type="button" id="cp">Copy</button></div>
     <div class="row"><a class="b pri" href="${esc(location.pathname)}?e=${key}">Edit</a><a class="b" href="/tracks">Tracks</a></div>`;
   $("cp").onclick = async () => { try { await navigator.clipboard.writeText(link); $("cp").textContent = "Copied"; } catch { $("lnk").select(); } };
+  // A picked or running upload carries on here (the box moves, its state with it).
+  if (picked || uploading) { $("upslot").append($("upbox")); startUpload(); }
   $("win").scrollIntoView({ block: "start", behavior: "smooth" });
 }
 </script>

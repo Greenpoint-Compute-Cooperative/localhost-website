@@ -40,7 +40,7 @@
   td { line-height: 1.45; } td a { color: var(--hi); } td a:hover { color: var(--acid); }
   td.n { color: var(--acid); white-space: nowrap; } td.team { font-weight: 600; min-width: 12ch; } td.pitch { min-width: 26ch; max-width: 44ch; color: var(--mid); }
   td.mv { white-space: nowrap; } td.mv button { background: none; color: var(--lo); border: 1px solid var(--line); padding: 2px 7px; font-size: 12px; } td.mv button:hover { color: var(--acid); border-color: var(--acid); }
-  .miss { color: var(--bad); white-space: nowrap; } .at { color: var(--lo); white-space: nowrap; }
+  .miss { color: var(--bad); white-space: nowrap; } td.vd { white-space: nowrap; } .at { color: var(--lo); white-space: nowrap; }
   .tag { display: inline-block; font-size: 11px; letter-spacing: .08em; padding: 2px 6px; border: 1px solid var(--line); margin: 0 4px 4px 0; white-space: nowrap; }
   .tag.tr { border-color: var(--acid); color: var(--acid); }
   .empty { color: var(--lo); padding: 16px 0; }
@@ -63,7 +63,7 @@
   #stage .bot { display: flex; justify-content: space-between; gap: 2vw; font: 1.8vh var(--mono); letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.5); }
   #stage .bot .play { color: var(--acid); } #stage .bot .nov { color: var(--bad); }
   #stage .vid { position: absolute; inset: 0; background: #000; display: none; }
-  #stage .vid.on { display: block; } #stage .vid iframe { width: 100%; height: 100%; border: 0; }
+  #stage .vid.on { display: block; } #stage .vid iframe, #stage .vid video { width: 100%; height: 100%; border: 0; background: #000; object-fit: contain; display: block; }
   #stage .vid .esc { position: absolute; top: 12px; right: 16px; font: 11px var(--mono); letter-spacing: .16em; color: rgba(255,255,255,.4); text-transform: uppercase; }
 
   /* score sheets: printed only */
@@ -97,6 +97,7 @@
       <button class="ghost" id="print" type="button">Score sheets</button>
       <button class="ghost" id="refresh" type="button">Refresh</button>
       <button class="ghost" id="csv" type="button">CSV</button>
+      <button class="ghost" id="feed" type="button" title="Presentation order for the demo stitch script (LOCALHOST src/demos)">Feed order</button>
       <button class="ghost" id="reset" type="button">Reset order</button>
     </div>
     <div class="scroll"><table><thead><tr><th>#</th><th></th><th>Team</th><th>Track</th><th>Bounties</th><th>Members</th><th>Repo</th><th>Video</th><th>One line</th><th>Saved</th><th></th></tr></thead><tbody id="rows"></tbody></table></div>
@@ -157,7 +158,8 @@ function projects(rows) {
   });
 }
 
-let token = null, list = [], all = [];
+let token = null, list = [], all = [], files = {};
+const fileOf = (p) => (p.a.demo ? files[p.a.demo] : null);
 const hidden = () => { try { return new Set(JSON.parse(localStorage.getItem(HIDE) || "[]")); } catch { return new Set(); } };
 const setHidden = (h) => { try { localStorage.setItem(HIDE, JSON.stringify([...h])); } catch {} };
 const loadOrder = () => { try { return JSON.parse(localStorage.getItem(ORDER) || "[]"); } catch { return []; } };
@@ -177,8 +179,8 @@ function render() {
   const h = hidden();
   list = all.filter((p) => !h.has(p.id));
   const repos = new Map(); for (const p of list) repos.set(p.a.repo, (repos.get(p.a.repo) || 0) + 1);
-  const noVid = list.filter((p) => !p.a.video).length, noRepo = list.filter((p) => !p.a.repo).length, big = list.filter((p) => p.members.length > 4).length;
-  $("sum").innerHTML = `<b>${list.length}</b> projects` + (noVid ? ` · <span class="x">${noVid} missing video</span>` : "") + (noRepo ? ` · <span class="x">${noRepo} missing repo</span>` : "") + (big ? ` · <span class="x">${big} over 4 members</span>` : "") + (h.size ? ` · <a href="#" id="unhide">${h.size} hidden</a>` : "") + ` · ${TRACKS.slice(0, 5).map((t) => `${t.n}: ${list.filter((p) => p.track === t).length}`).join(" · ")}`;
+  const noVid = list.filter((p) => !p.a.video && !fileOf(p)).length, noFile = list.filter((p) => !fileOf(p)).length, noRepo = list.filter((p) => !p.a.repo).length, big = list.filter((p) => p.members.length > 4).length;
+  $("sum").innerHTML = `<b>${list.length}</b> projects` + (noVid ? ` · <span class="x">${noVid} missing video</span>` : "") + (noFile ? ` · ${list.length - noFile}/${list.length} files uploaded` : ` · all files uploaded`) + (noRepo ? ` · <span class="x">${noRepo} missing repo</span>` : "") + (big ? ` · <span class="x">${big} over 4 members</span>` : "") + (h.size ? ` · <a href="#" id="unhide">${h.size} hidden</a>` : "") + ` · ${TRACKS.slice(0, 5).map((t) => `${t.n}: ${list.filter((p) => p.track === t).length}`).join(" · ")}`;
   $("rows").innerHTML = list.length
     ? list.map((p, i) => `<tr>
       <td class="n"><a href="#" data-go="${i}" title="Present from here">${String(i + 1).padStart(2, "0")}</a></td>
@@ -188,7 +190,7 @@ function render() {
       <td>${p.bounties.map((b) => `<span class="tag">${esc(b)}</span>`).join("")}</td>
       <td>${p.members.map((m) => `<a href="https://github.com/${esc(m)}" target="_blank" rel="noopener noreferrer">${esc(m)}</a>`).join(", ")}${p.members.length > 4 ? ' <span class="miss">over 4</span>' : ""}</td>
       <td>${p.a.repo ? `<a href="${esc(p.a.repo)}" target="_blank" rel="noopener noreferrer">${esc(short(p.a.repo).replace(/^github\.com\//, ""))}</a>` : '<span class="miss">missing</span>'}</td>
-      <td>${p.a.video ? `<a href="${esc(p.a.video)}" target="_blank" rel="noopener noreferrer">${embedUrl(p.a.video) ? "▶ plays" : "↗ opens"}</a>` : '<span class="miss">missing</span>'}</td>
+      <td class="vd">${fileOf(p) ? `<a href="${esc(fileOf(p).url)}" target="_blank" rel="noopener noreferrer" title="Uploaded file">▶ file ${Math.max(1, Math.round(fileOf(p).size / 1048576))} MB</a>` : p.a.video ? `<a href="${esc(p.a.video)}" target="_blank" rel="noopener noreferrer">${embedUrl(p.a.video) ? "▶ link" : "↗ link"}</a> <span class="miss" title="No uploaded file">no file</span>` : '<span class="miss">missing</span>'}</td>
       <td class="pitch">${esc(p.a.pitch)}</td>
       <td class="at" title="${p.saves} save${p.saves > 1 ? "s" : ""}">${when(p.at)}${p.saves > 1 ? ` ·${p.saves}` : ""}</td>
       <td class="mv"><button data-hide="${esc(p.id)}" title="Hide this entry (kept in this browser)" aria-label="Hide">✕</button></td></tr>`).join("")
@@ -214,6 +216,12 @@ async function load() {
   const j = await r.json().catch(() => ({}));
   if (!r.ok || !j.ok) throw new Error(j.error || `HTTP ${r.status}`);
   const d = await openSealed(token.priv, j);
+  // Signed 12 h links to the uploaded demo files (R2, lib/demos.ts in gpcc-forms).
+  try {
+    const sr = await fetch(API + "localhost-project/demo/sign", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ token: token.token }), cache: "no-store" });
+    const sj = await sr.json().catch(() => ({}));
+    files = sr.ok && sj.ok ? sj.files : {};
+  } catch { files = {}; }
   all = arrange(projects(d.rows));
   render();
   $("msg").textContent = `Loaded ${new Date().toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", second: "2-digit" })}. Reload the page to lock.`;
@@ -234,6 +242,12 @@ $("unlock").addEventListener("submit", async (e) => {
 $("refresh").onclick = () => load().catch((err) => { $("msg").className = "msg bad"; $("msg").textContent = `Couldn't refresh (${err.message}).`; });
 $("reset").onclick = () => { try { localStorage.removeItem(ORDER); } catch {} all = arrange(all); render(); };
 $("print").onclick = () => window.print();
+$("feed").onclick = () => {
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([JSON.stringify({ order: list.map((p) => ({ entry: p.id, team: p.a.team })) }, null, 1)], { type: "application/json" }));
+  a.download = "feed-order.json";
+  a.click();
+};
 $("csv").onclick = () => {
   const q = (s) => `"${String(s ?? "").replace(/"/g, '""')}"`;
   const head = ["Order", "Team", "Track", "Bounties", "Members", "Repo", "Video", "One line", "Email", "Last saved", "Saves"];
@@ -270,7 +284,7 @@ function present(i = 0) {
 }
 function card() {
   const p = list[cur], next = list[cur + 1];
-  const em = p.a.video ? embedUrl(p.a.video) : null;
+  const em = fileOf(p) ? "file" : p.a.video ? embedUrl(p.a.video) : null;
   stage.innerHTML = `<div class="top"><span>LOCALHOST · ${String(cur + 1).padStart(2, "0")} / ${String(list.length).padStart(2, "0")}</span><span class="tm">0:00</span></div>
     <div class="mid">
       <div class="trk">${esc(p.track.n === "—" ? "" : "Track " + p.track.n + " · ")}${esc(p.track.name)}</div>
@@ -279,13 +293,21 @@ function card() {
       <div class="who"><span>${p.members.map((m) => "@" + esc(m)).join("  ")}</span>${p.a.repo ? `<span class="rp">${esc(short(p.a.repo))}</span>` : ""}</div>
       ${p.bounties.length ? `<div class="bt">${p.bounties.map((b) => `<span class="tag">${esc(b)}</span>`).join("")}</div>` : ""}
     </div>
-    <div class="bot">${p.a.video ? `<span class="play">V ▶ play demo${em ? "" : " (new tab)"}</span>` : '<span class="nov">no demo video</span>'}<span>${next ? "next: " + esc(next.a.team) : "last one"}</span></div>
+    <div class="bot">${fileOf(p) || p.a.video ? `<span class="play">V ▶ play demo${em ? "" : " (new tab)"}</span>` : '<span class="nov">no demo video</span>'}<span>${next ? "next: " + esc(next.a.team) : "last one"}</span></div>
     <div class="vid" id="vid"></div>`;
   t0 = Date.now();
 }
 function play() {
   const p = list[cur];
-  if (!p?.a.video) return;
+  if (!p) return;
+  const v0 = $("vid"), f = fileOf(p);
+  if (f) {
+    v0.innerHTML = `<video src="${esc(f.url)}" autoplay controls playsinline></video><span class="esc">Esc back</span>`;
+    v0.classList.add("on");
+    v0.querySelector("video").addEventListener("ended", () => stopVideo());
+    return;
+  }
+  if (!p.a.video) return;
   const em = embedUrl(p.a.video);
   if (!em) { window.open(p.a.video, "_blank", "noopener"); return; }
   const v = $("vid");
