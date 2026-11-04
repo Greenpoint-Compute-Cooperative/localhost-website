@@ -206,6 +206,19 @@ $("unlock").addEventListener("submit", async (e) => {
       out.append(render(slug, title, loaded[slug]));
     }
     out.append(referrals(loaded), sources(loaded));
+    // RSVPs (localhost-rsvp): latest answer per invite code. Codes map to people only in the private send folder.
+    try {
+      const r = await fetch(API + "localhost-rsvp/results", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ token: k.token }), cache: "no-store" });
+      const j = await r.json().catch(() => ({}));
+      if (r.ok && j.ok) {
+        const d = await openSealed(k.priv, j), last = new Map();
+        for (const x of [...d.rows].sort((p, q) => p.at - q.at)) last.set(x.answers.code, x.answers.answer);
+        const n = { coming: 0, maybe: 0, cant: 0 }; for (const v of last.values()) if (v in n) n[v]++;
+        const s = render("localhost-rsvp", "RSVPs (every tap)", d);
+        s.querySelector(".hd").insertAdjacentHTML("afterend", `<p class="note">Latest answer per person: coming ${n.coming} · not sure ${n.maybe} · can't ${n.cant}</p>`);
+        out.append(s);
+      }
+    } catch { /* RSVPs are optional; the rest of the page still loads */ }
     $("pp").value = ""; $("unlock").hidden = true;
     msg.textContent = `Unlocked ${new Date().toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })}. Reload to lock.`;
   } catch (err) {
