@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Submit · LOCALHOST</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="https://localhostai.nyc/icon-192.png" sizes="192x192" type="image/png">
+<link rel="icon" href="https://localhostai.nyc/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="https://localhostai.nyc/favicon.svg" type="image/svg+xml">
+<link rel="manifest" href="https://localhostai.nyc/site.webmanifest">
+<link rel="apple-touch-icon" sizes="180x180" href="https://localhostai.nyc/apple-touch-icon.png">
+<meta name="theme-color" content="#0c0e11">
+<link rel="stylesheet" href="shared/base.css">
+<link rel="stylesheet" href="shared/apply-form.css">
+<style>
+  @font-face { font-family: "IBM Plex Mono"; src: url("fonts/IBMPlexMono-400.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+  @font-face { font-family: "IBM Plex Mono"; src: url("fonts/IBMPlexMono-500.woff2") format("woff2"); font-weight: 500; font-display: swap; }
+  @font-face { font-family: "IBM Plex Mono"; src: url("fonts/IBMPlexMono-600.woff2") format("woff2"); font-weight: 600; font-display: swap; }
+  /* same tokens as the home page's window (theme 9, ciphertext) */
+  :root { --pg: #0c0e11; --fg: #e9ecef; --ln: #2a3038; --pri: #c8ff00; --prifg: #0b0b0c; --hi: #f2f4f6; --mid: #a7b0ba; --lo: #6b747e; --bad: #ff6b6b; --read: "IBM Plex Mono", ui-monospace, Menlo, monospace; }
+  html, body { height: auto; }
+  body { min-height: 100svh; display: flex; flex-direction: column; align-items: center; overflow-x: hidden; cursor: crosshair; }
+  .corner { position: absolute; z-index: 5; padding: 18px 20px; line-height: 1.7; pointer-events: none; }
+  .tl { top: 0; left: 0; } .tr { top: 0; right: 0; text-align: right; position: fixed; }
+  .rec { color: #ff3b2f; }
+  .win { position: relative; z-index: 10; margin: 64px 12px 0; width: min(600px, calc(100vw - 24px)); background: var(--pg); color: var(--fg); border: 1px solid var(--pri); box-shadow: 12px 12px 0 rgba(0,0,0,.6); cursor: default; }
+  .ch { display: flex; align-items: center; gap: 10px; padding: 8px 10px; background: #14181d; border-bottom: 1px solid var(--ln); font-size: 12px; }
+  .ch .lk { flex: none; width: 10px; height: 8px; background: var(--pri); position: relative; margin-top: 5px; }
+  .ch .lk::before { content: ""; position: absolute; left: 2px; top: -6px; width: 4px; height: 5px; border: 1px solid var(--pri); border-bottom: 0; }
+  .ch .f { flex: 1; min-width: 0; padding: 5px 9px; border: 1px solid var(--ln); }
+  .ch .k { color: #8b939c; font-size: 11px; white-space: nowrap; }
+  .ch .x { color: #8b939c; text-decoration: none; padding: 0 2px; } .ch .x:hover { color: var(--pri); }
+  .head { padding: 20px 20px 0; }
+  .head h1 { font-weight: normal; font-size: 26px; letter-spacing: .02em; text-transform: uppercase; color: var(--hi); }
+  .head .when { margin-top: 6px; font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--lo); }
+  .head .when b { font-weight: normal; color: var(--pri); }
+  .apf { padding: 18px 20px 22px; }
+  .apf .row2 .b { min-width: 140px; text-align: center; }
+  .b { font: 13px var(--mono); letter-spacing: .1em; text-transform: uppercase; padding: 12px 18px; background: var(--pg); color: var(--hi); border: 1px solid #3a424c; text-decoration: none; cursor: pointer; }
+  .b.pri { background: var(--pri); color: var(--prifg); border-color: var(--pri); }
+  .b:hover { background: var(--pri); color: var(--prifg); }
+  .b:disabled { opacity: .6; cursor: wait; }
+  .apf .k i { font-style: normal; color: #4a525c; text-transform: none; letter-spacing: .04em; }
+  .apf .k .n { float: right; }
+  .mem { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  fieldset { border: 0; display: grid; gap: 6px; min-width: 0; }
+  legend { padding: 0; margin-bottom: 6px; }
+  .opts { display: grid; gap: 6px; }
+  [hidden] { display: none !important; }
+  .apf label.opt { display: flex; }
+  .apf input:disabled, .opt:has(input:disabled), .apf button:disabled { opacity: .45; cursor: default; }
+  .opt { display: flex; gap: 10px; align-items: center; padding: 10px 12px; border: 1px solid var(--ln); cursor: pointer; font-size: 13px; color: var(--mid); }
+  .opt input { appearance: none; -webkit-appearance: none; flex: none; width: 12px; height: 12px; border: 1px solid #4a525c; margin: 0; padding: 0; background: none; }
+  .opt input[type=radio] { border-radius: 50%; }
+  .opt input:checked { background: var(--pri); border-color: var(--pri); }
+  .opt:has(input:checked) { border-color: var(--pri); color: var(--hi); }
+  .opt:hover { border-color: #4a525c; }
+  .opt .t { font-family: var(--mono); font-size: 11px; letter-spacing: .1em; color: var(--lo); min-width: 2.6em; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chips .opt { padding: 8px 12px; }
+  .bad-f input, input.bad-f { border-color: var(--bad) !important; }
+  .msg.err { color: var(--bad) !important; }
+  .mode { font: 11px var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--lo); padding: 12px 20px 0; }
+  .mode a { color: var(--lo); } .mode a:hover { color: var(--pri); }
+  /* success */
+  .ok { padding: 22px 20px 24px; display: grid; gap: 14px; }
+  .ok h2 { font: 600 24px/1.25 var(--read); color: var(--pri); }
+  .ok p { font: 14px/1.6 var(--read); color: var(--mid); }
+  .ok .link { display: flex; gap: 8px; }
+  .ok .link input { flex: 1; min-width: 0; font: 13px var(--read); padding: 10px; background: #000; color: var(--hi); border: 1px dashed var(--ln); }
+  .ok .row { display: flex; gap: 10px; flex-wrap: wrap; }
+  .foot { position: relative; z-index: 10; display: flex; gap: 22px; margin: 22px 0 28px; flex-wrap: wrap; justify-content: center; }
+  .foot a { text-decoration: none; } .foot a:hover { color: var(--pri); }
+  @media (max-width: 640px) {
+    .corner.tr, .ch .k { display: none; }
+    .win { margin-top: 58px; }
+    .head { padding: 18px 16px 0; } .apf { padding: 16px 16px 20px; } .ok { padding: 20px 16px 22px; } .mode { padding: 12px 16px 0; }
+    .apf .row2 .b { flex: 1 1 100%; text-align: center; }
+  }
+  .cf-turnstile { max-width: 100%; overflow: hidden; }
+</style>
+</head>
+<body>
+<canvas class="thermal" id="c"></canvas>
+<div class="corner tl hud"><span class="rec">● REC</span> CAM 07 // NEW YORK</div>
+<div class="corner tr hud" id="clock">—</div>
+<main class="win" id="win">
+  <div class="ch"><span class="lk"></span><span class="f">localhost/submit</span><span class="k">key held on this machine</span><a class="x" href="/tracks" aria-label="Back to tracks">×</a></div>
+  <div class="head"><h1 id="h1">Submit your project</h1><p class="when" id="when">Edits until 5:00 PM · presentations 5:15</p></div>
+  <p class="mode" id="mode" hidden></p>
+  <form class="apf" id="form" novalidate>
+    <label><span class="k">Team name</span><input name="team" required maxlength="60" autocomplete="off"></label>
+    <fieldset><legend class="k">Members <i>GitHub, 1–4</i></legend>
+      <div class="mem">
+        <input name="m1" required maxlength="60" placeholder="username" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Member 1 GitHub">
+        <input name="m2" maxlength="60" placeholder="username" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Member 2 GitHub">
+        <input name="m3" maxlength="60" placeholder="username" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Member 3 GitHub">
+        <input name="m4" maxlength="60" placeholder="username" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Member 4 GitHub">
+      </div>
+    </fieldset>
+    <label><span class="k">Email <i>the edit link goes here</i></span><input name="email" type="email" required autocomplete="email" placeholder="you@example.com"></label>
+    <label><span class="k">Public GitHub repo</span><input name="repo" required maxlength="300" placeholder="github.com/team/project" autocomplete="off" autocapitalize="off" spellcheck="false"></label>
+    <label><span class="k">2-minute demo video <i>add it by 5:00</i></span><input name="video" maxlength="300" placeholder="YouTube, Loom or any public link" autocomplete="off" autocapitalize="off" spellcheck="false"></label>
+    <label><span class="k">One line <span class="n" id="cnt">0/140</span></span><input name="pitch" required maxlength="140" placeholder="What it does, in one line" autocomplete="off"></label>
+    <fieldset><legend class="k">Open track <i>pick one</i></legend>
+      <div class="opts" id="tracks"></div>
+    </fieldset>
+    <fieldset><legend class="k">Sponsor bounties <i>any</i></legend>
+      <div class="chips" id="bounties"></div>
+    </fieldset>
+    <input type="text" name="field_hp" tabindex="-1" autocomplete="off" aria-hidden="true" class="hp">
+    <div class="cf-turnstile" data-action="localhost-project"></div>
+    <div class="row2"><button class="b pri" type="submit" id="go">Submit</button><span class="msg" id="msg" role="status"></span></div>
+  </form>
+  <div class="ok" id="ok" hidden></div>
+</main>
+<nav class="foot hud"><a href="/tracks">← tracks</a><a href="/tracks#bounties">sponsor bounties</a></nav>
+
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
+<script type="module">
+import { thermal } from "./shared/thermal.js";
+import { FORMS_API } from "./shared/forms.js";
+import { TRACKS, BOUNTIES, ghUser, repoUrl, videoUrl } from "./shared/projects.js";
+thermal(document.getElementById("c"), { block: 5 });
+const $ = (id) => document.getElementById(id);
+const esc = (x) => String(x).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+const DEADLINE = Date.parse("2026-11-07T17:00:00-05:00");
+const STORE = "localhost-project-edit";
+const form = $("form"), msg = $("msg"), go = $("go");
+
+$("tracks").innerHTML = TRACKS.map((t) => `<label class="opt"><input type="radio" name="track" value="${t.value}" required><span class="t">${t.n}</span>${esc(t.name)}</label>`).join("");
+$("bounties").innerHTML = BOUNTIES.map((b) => `<label class="opt"><input type="checkbox" name="bounties" value="${b.value}">${esc(b.name)}</label>`).join("");
+form.elements.pitch.addEventListener("input", (e) => ($("cnt").textContent = `${e.target.value.length}/140`));
+
+// Clock, and the countdown to the deadline in the header.
+const clock = $("clock");
+const left = () => {
+  const s = Math.floor((DEADLINE - Date.now()) / 1000);
+  if (s <= 0) return null;
+  const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), x = s % 60;
+  return (h ? h + ":" + String(m).padStart(2, "0") : m) + ":" + String(x).padStart(2, "0");
+};
+const tick = () => {
+  clock.innerHTML = new Date().toISOString().replace("T", " ").slice(0, 19) + "Z<br>FRAME " + Math.floor(performance.now() / 41.7);
+  const l = left();
+  if (l && DEADLINE - Date.now() < 12 * 3600e3) $("when").innerHTML = `Edits until 5:00 PM · <b>${l} left</b>`;
+  else if (!l) closed();
+};
+setInterval(tick, 250);
+
+let isClosed = false;
+function closed() {
+  if (isClosed) return;
+  isClosed = true;
+  $("when").textContent = "Submissions closed at 5:00 PM";
+  for (const el of form.elements) el.disabled = true;
+  msg.textContent = "Closed. Presentations start 5:15.";
+}
+
+// Edit key: from the link (?e=) or this browser. With one, load the latest saved answers.
+const okKey = (k) => (/^[a-z2-7]{26}$/.test(k || "") ? k : "");
+let key = okKey((new URLSearchParams(location.search).get("e") || "").trim().toLowerCase());
+if (!key) { try { key = okKey(localStorage.getItem(STORE)); } catch {} }
+
+function fill(a) {
+  for (const n of ["team", "email", "repo", "video", "pitch"]) if (a[n] !== undefined) form.elements[n].value = a[n];
+  const ms = String(a.members || "").split(/[,\s]+/).filter(Boolean);
+  ["m1", "m2", "m3", "m4"].forEach((n, i) => (form.elements[n].value = ms[i] || ""));
+  for (const r of form.querySelectorAll("[name=track]")) r.checked = r.value === a.track;
+  const bs = new Set(Array.isArray(a.bounties) ? a.bounties : []);
+  for (const c of form.querySelectorAll("[name=bounties]")) c.checked = bs.has(c.value);
+  $("cnt").textContent = `${form.elements.pitch.value.length}/140`;
+}
+
+function editMode(team) {
+  $("h1").textContent = "Edit your project";
+  go.textContent = "Save";
+  const m = $("mode");
+  m.hidden = false;
+  m.innerHTML = `Editing ${esc(team)} · <a href="#" id="fresh">submit a different project</a>`;
+  $("fresh").onclick = (e) => {
+    e.preventDefault();
+    try { localStorage.removeItem(STORE); } catch {}
+    location.href = location.pathname;
+  };
+}
+
+if (key) {
+  try {
+    const r = await fetch(FORMS_API + "/api/f/localhost-project/edit", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ edit: key }) });
+    const j = await r.json().catch(() => ({}));
+    if (r.ok && j.ok) {
+      fill(j.answers);
+      editMode(j.answers.team || "your project");
+      try { localStorage.setItem(STORE, key); } catch {}
+      if (!j.open) closed();
+    } else {
+      key = "";
+      try { localStorage.removeItem(STORE); } catch {}
+      if (r.status === 404) msg.textContent = "That edit link isn't recognised. Submit as new, or use the link from your email.";
+    }
+  } catch { msg.textContent = "Couldn't load your saved project. Check the connection and reload."; }
+}
+tick();
+
+// Turnstile, rendered explicitly (see shared/apply-form.js for why).
+const ts = form.querySelector(".cf-turnstile");
+let widget = null;
+const renderTs = () => {
+  if (widget !== null || !window.turnstile) return;
+  widget = window.turnstile.render(ts, { sitekey: /^(localhost|127\.0\.0\.1)$/.test(location.hostname) ? "1x00000000000000000000AA" : "0x4AAAAAAFLsrU-_juvQUw02", action: "localhost-project", theme: "dark", size: "flexible", appearance: "interaction-only" });
+};
+const tt = setInterval(() => { renderTs(); if (widget !== null) clearInterval(tt); }, 100);
+setTimeout(() => clearInterval(tt), 30000);
+const token = () => form.querySelector('[name="cf-turnstile-response"]')?.value || "";
+
+function fail(name, text) {
+  msg.className = "msg err";
+  msg.textContent = text;
+  const el = name && form.elements[name];
+  if (el && el.focus) { (el.length ? el[0] : el).focus?.(); (el.classList ? el : el[0]?.closest(".opt"))?.classList.add("bad-f"); }
+  return null;
+}
+form.addEventListener("input", (e) => e.target.classList?.remove("bad-f"));
+
+function collect() {
+  const v = (n) => form.elements[n].value.trim();
+  if (!v("team")) return fail("team", "Team name.");
+  const members = [];
+  for (const n of ["m1", "m2", "m3", "m4"]) {
+    if (!v(n)) continue;
+    const u = ghUser(v(n));
+    if (!u) return fail(n, `“${v(n)}” isn't a GitHub username.`);
+    if (!members.includes(u)) members.push(u);
+  }
+  if (!members.length) return fail("m1", "At least one member's GitHub.");
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v("email"))) return fail("email", "An email for the edit link.");
+  const repo = repoUrl(v("repo"));
+  if (!repo) return fail("repo", "Repo: github.com/owner/name.");
+  let video = "";
+  if (v("video")) { video = videoUrl(v("video")); if (!video) return fail("video", "Video: a full link (https://…)."); }
+  if (!v("pitch")) return fail("pitch", "One line about it.");
+  const track = form.querySelector("[name=track]:checked")?.value;
+  if (!track) { $("tracks").scrollIntoView({ block: "center", behavior: "smooth" }); return fail(null, "Pick one open track (or sponsor bounties only)."); }
+  const bounties = [...form.querySelectorAll("[name=bounties]:checked")].map((c) => c.value);
+  if (track === "none" && !bounties.length) return fail(null, "Sponsor bounties only: tick at least one bounty.");
+  const body = { team: v("team"), members: members.join(", "), email: v("email"), repo, pitch: v("pitch"), track, bounties, field_hp: form.elements.field_hp.value };
+  if (video) body.video = video;
+  if (key) body.edit = key;
+  return body;
+}
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  if (isClosed) return;
+  msg.className = "msg";
+  const body = collect();
+  if (!body) return;
+  go.disabled = true;
+  if (!token()) {
+    msg.textContent = "checking you're human…";
+    for (const t0 = Date.now(); !token() && Date.now() - t0 < 20000; ) await new Promise((r) => setTimeout(r, 250));
+    if (!token()) { fail(null, "Tick the Cloudflare box above, then submit again."); go.disabled = false; return; }
+  }
+  msg.textContent = "sending…";
+  try {
+    const res = await fetch(FORMS_API + "/api/f/localhost-project", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...body, "cf-turnstile-response": token() }) });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.fieldErrors && Object.keys(data.fieldErrors).length ? Object.values(data.fieldErrors).join(" ") : data.error || "HTTP " + res.status);
+    if (okKey(data.edit)) { key = data.edit; try { localStorage.setItem(STORE, key); } catch {} }
+    done(body, !!body.edit);
+  } catch (err) {
+    fail(null, /closed/i.test(err.message) ? "Submissions closed at 5:00 PM." : err.message || "Something broke. Try again.");
+    if (widget !== null) window.turnstile?.reset(widget);
+    go.disabled = false;
+  }
+});
+
+function done(body, edited) {
+  const link = `https://localhostai.nyc/submit?e=${key}`;
+  form.hidden = true;
+  $("mode").hidden = true;
+  const ok = $("ok");
+  ok.hidden = false;
+  ok.innerHTML = `<h2>${edited ? "Saved" : "Submitted"} 🗽</h2>
+    <p>${esc(body.team)} · ${esc(TRACKS.find((t) => t.value === body.track)?.name || "")}${body.video ? "" : " · <span style='color:var(--bad)'>no video yet</span>"}</p>
+    <p>Your edit link, until 5:00 PM. Also sent to ${esc(body.email)}.</p>
+    <div class="link"><input id="lnk" readonly value="${esc(link)}" aria-label="Edit link"><button class="b" type="button" id="cp">Copy</button></div>
+    <div class="row"><a class="b pri" href="${esc(location.pathname)}?e=${key}">Edit</a><a class="b" href="/tracks">Tracks</a></div>`;
+  $("cp").onclick = async () => { try { await navigator.clipboard.writeText(link); $("cp").textContent = "Copied"; } catch { $("lnk").select(); } };
+  $("win").scrollIntoView({ block: "start", behavior: "smooth" });
+}
+</script>
+</body>
+</html>
