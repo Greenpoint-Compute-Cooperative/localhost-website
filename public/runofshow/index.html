@@ -49,7 +49,9 @@ h3 { font: 12px/1 var(--label); letter-spacing: .1em; text-transform: uppercase;
 .rules li { counter-increment: r; padding: 12px; border-right: 1px dashed var(--rule); font-weight: 600; }
 .rules li:last-child { border-right: 0; }
 .rules li::before { content: counter(r); display: block; font: 11px/1 var(--label); color: var(--dim); margin-bottom: 6px; }
-.plan { max-width: 620px; border: 1px solid var(--ink); background: #fff; }
+.plans { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; max-width: 900px; }
+@media (max-width: 640px) { .plans { grid-template-columns: 1fr; } }
+.plan { max-width: 620px; margin: 0; border: 1px solid var(--ink); background: #fff; }
 .plan img { display: block; width: 100%; height: auto; }
 figcaption { font: 11px/1 var(--label); letter-spacing: .1em; text-transform: uppercase; padding: 8px 10px; border-top: 1px solid var(--ink); color: #0b0b0c; display: flex; justify-content: space-between; }
 .key { display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 12px 0 0; font-size: 13px; }
@@ -123,7 +125,7 @@ footer { margin: 44px 0 36px; padding-top: 12px; border-top: 1px solid var(--ink
     <div class="t">10:45</div><div class="k">Hacking</div>
     <div class="t">1:00</div><div>Lunch pickup, until 1:45</div>
     <div class="t">2:30</div><div>Feedback round, 10 min per team</div>
-    <div class="t">5:00</div><div class="k">Submissions close</div>
+    <div class="t">5:00</div><div class="k">Submissions close; changeover to the evening layout</div>
     <div class="t">5:15</div><div class="k">Keynote (Variant), talks 5:35</div>
     <div class="t">5:55</div><div class="k">Project demos, 2 min each</div>
     <div class="t">6:45</div><div class="k">First winners announced + close (rest after judging)</div>
@@ -143,6 +145,8 @@ footer { margin: 44px 0 36px; padding-top: 12px; border-top: 1px solid var(--ink
       <ul class="l"><li>Paper, soap, trash</li><li>Tell ops if anything is broken</li></ul></details>
     <details class="job"><summary><span class="jn"><i style="background:var(--ops)"></i>AV, presentations</span><span class="jw">4:30–7 · stage</span><span class="jp"><span class="who open">open</span></span></summary>
       <ul class="l"><li>Test projector, mics and HDMI switch by 4:30</li><li>Queue each team&#x27;s demo, 2 min each</li><li>Keep Cam A and the livestream running</li></ul></details>
+    <details class="job"><summary><span class="jn"><i style="background:var(--ops)"></i>Changeover crew</span><span class="jw">5:00–5:15 · auditorium</span><span class="jp"><span class="who open">open</span><span class="who open">open</span><span class="who open">open</span><span class="who open">open</span></span></summary>
+      <ul class="l"><li>Teams at T6–T10 take their gear at 5:00</li><li>Fold T6–T10, stack them in the crew room</li><li>Bring the couches in from the Salon, group them per the evening plan</li><li>Side-table chairs turn to face the stage</li><li>Aisles and exits stay clear</li></ul></details>
     <details class="job"><summary><span class="jn"><i style="background:var(--hack)"></i>Team formation</span><span class="jw">10:45–12 · Salon</span><span class="jp"><span class="who open">open</span></span></summary>
       <ul class="l"><li>Solo hackers pitch an idea in one line</li><li>Match people into teams of 1–4, claim a table</li></ul></details>
     <details class="job"><summary><span class="jn"><i style="background:var(--hack)"></i>Reviewer</span><span class="jw">2:30–3:30 · at the tables</span><span class="jp"><span class="who open">open</span><span class="who open">open</span><span class="who open">open</span></span></summary>
@@ -159,15 +163,20 @@ footer { margin: 44px 0 36px; padding-top: 12px; border-top: 1px solid var(--ink
     <li>Pitches happen without moving a table</li>
     <li>Talking and eating happen outside the auditorium</li>
   </ol>
-  <figure class="plan"><a href="img/floor1-plan.svg"><img src="img/floor1-plan.svg" alt="1st floor layout"></a><figcaption><span>1st floor</span><a href="img/floor1-plan.svg" download>svg ↓</a></figcaption></figure>
+  <p class="hint">Day and evening are the same room: the middle tables swap for couches, everything else stays.</p>
+  <div class="plans">
+    <figure class="plan"><a href="img/floor1-plan.svg"><img src="img/floor1-plan.svg" alt="1st floor, day layout"></a><figcaption><span>Day · 9 AM–5 PM</span><a href="img/floor1-plan.svg" download>svg ↓</a></figcaption></figure>
+    <figure class="plan"><a href="img/floor1-evening.svg"><img src="img/floor1-evening.svg" alt="1st floor, evening layout: couches in the middle"></a><figcaption><span>Evening · 5:15–7 PM</span><a href="img/floor1-evening.svg" download>svg ↓</a></figcaption></figure>
+  </div>
   <div class="key">
-    <span style="--k:#e6f7a0">Hack floor</span><span style="--k:#ffd98a">Stage</span><span style="--k:#cfe0ff">Porch</span><span style="--k:#ffc9bb">Salon</span><span style="--k:#e2d3ff">Green room</span><span style="--k:#ff9fdf">Artist</span><span style="--k:#16a34a">Exit</span>
+    <span style="--k:#e6f7a0">Hack floor</span><span style="--k:#ffd98a">Stage</span><span style="--k:#cfe0ff">Porch</span><span style="--k:#ffc9bb">Salon / lounge</span><span style="--k:#e2d3ff">Green room</span><span style="--k:#ff9fdf">Artist</span><span style="--k:#16a34a">Exit</span>
   </div>
   <h3>For the designer</h3>
   <ul class="l">
     <li>The line: waist-high, one gate, readable from the door</li>
     <li>Soften the echo: rugs, fabric, bean bags</li>
     <li>Salon = the lounge people actually want to hang out in</li>
+    <li>Evening: its 5 couches move to the middle of the auditorium, in mixed groups facing the stage</li>
     <li>Stage + screen look good on camera</li>
     <li>Exits and aisles stay clear</li>
   </ul>
