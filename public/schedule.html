@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Schedule · LOCALHOST</title>
+<meta name="description" content="LOCALHOST schedule, Sat Nov 7, 2026 at The School, Williamsburg. Hacking by day; keynote, talks and demos in the evening, livestreamed.">
+<meta property="og:title" content="LOCALHOST · Schedule">
+<meta property="og:description" content="Sat Nov 7. Hacking by day; keynote, talks and demos in the evening, livestreamed.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://localhostai.nyc/img/school/leg1-thermal.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#0c0e11">
+<link rel="stylesheet" href="/shared/base.css">
+<style>
+@font-face { font-family: "IBM Plex Mono"; src: url("/fonts/IBMPlexMono-400.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "IBM Plex Mono"; src: url("/fonts/IBMPlexMono-500.woff2") format("woff2"); font-weight: 500; font-display: swap; }
+:root { --bg: #0c0e11; --panel: #12161b; --line: #2a3038; --hi: #f2f4f6; --mid: #a7b0ba; --low: #7c8590; --read: "IBM Plex Mono", ui-monospace, Menlo, monospace; --eve: 196,44,206; }
+html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+body { height: auto; background: var(--bg); color: var(--hi); }
+p { font: 400 15px/1.7 var(--read); }
+a { color: inherit; text-underline-offset: .2em; text-decoration-color: #56606b; }
+a:hover { color: var(--acid); text-decoration-color: var(--acid); }
+a:focus-visible { outline: 2px solid var(--acid); outline-offset: 4px; }
+.wrap { width: min(1120px, 100%); margin: 0 auto; padding: 0 32px; }
+.k { font: 11px/1.5 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--mid); }
+header { position: sticky; top: 0; z-index: 10; background: rgba(12,14,17,.96); border-bottom: 1px solid var(--line); }
+header .wrap { min-height: 60px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+.brand { text-decoration: none; font-size: 16px; white-space: nowrap; }
+header nav { display: flex; gap: 24px; }
+header nav a { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; text-decoration: none; padding: 12px 0; color: var(--mid); }
+.hero { position: relative; isolation: isolate; overflow: hidden; padding: 88px 0 64px; border-bottom: 1px solid var(--line); }
+.hero canvas.thermal { position: absolute; z-index: -2; }
+.hero::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, rgba(12,14,17,.86), rgba(12,14,17,.45)), linear-gradient(0deg, var(--bg), transparent 55%); }
+.hero .eyebrow { color: var(--acid); margin-bottom: 26px; }
+h1 { font: 400 clamp(40px, 5.6vw, 80px)/1 var(--mono); letter-spacing: -.05em; max-width: 15ch; }
+h1 span { color: var(--acid); }
+.lede { margin-top: 32px; max-width: 62ch; color: #cfd5db; font-size: 16px; }
+.part { --hc: 200,255,0; position: relative; overflow: hidden; margin-top: 72px; padding: 36px 44px 30px; border: 1px solid rgba(255,255,255,.1); background: linear-gradient(180deg, rgba(var(--hc),.06), rgba(var(--hc),0) 300px), #0f1216; }
+.part::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 3px; background: linear-gradient(90deg, rgba(var(--hc),.15), rgb(var(--hc)) 50%, rgba(var(--hc),.15)); }
+.part.eve { --hc: var(--eve); }
+.part-top { display: flex; justify-content: space-between; align-items: end; gap: 20px; flex-wrap: wrap; padding-bottom: 18px; border-bottom: 1px solid var(--line); }
+.part-top .k { color: rgb(var(--hc)); margin-bottom: 12px; }
+h2 { font: 400 clamp(30px, 3.6vw, 48px)/1.05 var(--mono); letter-spacing: -.04em; }
+.tags { display: flex; gap: 8px; flex-wrap: wrap; }
+.tag { font: 11px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; padding: 8px 10px; border: 1px solid rgba(var(--hc),.6); color: rgb(var(--hc)); }
+.tag.live::before { content: "● "; }
+ol { list-style: none; }
+.row { display: grid; grid-template-columns: 96px 1fr; gap: 24px; padding: 20px 0; border-bottom: 1px dashed #333b45; }
+.row:last-child { border-bottom: 0; }
+.t { font: 400 22px/1.2 var(--mono); letter-spacing: -.02em; color: #fff; }
+.what { font: 500 17px/1.4 var(--read); letter-spacing: -.01em; }
+.row p { color: var(--mid); font-size: 14px; margin-top: 4px; }
+.row.big .what { font-size: 20px; }
+.row.big .t { color: rgb(var(--hc)); }
+footer { padding: 96px 0 38px; }
+footer .wrap { display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; border-top: 1px solid var(--line); padding-top: 26px; }
+footer a { text-decoration: none; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+@media (max-width: 580px) {
+  .wrap { padding: 0 16px; }
+  .brand { font-size: 14px; }
+  header nav { gap: 14px; }
+  header nav a { font-size: 10px; }
+  .hero { padding: 52px 0 40px; }
+  h1 { font-size: clamp(34px, 10vw, 52px); }
+  .part { padding: 26px 18px 18px; margin-top: 48px; }
+  .row { grid-template-columns: 64px 1fr; gap: 14px; }
+  .t { font-size: 17px; }
+}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <a class="brand" href="/">← LOCALHOST</a>
+  <nav aria-label="Main"><a href="#day">Day</a><a href="#evening">Evening</a><a href="/tracks">Tracks</a></nav>
+</div></header>
+<main>
+<section class="hero" aria-labelledby="page-title">
+  <canvas class="thermal" id="thermal" aria-hidden="true"></canvas>
+  <div class="wrap">
+    <div class="k eyebrow">LOCALHOST // Schedule</div>
+    <h1 id="page-title">Saturday, Nov&nbsp;7.<br><span>Hack by day. Demo at night.</span></h1>
+    <p class="lede">The School, 29 Nassau Ave, Williamsburg.</p>
+  </div>
+</section>
+<div class="wrap">
+
+  <section class="part" id="day" aria-labelledby="day-title">
+    <div class="part-top">
+      <div><div class="k">Part 1 · 9 AM–5 PM</div><h2 id="day-title">Day</h2></div>
+      <div class="tags"><span class="tag">Hackers only</span></div>
+    </div>
+    <ol>
+      <li class="row"><span class="t">9:00</span><div><div class="what">Doors + breakfast</div><p>Check in, coffee, find a team.</p></div></li>
+      <li class="row big"><span class="t">10:15</span><div><div class="what">Kickoff</div><p>How the day works, then one slide from each sponsor.</p></div></li>
+      <li class="row big"><span class="t">10:45</span><div><div class="what">Hacking starts</div><p>Team formation help until noon.</p></div></li>
+      <li class="row"><span class="t">1:00</span><div><div class="what">Lunch</div><p>Pick up until 1:45.</p></div></li>
+      <li class="row"><span class="t">2:30</span><div><div class="what">Feedback round</div><p>Crew comes to your table, 10 minutes per team.</p></div></li>
+      <li class="row big"><span class="t">5:00</span><div><div class="what">Submissions close</div><p>Public repo + 2-minute demo. <a href="/tracks#submit">How to submit</a></p></div></li>
+    </ol>
+  </section>
+
+  <section class="part eve" id="evening" aria-labelledby="evening-title">
+    <div class="part-top">
+      <div><div class="k">Part 2 · 5:15–8 PM</div><h2 id="evening-title">Evening</h2></div>
+      <div class="tags"><span class="tag">Open to guests</span><span class="tag live">Livestreamed</span></div>
+    </div>
+    <ol>
+      <li class="row big"><span class="t">5:15</span><div><div class="what">Keynote</div><p>Variant.</p></div></li>
+      <li class="row"><span class="t">5:40</span><div><div class="what">Talks</div><p>Speakers announced soon.</p></div></li>
+      <li class="row big"><span class="t">6:10</span><div><div class="what">Project demos</div><p>Every team, 2 minutes on the big screen.</p></div></li>
+      <li class="row"><span class="t">7:10</span><div><div class="what">Discussion</div><p>While the judges decide.</p></div></li>
+      <li class="row big"><span class="t">7:40</span><div><div class="what">Prizes + close</div><p>$7,750 across three <a href="/tracks">tracks</a>.</p></div></li>
+      <li class="row"><span class="t">8:00</span><div><div class="what">Dinner</div><p>Optional, at Spritzenhaus 33.</p></div></li>
+    </ol>
+  </section>
+
+</div>
+</main>
+<footer><div class="wrap k"><a href="/">← LOCALHOST · Sat, Nov 7, 2026 · The School, 29 Nassau Ave</a><a href="/tracks">Tracks →</a></div></footer>
+<script type="module">
+import { thermal } from "/shared/thermal.js";
+thermal(document.getElementById("thermal"), { block: 6, bodies: 5 });
+</script>
+</body>
+</html>

@@ -417,17 +417,19 @@ The authenticity of host 'localhost' can't be established.
 ED25519 key fingerprint is SHA256:${rand(43)}.
 Are you sure you want to continue connecting (yes/no)?<span class="q"><button id="yes">yes</button><button id="no">no</button></span></div>` : "";
 
-const sched = `<span class="d">draft, times will move</span>
-
-SAT 7 NOV
-  09:00  doors open
-  09:30  opening remarks
-  10:00  kickoff, hacking starts
+const sched = `SAT 7 NOV
+  09:00  doors + breakfast
+  10:15  kickoff
+  10:45  hacking starts
   13:00  lunch
-  16:30  projects in
-  17:00  demos + judging
-  18:30  awards + closing
-  19:00  doors close`;
+  17:00  submissions close
+<span class="d">  evening · open to guests · live</span>
+  17:15  keynote: Variant
+  17:40  talks
+  18:10  project demos
+  19:40  prizes + close
+
+<a href="/schedule">full schedule →</a>`;
 
 document.getElementById("root").innerHTML = `
 <div class="win focus" id="main">${TH.chrome("localhost", false)}${gate}<div class="page"${V === 10 ? " hidden" : ""}>${pageHTML}</div>${TH.foot ? TH.foot(false) : ""}</div>
