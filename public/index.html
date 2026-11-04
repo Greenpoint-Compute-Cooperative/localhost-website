@@ -301,7 +301,7 @@
     [data-t="9"] .ctas .b.ghost { padding-left: 0; padding-right: 20px; }
     .line1 { font-size: 18px; }
     [data-t="9"] .line1 { font-size: 21px; margin-top: 24px; } [data-t="9"] .line2 { font-size: 15px; } [data-t="9"] .copy { padding: 0 18px; }
-    [data-t="9"] .meta { grid-template-columns: auto 1fr; }
+    [data-t="9"] .meta { grid-template-columns: auto 1fr; } [data-t="9"] .meta .v { white-space: normal; padding-right: 0; }
     .sponsors .logos { --h: 18px; gap: 14px 22px; }
     .ctas .sp { flex-basis: 100%; height: 0; }
     [data-t="9"] .apf { grid-template-columns: 1fr; }
@@ -399,7 +399,7 @@ const pageHTML = `
       <span class="msg" id="apmsg" role="status"></span>
     </form>
     <p class="line2" data-c>${L2}</p>
-    <div class="meta"><span class="k">When</span><span class="v" data-c>Sat, Nov 7, 2026 · 9 AM–7 PM</span><span class="k">Who</span><span class="v" data-c>50–100 hackers</span><span class="k">Where</span><span class="v" data-c><a href="https://www.google.com/maps/search/?api=1&amp;query=The+School%2C+29+Nassau+Ave%2C+Brooklyn%2C+NY+11222" target="_blank" rel="noopener">The School, 29 Nassau Ave</a></span></div>
+    <div class="meta"><span class="k">When</span><span class="v" data-c>Sat, Nov&nbsp;7, 2026 · 9&nbsp;AM–7&nbsp;PM</span><span class="k">Who</span><span class="v" data-c>50–100 hackers</span><span class="k">Where</span><span class="v" data-c><a href="https://www.google.com/maps/search/?api=1&amp;query=The+School%2C+29+Nassau+Ave%2C+Brooklyn%2C+NY+11222" target="_blank" rel="noopener">The School, 29&nbsp;Nassau&nbsp;Ave</a></span></div>
     <div class="ctas">
       <button class="b ghost" data-open="tracks" data-c>Tracks →</button><button class="b ghost" data-open="schedule" data-c>Schedule →</button>
     </div>

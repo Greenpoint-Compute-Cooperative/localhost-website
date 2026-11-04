@@ -66,6 +66,8 @@
     .head { padding: 18px 16px 0; } .opts { padding: 18px 16px 6px; } .msg { padding: 4px 16px 16px; } .done, .bad { padding-left: 16px; padding-right: 16px; }
     .done .row .b { flex: 1 1 100%; text-align: center; }
   }
+/* Turnstile's flexible widget is at least 300px; on 320px phones let the card clip it instead of widening the page */
+.cf-turnstile { max-width: 100%; overflow: hidden; }
 </style>
 </head>
 <body>
