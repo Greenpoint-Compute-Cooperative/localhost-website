@@ -383,6 +383,8 @@ const SPONSORS = [
   { id: "tinfoil", name: "Tinfoil", host: "tinfoil.sh", w: 3.9, s: 1.05 },
   { id: "cognee", name: "cognee", host: "cognee.ai", w: 4.0, s: 1 },
   { id: "superlinked", name: "Superlinked", host: "superlinked.com", w: 4.3, s: 1.65 },
+  { id: "flashbots", name: "Flashbots", host: "flashbots.net", w: 4.08, s: 1.35, ext: "png" },
+  { id: "gensyn", name: "Gensyn", host: "gensyn.ai", w: 3.54, s: 1.35, ext: "png" },
 ];
 const pageHTML = `
   ${TH.pre ? `<div class="pre">${TH.pre()}</div>` : ""}
@@ -406,7 +408,7 @@ const pageHTML = `
     </div>
     <div class="sponsors" data-c>
       <span class="k">Root sponsors</span>
-      <div class="logos">${SPONSORS.map((s) => `<a href="https://${s.host}" target="_blank" rel="noopener" aria-label="${s.name}" title="${s.name} · ${s.host}"><img src="img/sponsors/${s.id}.svg" alt="${s.name}" style="--w:${s.w};--s:${s.s}"></a>`).join("")}</div>
+      <div class="logos">${SPONSORS.map((s) => `<a href="https://${s.host}" target="_blank" rel="noopener" aria-label="${s.name}" title="${s.name} · ${s.host}"><img src="img/sponsors/${s.id}.${s.ext || "svg"}" alt="${s.name}" style="--w:${s.w};--s:${s.s}"></a>`).join("")}</div>
       <p class="ask">Companies: a track and a prize of your own, <a href="sponsor.html">sponsor LOCALHOST →</a></p>
     </div>
   </div>
