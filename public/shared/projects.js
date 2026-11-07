@@ -6,8 +6,9 @@ export const TRACKS = [
   { value: "t01", n: "01", name: "Sovereign Agentic Organization" },
   { value: "t21", n: "2.1", name: "Most production-ready product" },
   { value: "t22", n: "2.2", name: "Own the model" },
-  { value: "t23", n: "2.3", name: "Private inference you can check" },
+  { value: "t23", n: "2.3", name: "Private inference routing" },
   { value: "t24", n: "2.4", name: "Private cooperation" },
+  { value: "t25", n: "2.5", name: "Private swarm memory" },
 ];
 export const BOUNTIES = [
   { value: "tinfoil", name: "Tinfoil" },

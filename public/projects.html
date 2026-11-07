@@ -221,7 +221,7 @@ function render() {
   list = all.filter((p) => !h.has(p.id));
   const repos = new Map(); for (const p of list) repos.set(p.a.repo, (repos.get(p.a.repo) || 0) + 1);
   const noVid = list.filter((p) => !p.a.video && !fileOf(p)).length, noFile = list.filter((p) => !fileOf(p)).length, noRepo = list.filter((p) => !p.a.repo).length, big = list.filter((p) => p.members.length > 6).length;
-  $("sum").innerHTML = `<b>${list.length}</b> projects` + (noVid ? ` · <span class="x">${noVid} missing video</span>` : "") + (noFile ? ` · ${list.length - noFile}/${list.length} files uploaded` : ` · all files uploaded`) + (noRepo ? ` · <span class="x">${noRepo} missing repo</span>` : "") + (big ? ` · <span class="x">${big} over 6 members</span>` : "") + (h.size ? ` · <a href="#" id="unhide">${h.size} hidden</a>` : "") + ` · ${TRACKS.slice(0, 5).map((t) => `${t.n}: ${list.filter((p) => p.tracks.includes(t)).length}`).join(" · ")}`;
+  $("sum").innerHTML = `<b>${list.length}</b> projects` + (noVid ? ` · <span class="x">${noVid} missing video</span>` : "") + (noFile ? ` · ${list.length - noFile}/${list.length} files uploaded` : ` · all files uploaded`) + (noRepo ? ` · <span class="x">${noRepo} missing repo</span>` : "") + (big ? ` · <span class="x">${big} over 6 members</span>` : "") + (h.size ? ` · <a href="#" id="unhide">${h.size} hidden</a>` : "") + ` · ${TRACKS.map((t) => `${t.n}: ${list.filter((p) => p.tracks.includes(t)).length}`).join(" · ")}`;
   $("rows").innerHTML = list.length
     ? list.map((p, i) => `<tr>
       <td class="n"><a href="#" data-go="${i}" title="Present from here">${String(i + 1).padStart(2, "0")}</a></td>
@@ -308,7 +308,7 @@ function sheets() {
     ${ps.length ? ps.map((p) => `<tr><td>${list.indexOf(p) + 1}</td><td><b>${esc(p.a.team)}</b><div class="p">${esc(p.a.pitch)}</div></td>${CRITERIA.map(() => '<td class="box"></td>').join("")}<td class="box"></td><td class="notes"></td></tr>`).join("") : '<tr><td colspan="9">No entries.</td></tr>'}
     </tbody></table></section>`;
   $("sheets").innerHTML =
-    TRACKS.slice(0, 5).map((t) => page(`Track ${t.n} · ${t.name}`, list.filter((p) => p.tracks.includes(t)))).join("") +
+    TRACKS.map((t) => page(`Track ${t.n} · ${t.name}`, list.filter((p) => p.tracks.includes(t)))).join("") +
     BOUNTIES.map((b) => page(`${b.name} bounty`, list.filter((p) => p.bounties.includes(b.name)))).join("");
 }
 
