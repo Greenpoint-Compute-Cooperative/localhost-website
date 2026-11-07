@@ -7,14 +7,14 @@
   const groupsView = new URLSearchParams(location.search).get('view') === 'groups';
   if (groupsView) {
     document.querySelector('.board-layout').hidden = true;
-    $('page-title').textContent = 'Suggested teams.';
-    $('page-description').textContent = 'Find your group, compare ideas, and start building together.';
+    $('page-title').textContent = 'Grouped by topic.';
+    $('page-description').textContent = 'Find people with related themes and ideas, and start building together.';
     $('view-link').href = '/teams';
     $('view-link').textContent = '← Back to the board';
     $('groups-section').hidden = false;
     statusAfterLoad();
   }
-  function statusAfterLoad() { $('groups-empty').hidden = false; $('groups-empty').textContent = 'Loading suggested teams…'; }
+  function statusAfterLoad() { $('groups-empty').hidden = false; $('groups-empty').textContent = 'Loading topic groups…'; }
   const apiBase = document.querySelector('meta[name="teams-api"]').content;
   const status = (id, message, error = false) => {
     $(id).textContent = message;
@@ -58,14 +58,14 @@
     const teams = groups?.teams || [];
     $('groups-section').hidden = !groupsView && !teams.length;
     $('groups-empty').hidden = !groupsView || !!teams.length;
-    $('groups-empty').textContent = 'No teams have been published yet. Add your idea to the board, then check back here.';
-    $('group-count').textContent = teams.length ? `(${teams.length} teams · ${new Set(teams.flatMap(team => team.members || [])).size} people)` : '';
+    $('groups-empty').textContent = 'No topic groups have been published yet. Add your idea to the board, then check back here.';
+    $('group-count').textContent = teams.length ? `(${teams.length} topics · ${new Set(teams.flatMap(team => team.members || [])).size} people)` : '';
     if (!teams.length) { $('groups-list').replaceChildren(); $('groups-updated').textContent = ''; return; }
     const byId = new Map(participants.map(p => [p.id, p]));
     const fragment = document.createDocumentFragment();
     groups.teams.forEach(team => {
       const card = element('article', undefined, 'team');
-      card.append(element('h3', team.name || 'Team'), element('p', team.summary || ''));
+      card.append(element('h3', team.name || 'Topic'), element('p', team.summary || ''));
       const list = element('ul');
       (team.members || []).forEach(id => { if (byId.has(id)) list.append(element('li', byId.get(id).name)); });
       card.append(list);
@@ -73,7 +73,7 @@
     });
     $('groups-list').replaceChildren(fragment);
     const date = new Date(groups.updatedAt);
-    $('groups-updated').textContent = Number.isNaN(date.getTime()) ? '' : `Last suggested ${date.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}. New arrivals may not be grouped yet.`;
+    $('groups-updated').textContent = Number.isNaN(date.getTime()) ? '' : `Last grouped ${date.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}. New arrivals may not be grouped yet.`;
   }
   async function refresh() {
     if (refreshing) return;
