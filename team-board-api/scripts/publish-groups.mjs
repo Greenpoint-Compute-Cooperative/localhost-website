@@ -12,7 +12,7 @@ if (!file || (action && action !== '--publish')) {
 const draft = JSON.parse(await readFile(file, 'utf8'));
 const current = await participants({ fresh: true });
 const teams = validateTeams(draft.teams, current);
-console.log(`Validated ${teams.length} teams for ${current.length} current participants.`);
+console.log(`Validated ${teams.length} theme groups for ${current.length} current participants.`);
 if (action === '--publish') {
   const saved = await saveGroups(teams, current);
   console.log(`Published ${saved.updatedAt}`);

@@ -20,16 +20,16 @@ export function sameSecret(a, b) {
 }
 export const publicParticipant = ({ id, name, idea, skills, createdAt }) => ({ id, name, idea, skills, createdAt });
 export function validateTeams(teams, participants) {
-  if (!Array.isArray(teams) || !teams.length) throw new ApiError(400, 'Provide at least one team.');
+  if (!Array.isArray(teams) || !teams.length) throw new ApiError(400, 'Provide at least one theme group.');
   const available = new Set(participants.map(p => p.id));
   const seen = new Set();
   const result = teams.map(team => {
-    if (!team || !Array.isArray(team.members) || team.members.length > 5 || team.members.length < (participants.length === 1 ? 1 : 2)) throw new ApiError(400, 'Each team must have 2–5 people (one if only one person joined).');
+    if (!team || !Array.isArray(team.members) || !team.members.length) throw new ApiError(400, 'Each theme group must have at least one person.');
     const members = team.members.map(id => {
-      if (!available.has(id) || seen.has(id)) throw new ApiError(400, 'Team members must be current participant IDs, each used once.');
+      if (!available.has(id) || seen.has(id)) throw new ApiError(400, 'Group members must be current participant IDs, each used once.');
       seen.add(id); return id;
     });
-    return { name: text(team.name, 'Team name', 100, true), summary: text(team.summary, 'Team summary', 800, true), members };
+    return { name: text(team.name, 'Theme name', 100, true), summary: text(team.summary, 'Theme summary', 800, true), members };
   });
   if (seen.size !== available.size) throw new ApiError(400, 'Every current participant must be assigned exactly once. Refresh the board and try again.');
   return result;
