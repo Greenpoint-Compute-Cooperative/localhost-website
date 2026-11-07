@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>LOCALHOST Day Plan</title>
+<meta name="description" content="LOCALHOST, Sat Nov 7 at The School: schedule, space, hacking, AV, food, check-in.">
+<style>
+@font-face { font-family: "Departure Mono"; src: url("fonts/DepartureMono-Regular.woff2") format("woff2"); font-display: swap; }
+@font-face { font-family: "Plex"; src: url("fonts/IBMPlexMono-400.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "Plex"; src: url("fonts/IBMPlexMono-600.woff2") format("woff2"); font-weight: 600; font-display: swap; }
+:root { --paper: #fff; --ink: #0b0b0c; --dim: #6a6a70; --rule: #dcdcdf; --acid: #c8ff00; --hot: #ffb314;
+  --both: #c8ff00; --hack: #b48cff; --ops: #ffb314;
+  --label: "Departure Mono", ui-monospace, Menlo, monospace; --body: "Plex", ui-monospace, Menlo, monospace; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --paper: #0d0d0f; --ink: #ecebe6; --dim: #9b9ba3; --rule: #2c2c31; } }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { background: var(--paper); color: var(--ink); font: 400 15px/1.5 var(--body); }
+a { color: inherit; }
+.wrap { max-width: 980px; margin: 0 auto; padding: 0 16px; }
+header { padding: 32px 0 20px; border-bottom: 1px solid var(--ink); }
+h1 { font: 42px/1 var(--label); }
+h1 i { display: inline-block; width: .55em; height: .16em; background: var(--acid); border: 1px solid var(--ink); vertical-align: middle; margin-left: .2em; }
+.meta { margin-top: 10px; color: var(--dim); }
+
+.chip { font: 10px/1 var(--label); letter-spacing: .08em; text-transform: uppercase; padding: 3px 5px 2px; border: 1px solid #0b0b0c; color: #0b0b0c; white-space: nowrap; }
+.chip.both { background: var(--both); } .chip.hack { background: var(--hack); } .chip.ops { background: var(--ops); }
+
+.toc { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--ink); margin-top: 22px; }
+.toc .col { padding: 12px; border-right: 1px dashed var(--rule); }
+.toc .col:last-child { border-right: 0; }
+.toc .col > .chip { display: inline-block; margin-bottom: 8px; }
+.toc a { display: block; padding: 3px 0; text-decoration: none; font-weight: 600; }
+.toc a:hover { text-decoration: underline; }
+
+section { padding: 36px 0 0; scroll-margin-top: 8px; }
+.sub { scroll-margin-top: 8px; }
+h2 { font: 18px/1 var(--label); letter-spacing: .06em; text-transform: uppercase; padding: 10px 0 10px 12px; border-bottom: 1px dashed var(--ink); margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; gap: 10px; border-left: 6px solid var(--c); }
+.both { --c: var(--both); } .hack { --c: var(--hack); } .ops { --c: var(--ops); }
+h3 { font: 12px/1 var(--label); letter-spacing: .1em; text-transform: uppercase; margin: 18px 0 8px; color: var(--dim); }
+
+.sched { display: grid; grid-template-columns: 64px 1fr; max-width: 520px; }
+.sched div { padding: 6px 0; border-bottom: 1px dotted var(--rule); }
+.sched .t { font-weight: 600; font-variant-numeric: tabular-nums; }
+.sched .k { font-weight: 600; }
+
+.rules { list-style: none; counter-reset: r; display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--ink); margin-bottom: 16px; }
+.rules li { counter-increment: r; padding: 12px; border-right: 1px dashed var(--rule); font-weight: 600; }
+.rules li:last-child { border-right: 0; }
+.rules li::before { content: counter(r); display: block; font: 11px/1 var(--label); color: var(--dim); margin-bottom: 6px; }
+.plans { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; max-width: 900px; }
+@media (max-width: 640px) { .plans { grid-template-columns: 1fr; } }
+.plan { max-width: 620px; margin: 0; border: 1px solid var(--ink); background: #fff; }
+.plan img { display: block; width: 100%; height: auto; }
+figcaption { font: 11px/1 var(--label); letter-spacing: .1em; text-transform: uppercase; padding: 8px 10px; border-top: 1px solid var(--ink); color: #0b0b0c; display: flex; justify-content: space-between; }
+.key { display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 12px 0 0; font-size: 13px; }
+.key span::before { content: ""; display: inline-block; width: 12px; height: 12px; border: 1px solid var(--ink); margin-right: 6px; vertical-align: -1px; background: var(--k); }
+.photo { margin-top: 14px; border: 1px solid var(--ink); }
+.photo img { display: block; width: 100%; height: auto; }
+
+ul.l { list-style: none; max-width: 640px; }
+ul.l li { padding: 6px 0 6px 16px; border-bottom: 1px dotted var(--rule); position: relative; }
+ul.l li::before { content: "›"; position: absolute; left: 2px; color: var(--dim); }
+
+.ticks { position: relative; height: 14px; font: 10px/1 var(--label); color: var(--dim); }
+.ticks span { position: absolute; top: 0; }
+.bar { display: flex; height: 32px; border: 1px solid var(--ink); margin-bottom: 14px; }
+.bar div { border-right: 1px solid var(--ink); display: flex; align-items: center; justify-content: center; font: 10px/1 var(--label); text-transform: uppercase; overflow: hidden; white-space: nowrap; color: #0b0b0c; }
+.bar div:last-child { border-right: 0; }
+.blocks { border: 1px solid var(--ink); }
+.b { display: grid; grid-template-columns: 110px 1fr; border-bottom: 1px solid var(--rule); }
+.b:last-child { border-bottom: 0; }
+.b .t { padding: 10px 12px; font-weight: 600; font-variant-numeric: tabular-nums; border-right: 1px solid var(--rule); }
+.b .c { padding: 10px 12px; }
+.b h4 { font: 13px/1.2 var(--label); text-transform: uppercase; display: flex; gap: 8px; align-items: center; }
+.b h4 i { width: 11px; height: 11px; border: 1px solid #0b0b0c; flex: none; }
+.b .w { color: var(--dim); font-size: 13px; margin-top: 3px; }
+.b ul { list-style: none; margin-top: 4px; }
+.b li { padding: 1px 0 1px 14px; position: relative; }
+.b li::before { content: "›"; position: absolute; left: 0; color: var(--dim); }
+
+.cols { display: grid; grid-template-columns: 1fr 1fr; gap: 0 28px; }
+.tbd { font: 10px/1 var(--label); text-transform: uppercase; background: var(--hot); color: #0b0b0c; padding: 2px 4px; border: 1px solid #0b0b0c; margin-left: 6px; }
+footer { margin: 44px 0 36px; padding-top: 12px; border-top: 1px solid var(--ink); font-size: 12px; color: var(--dim); }
+@media (max-width: 720px) { .toc, .cols, .rules { grid-template-columns: 1fr; } .toc .col, .rules li { border-right: 0; border-bottom: 1px dashed var(--rule); } .b { grid-template-columns: 1fr; } .b .t { border-right: 0; padding-bottom: 0; } .bar div { font-size: 0; } h1 { font-size: 34px; } }
+.jobs { border-top: 1px solid var(--ink); }
+.job { border-bottom: 1px solid var(--rule); }
+.job summary { list-style: none; cursor: pointer; display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; align-items: center; padding: 12px 0; }
+.job summary::-webkit-details-marker { display: none; }
+.job .jn { font-weight: 600; display: flex; gap: 8px; align-items: center; }
+.job .jn::after { content: "+"; color: var(--dim); font-weight: 400; }
+.job[open] .jn::after { content: "–"; }
+.job .jn i { width: 10px; height: 10px; border: 1px solid #0b0b0c; flex: none; }
+.job .jw { grid-column: 1; color: var(--dim); font-size: 13px; }
+.job .jp { grid-column: 2; grid-row: 1 / span 2; display: flex; flex-wrap: wrap; gap: 4px; justify-content: flex-end; max-width: 52vw; }
+.who { font: 11px/1 var(--label); letter-spacing: .06em; text-transform: uppercase; padding: 4px 6px 3px; border: 1px solid var(--ink); white-space: nowrap; }
+.who.open { border-style: dashed; color: var(--dim); }
+.job .l { margin: 0 0 14px 18px; }
+.hint { color: var(--dim); font-size: 13px; margin: -6px 0 10px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>LOCALHOST<i></i></h1>
+  <div class="meta">Sat Nov 7 · The School, 29 Nassau Ave · doors 9 AM, close 7 PM · ~60 hackers</div>
+  <nav class="toc">
+    <div class="col"><span class="chip both">Both crews</span>
+      <a href="#schedule">Schedule</a><a href="#jobs">Jobs</a><a href="#space">Space</a><a href="#open">Open</a></div>
+    <div class="col"><span class="chip hack">Hacker crew</span>
+      <a href="#hacking">Hacking, in detail</a></div>
+    <div class="col"><span class="chip ops">Ops crew</span>
+      <a href="#av">AV</a><a href="#food">Food</a><a href="#checkin">Check-in</a><a href="#artists">Artists</a><a href="/cleanup">Cleanup →</a></div>
+  </nav>
+</header>
+
+<section id="schedule" class="both">
+  <h2>Schedule <span class="chip both">Both</span></h2>
+  <div class="sched">
+    <div class="t">7:00</div><div>Crew in, setup</div>
+    <div class="t">9:00</div><div class="k">Doors, breakfast, team formation</div>
+    <div class="t">10:15</div><div class="k">Kickoff + sponsor slides</div>
+    <div class="t">10:45</div><div class="k">Team formation</div>
+    <div class="t">11:15</div><div class="k">Hacking</div>
+    <div class="t">1:00</div><div>Lunch pickup, until 1:45</div>
+    <div class="t">2:30</div><div>Feedback round, 10 min per team</div>
+    <div class="t">5:00</div><div class="k">Submissions close; changeover to the evening layout</div>
+    <div class="t">5:15</div><div class="k">Keynote (Variant), talks 5:35</div>
+    <div class="t">5:55</div><div class="k">Project demos, 2 min each</div>
+    <div class="t">6:45</div><div class="k">First winners announced + close (rest after judging)</div>
+    <div class="t">7:00</div><div>Doors close; optional dinner at Spritzenhaus 33</div>
+  </div>
+</section>
+
+<section id="jobs" class="both">
+  <h2>Jobs <span class="chip both">Both</span></h2>
+  <p class="hint">Tap a job to see the asks.</p>
+  <div class="jobs">
+    <details class="job"><summary><span class="jn"><i style="background:var(--both)"></i>Co-host</span><span class="jw">10:15 kickoff · 5:15–7 evening</span><span class="jp"><span class="who">dmarz</span><span class="who">Brenner</span></span></summary>
+      <ul class="l"><li>Kickoff: how the day works, one slide per sponsor</li><li>Evening: introduce the keynote and talks, run the demos</li><li>Announce the first winners at 6:45</li></ul></details>
+    <details class="job"><summary><span class="jn"><i style="background:var(--ops)"></i>Door + check-in</span><span class="jw">8:45–11 · office off the entry stairs</span><span class="jp"><span class="who open">open</span></span></summary>
+      <ul class="l"><li>Check names against the printed list</li><li>Wristband, name badge, wifi card</li><li>Walk-ins after 11 if there&#x27;s room</li></ul></details>
+    <details class="job"><summary><span class="jn"><i style="background:var(--ops)"></i>Bathroom check</span><span class="jw">~12:30 and ~4:00</span><span class="jp"><span class="who open">open</span></span></summary>
+      <ul class="l"><li>Paper, soap, trash</li><li>Tell ops if anything is broken</li></ul></details>
+    <details class="job"><summary><span class="jn"><i style="background:var(--ops)"></i>AV, presentations</span><span class="jw">4:30–7 · stage</span><span class="jp"><span class="who">Dan</span><span class="who">James</span><span class="who">Gonzo</span></span></summary>
+      <ul class="l"><li>Test projector, mics and HDMI switch by 4:30</li><li>Queue each team&#x27;s demo, 2 min each</li><li>Keep Cam A and the livestream running</li></ul></details>
+    <details class="job"><summary><span class="jn"><i style="background:var(--ops)"></i>Cleanup</span><span class="jw">After the event</span><span class="jp"><span class="who">Electric (Dan’s)</span></span></summary>
+      <ul class="l"><li><a href="/cleanup">Cleanup checklist: where everything goes →</a></li><li>Clove takes care of all the art stuff.</li></ul></details>
+    <details class="job"><summary><span class="jn"><i style="background:var(--ops)"></i>Changeover crew</span><span class="jw">5:00–5:15 · auditorium</span><span class="jp"><span class="who open">open</span><span class="who open">open</span><span class="who open">open</span><span class="who open">open</span></span></summary>
+      <ul class="l"><li>Teams at T6–T10 take their gear at 5:00</li><li>Fold T6–T10, stack them in the crew room</li><li>Bring the couches in from the Salon, group them per the evening plan</li><li>Side-table chairs turn to face the stage</li><li>Aisles and exits stay clear</li></ul></details>
+    <details class="job"><summary><span class="jn"><i style="background:var(--hack)"></i>Team formation</span><span class="jw">10:45–11:15 · Salon</span><span class="jp"><span class="who open">open</span></span></summary>
+      <ul class="l"><li>Solo hackers pitch an idea in one line</li><li>Teams of 2–4 are highly encouraged; teams of 3–5 get individual tables</li></ul></details>
+    <details class="job"><summary><span class="jn"><i style="background:var(--hack)"></i>Reviewer</span><span class="jw">2:30–3:30 · at the tables</span><span class="jp"><span class="who open">open</span><span class="who open">open</span><span class="who open">open</span></span></summary>
+      <ul class="l"><li>5 teams each, 10 min per team</li><li>What works, the pitch in one sentence, one thing to cut</li></ul></details>
+    <details class="job"><summary><span class="jn"><i style="background:var(--hack)"></i>Submissions</span><span class="jw">4:30–5:00 · hack floor</span><span class="jp"><span class="who open">open</span></span></summary>
+      <ul class="l"><li>Chase missing submissions</li><li>Check every repo link is public</li></ul></details>
+  </div>
+</section>
+
+<section id="space" class="both">
+  <h2>Space <span class="chip both">Both</span></h2>
+  <ol class="rules">
+    <li>Back ¾ of the auditorium is hackers only</li>
+    <li>Pitches happen without moving a table</li>
+    <li>Talking and eating happen outside the auditorium</li>
+  </ol>
+  <p class="hint">Day and evening are the same room: the middle tables swap for couches, everything else stays.</p>
+  <div class="plans">
+    <figure class="plan"><a href="img/floor1-plan.svg"><img src="img/floor1-plan.svg" alt="1st floor, day layout"></a><figcaption><span>Day · 9 AM–5 PM</span><a href="img/floor1-plan.svg" download>svg ↓</a></figcaption></figure>
+    <figure class="plan"><a href="img/floor1-evening.svg"><img src="img/floor1-evening.svg" alt="1st floor, evening layout: couches in the middle"></a><figcaption><span>Evening · 5:15–7 PM</span><a href="img/floor1-evening.svg" download>svg ↓</a></figcaption></figure>
+  </div>
+  <div class="key">
+    <span style="--k:#e6f7a0">Hack floor</span><span style="--k:#ffd98a">Stage</span><span style="--k:#cfe0ff">Porch</span><span style="--k:#ffc9bb">Salon / lounge</span><span style="--k:#e2d3ff">Green room</span><span style="--k:#ff9fdf">Artist</span><span style="--k:#16a34a">Exit</span>
+  </div>
+  <h3>For the designer</h3>
+  <ul class="l">
+    <li>The line: waist-high, one gate, readable from the door</li>
+    <li>Soften the echo: rugs, fabric, bean bags</li>
+    <li>Salon = the lounge people actually want to hang out in</li>
+    <li>Evening: its 5 couches move to the middle of the auditorium, in mixed groups facing the stage</li>
+    <li>Stage + screen look good on camera</li>
+    <li>Exits and aisles stay clear</li>
+  </ul>
+  <div class="photo"><img src="img/auditorium.jpg" alt="The auditorium, empty, looking toward the stage" loading="lazy"></div>
+</section>
+
+<section id="hacking" class="hack">
+  <h2>Hacking, in detail <span class="chip hack">Hacker crew</span></h2>
+  <div class="ticks"><span style="left:0%">10:45</span><span style="left:20%">12</span><span style="left:36%">1</span><span style="left:52%">2</span><span style="left:68%">3</span><span style="left:84%">4</span><span style="left:97%">5</span></div>
+  <div class="bar">
+    <div style="flex:30;background:#b48cff">Team formation</div>
+    <div style="flex:195;background:#c8ff00">Hack</div>
+    <div style="flex:60;background:#ffb314">Review</div>
+    <div style="flex:60;background:#c8ff00">Hack</div>
+    <div style="flex:30;background:#8fb8ff">Prep</div>
+  </div>
+  <div class="blocks">
+    <div class="b"><div class="t">10:45–11:15</div><div class="c">
+      <h4><i style="background:#b48cff"></i>Team formation</h4><div class="w">Salon</div>
+      <ul><li>Solo hackers pitch an idea in one line</li><li>Teams of 2–4 are highly encouraged</li><li>Teams of 3–5 get individual tables, T1–T15</li></ul></div></div>
+    <div class="b"><div class="t">11:15–2:30</div><div class="c">
+      <h4><i style="background:#c8ff00"></i>Hacking</h4><div class="w">Hack floor · lunch pickup 1:00–1:45</div>
+      <ul><li>Walk the floor, unblock setup: wifi, API keys, model downloads</li><li>Every team submits its repo link early</li></ul></div></div>
+    <div class="b"><div class="t">2:30–3:30</div><div class="c">
+      <h4><i style="background:#ffb314"></i>Structured feedback + review</h4><div class="w">At each team's table</div>
+      <ul><li>10 min per team, 3 reviewers, 5 teams each</li><li>Show what works so far</li><li>Say the pitch in one sentence</li><li>Pick the one thing to cut</li></ul></div></div>
+    <div class="b"><div class="t">3:30–4:30</div><div class="c">
+      <h4><i style="background:#c8ff00"></i>Hacking</h4><div class="w">Hack floor</div>
+      <ul><li>Check back with teams that were stuck at review</li></ul></div></div>
+    <div class="b"><div class="t">4:30–5:00</div><div class="c">
+      <h4><i style="background:#8fb8ff"></i>Presentation prep + submission</h4><div class="w">Hack floor · deadline 5:00</div>
+      <ul><li>2-min pitch: problem, demo, what's sovereign about it</li><li>Submit repo + pitch link</li><li>Crew chases missing submissions</li></ul></div></div>
+  </div>
+</section>
+
+<section id="av" class="ops">
+  <h2>AV <span class="chip ops">Ops crew</span></h2>
+  <p style="margin-bottom:14px"><strong>Dan · James · Gonzo</strong></p>
+  <ul class="l">
+    <li>Projector (ceiling) + screen</li>
+    <li>Schedule up all day on a second projector or TV where people gather (localhostai.nyc/schedule)</li>
+    <li>2–3 wireless mics</li>
+    <li>PA + mixer</li>
+    <li>Stage laptop, HDMI switcher, adapters</li>
+    <li>Cam A tripod, Cam B handheld</li>
+    <li>5G backup router + 3 hotspots</li>
+    <li>26 power strips, 12 cords, tape</li>
+  </ul>
+</section>
+
+<div class="cols">
+  <section id="food" class="ops">
+    <h2>Food <span class="chip ops">Ops crew</span></h2>
+    <ul class="l">
+      <li>9:00 coffee, bagels, fruit</li>
+      <li>1:00 food truck <span class="tbd">book</span></li>
+      <li>3:00 snacks + drinks</li>
+      <li>Water all day</li>
+      <li>7:00 optional dinner, Spritzenhaus 33</li>
+    </ul>
+  </section>
+  <section id="checkin" class="ops">
+    <h2>Check-in <span class="chip ops">Ops crew</span></h2>
+    <ul class="l">
+      <li>In the office off the entry stairs</li>
+      <li>Printed list, wristband, name badge</li>
+      <li>Hand out a wifi card</li>
+      <li>Walk-ins after 11 if there's room</li>
+      <li>Observers from 3:30</li>
+    </ul>
+  </section>
+</div>
+
+<section id="artists" class="ops">
+  <h2>Artists <span class="chip ops">Ops crew</span></h2>
+  <ul class="l">
+    <li>3 spots, one artist each, ~6 × 6 ft</li>
+    <li>A1 by the stage · A2 in the porch · A3 in the Salon</li>
+    <li>Each gets: table, drop cloth, clip light, one outlet</li>
+  </ul>
+</section>
+
+<section id="open" class="both">
+  <h2>Open <span class="chip both">Both</span></h2>
+  <ul class="l">
+    <li>Venue: access hours, outlets, tables + chairs</li>
+    <li>Food truck</li>
+    <li>Judges</li>
+    <li>Project submission form</li>
+    <li>Artists: who, and what they need</li>
+  </ul>
+</section>
+
+<footer>LOCALHOST · localhostai.nyc</footer>
+</div>
+</body>
+</html>

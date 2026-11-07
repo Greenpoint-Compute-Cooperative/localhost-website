@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="color-scheme" content="light dark">
+<title>Cleanup · LOCALHOST</title>
+<meta name="description" content="LOCALHOST cleanup checklist: furniture, equipment, art and plants.">
+<style>
+@font-face { font-family: "Departure Mono"; src: url("/runofshow/fonts/DepartureMono-Regular.woff2") format("woff2"); font-display: swap; }
+@font-face { font-family: "Plex"; src: url("/runofshow/fonts/IBMPlexMono-400.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "Plex"; src: url("/runofshow/fonts/IBMPlexMono-600.woff2") format("woff2"); font-weight: 600; font-display: swap; }
+:root { --paper: #fff; --ink: #0b0b0c; --dim: #6a6a70; --rule: #dcdcdf; --acid: #c8ff00; --label: "Departure Mono", ui-monospace, Menlo, monospace; --body: "Plex", ui-monospace, Menlo, monospace; }
+@media (prefers-color-scheme: dark) { :root { --paper: #0d0d0f; --ink: #ecebe6; --dim: #a6a6ae; --rule: #34343a; } }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--paper); color: var(--ink); font: 400 15px/1.6 var(--body); }
+a { color: inherit; text-underline-offset: .2em; }
+a:focus-visible, input:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
+.wrap { max-width: 800px; margin: 0 auto; padding: 0 20px; }
+header { padding: 30px 0 24px; border-bottom: 1px solid var(--ink); }
+.back { display: inline-block; margin-bottom: 25px; font: 11px/1.5 var(--label); text-transform: uppercase; letter-spacing: .05em; }
+.eyebrow { font: 11px/1.5 var(--label); text-transform: uppercase; letter-spacing: .08em; color: var(--dim); margin-bottom: 12px; }
+h1 { font: 40px/1.15 var(--label); letter-spacing: -.03em; }
+.lead { display: inline-block; margin-top: 18px; padding: 5px 8px; background: var(--acid); color: #0b0b0c; border: 1px solid #0b0b0c; font-size: 13px; }
+main { padding: 26px 0 0; }
+section { margin-top: 26px; }
+h2 { font: 15px/1.5 var(--label); letter-spacing: .04em; text-transform: uppercase; margin-bottom: 8px; }
+.hint { font-size: 12px; color: var(--dim); margin-bottom: 18px; }
+ul { list-style: none; border-top: 1px solid var(--ink); }
+li { border-bottom: 1px solid var(--rule); break-inside: avoid; }
+label { display: flex; align-items: flex-start; gap: 15px; padding: 16px 0; cursor: pointer; }
+input { flex: 0 0 auto; width: 21px; height: 21px; margin-top: 2px; accent-color: var(--ink); cursor: pointer; }
+label span { min-width: 0; }
+strong { font-weight: 600; text-decoration: underline; text-underline-offset: .2em; }
+footer { border-top: 1px solid var(--ink); margin: 30px 0; padding-top: 12px; font-size: 12px; color: var(--dim); }
+@media (max-width: 480px) { .wrap { padding: 0 16px; } h1 { font-size: 32px; } label { gap: 12px; font-size: 14px; padding: 15px 0; } }
+@media print {
+  :root { --paper: #fff; --ink: #000; --dim: #444; --rule: #bbb; color-scheme: light; }
+  body { font-size: 11pt; }
+  .wrap { max-width: none; padding: 0; }
+  header { padding: 0 0 14px; }
+  .back { display: none; }
+  h1 { font-size: 26pt; }
+  .lead { background: none; color: #000; }
+  main { padding-top: 18px; }
+  label { padding: 9px 0; }
+  input { appearance: none; width: 14px; height: 14px; border: 1px solid #000; border-radius: 0; }
+  input:checked::after { content: "✓"; display: block; font: 12px/12px sans-serif; text-align: center; }
+  footer { margin: 20px 0 0; }
+}
+
+.place { font-weight: 600; }
+.place.mural { color: #166534; }
+.place.stage-right { color: #9a3412; }
+.place.upstairs { color: #1d4ed8; }
+.place.upstairs-left { color: #6d28d9; }
+.place.community { color: #0f766e; }
+.place.under-stage { color: #854d0e; }
+.place.aygo { color: #a21caf; }
+.place.entryway { color: #b91c1c; }
+.place.integration { color: #4338ca; }
+.place.backstage { color: #3f6212; }
+.place.downstairs { color: #0e7490; }
+@media (prefers-color-scheme: dark) {
+  .place.mural { color: #86efac; }
+  .place.stage-right { color: #fdba74; }
+  .place.upstairs { color: #93c5fd; }
+  .place.upstairs-left { color: #c4b5fd; }
+  .place.community { color: #5eead4; }
+  .place.under-stage { color: #fde047; }
+  .place.aygo { color: #f0abfc; }
+  .place.entryway { color: #fca5a5; }
+  .place.integration { color: #a5b4fc; }
+  .place.backstage { color: #bef264; }
+  .place.downstairs { color: #67e8f9; }
+}
+@media print { .place { color: #000 !important; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <a class="back" href="/runofshow/">← Day plan</a>
+  <p class="eyebrow">LOCALHOST · Sat Nov 7 · The School</p>
+  <h1>Cleanup</h1>
+  <p class="lead">Cleanup lead: Electric (Dan’s)</p>
+</header>
+<main>
+  <h2>Where everything goes</h2>
+  <p class="hint">Check off as you go. Checks are not saved.</p>
+  <section aria-labelledby="chairs-heading">
+    <h2 id="chairs-heading">Chairs</h2>
+    <ul aria-label="Chairs cleanup">
+      <li><label for="item-1"><input id="item-1" type="checkbox"><span>Black chairs → <span class="place mural">mural room storage</span>.</span></label></li>
+      <li><label for="item-2"><input id="item-2" type="checkbox"><span>Brown folding chairs → <span class="place stage-right">downstairs, right of stage</span>.</span></label></li>
+      <li><label for="item-3"><input id="item-3" type="checkbox"><span>Weird unmatched folding chairs → <span class="place stage-right">downstairs, right of stage</span>.</span></label></li>
+      <li><label for="item-4"><input id="item-4" type="checkbox"><span>All comfy chairs → <span class="place upstairs">upstairs</span>; put a few in the <span class="place upstairs-left">left room upstairs</span>.</span></label></li>
+      <li><label for="item-5"><input id="item-5" type="checkbox"><span>4 green chairs → <span class="place upstairs-left">left room upstairs</span>.</span></label></li>
+      <li><label for="item-6"><input id="item-6" type="checkbox"><span>2 high chairs → <span class="place community">community room</span>.</span></label></li>
+    </ul>
+  </section>
+  <section aria-labelledby="tables-heading">
+    <h2 id="tables-heading">Tables</h2>
+    <ul aria-label="Tables cleanup">
+      <li><label for="item-7"><input id="item-7" type="checkbox"><span>6 long tables → <span class="place under-stage">left side under the stage</span>. Roll the table holder all the way out, fold the tables, put them on the roller, then roll it back.</span></label></li>
+      <li><label for="item-8"><input id="item-8" type="checkbox"><span>4 nicer wooden tables → <span class="place aygo">Aygo room</span>.</span></label></li>
+      <li><label for="item-9"><input id="item-9" type="checkbox"><span>Large wood table with leaf → <span class="place aygo">Aygo room</span>.</span></label></li>
+      <li><label for="item-10"><input id="item-10" type="checkbox"><span>Circle table → <span class="place upstairs-left">left room upstairs</span>.</span></label></li>
+      <li><label for="item-11"><input id="item-11" type="checkbox"><span>High table → <span class="place community">community room</span>.</span></label></li>
+      <li><label for="item-12"><input id="item-12" type="checkbox"><span>3 heavy white marble tables → <span class="place entryway">entryway</span>.</span></label></li>
+    </ul>
+  </section>
+  <section aria-labelledby="couches-heading">
+    <h2 id="couches-heading">Couches</h2>
+    <ul aria-label="Couches cleanup">
+      <li><label for="item-13"><input id="item-13" type="checkbox"><span>1 big blue couch → <span class="place mural">mural room</span>.</span></label></li>
+      <li><label for="item-14"><input id="item-14" type="checkbox"><span>2 big green couches → <span class="place mural">mural room</span>.</span></label></li>
+      <li><label for="item-15"><input id="item-15" type="checkbox"><span>1 light green couch → <span class="place mural">mural room</span>.</span></label></li>
+      <li><label for="item-16"><input id="item-16" type="checkbox"><span>3 couches against the wall → <span class="place integration">integration room downstairs (left back room)</span>.</span></label></li>
+    </ul>
+  </section>
+  <section aria-labelledby="rugs-heading">
+    <h2 id="rugs-heading">Rugs</h2>
+    <ul aria-label="Rugs cleanup">
+      <li><label for="item-17"><input id="item-17" type="checkbox"><span>Rugs → <span class="place upstairs-left">left room upstairs</span>.</span></label></li>
+    </ul>
+  </section>
+  <section aria-labelledby="av-equipment-heading">
+    <h2 id="av-equipment-heading">AV equipment</h2>
+    <ul aria-label="AV equipment cleanup">
+      <li><label for="item-18"><input id="item-18" type="checkbox"><span>Disco TV → <span class="place downstairs">downstairs</span>. <strong>Wear GLOVES to carry.</strong></span></label></li>
+      <li><label for="item-19"><input id="item-19" type="checkbox"><span>Speakers → <span class="place backstage">backstage room of stage</span>.</span></label></li>
+    </ul>
+  </section>
+  <section aria-labelledby="art-heading">
+    <h2 id="art-heading">Art</h2>
+    <ul aria-label="Art cleanup">
+      <li><label for="item-20"><input id="item-20" type="checkbox"><span>All art stuff → Clove takes care of it.</span></label></li>
+    </ul>
+  </section>
+  <section aria-labelledby="plants-heading">
+    <h2 id="plants-heading">Plants</h2>
+    <ul aria-label="Plants cleanup">
+      <li><label for="item-21"><input id="item-21" type="checkbox"><span>Plants → <span class="place upstairs">upstairs</span>, a few in each room.</span></label></li>
+    </ul>
+  </section>
+  <section aria-labelledby="other-furniture-heading">
+    <h2 id="other-furniture-heading">Other furniture</h2>
+    <ul aria-label="Other furniture cleanup">
+      <li><label for="item-22"><input id="item-22" type="checkbox"><span>Black bench → stays here.</span></label></li>
+      <li><label for="item-23"><input id="item-23" type="checkbox"><span>Trunk → stays here.</span></label></li>
+    </ul>
+  </section>
+  <section aria-labelledby="lamps-heading">
+    <h2 id="lamps-heading">Lamps</h2>
+    <ul aria-label="Lamps cleanup">
+      <li><label for="item-24"><input id="item-24" type="checkbox"><span>All lamps → stay here.</span></label></li>
+    </ul>
+  </section>
+</main>
+<footer><a href="/runofshow/">Back to the day plan</a></footer>
+</div>
+</body>
+</html>

@@ -23,7 +23,6 @@
 <link rel="apple-touch-icon" sizes="180x180" href="https://localhostai.nyc/apple-touch-icon.png">
 <meta name="theme-color" content="#0c0e11">
 <link rel="stylesheet" href="shared/base.css">
-<link rel="stylesheet" href="shared/apply-form.css">
 <style>
   @font-face { font-family: "IBM Plex Mono"; src: url("fonts/IBMPlexMono-400.woff2") format("woff2"); font-weight: 400; font-display: swap; }
   @font-face { font-family: "IBM Plex Mono"; src: url("fonts/IBMPlexMono-500.woff2") format("woff2"); font-weight: 500; font-display: swap; }
@@ -63,7 +62,6 @@
   .line1 { font-size: 22px; line-height: 1.25; }
   .line2 { margin-top: 8px; font-size: 13.5px; line-height: 1.6; color: var(--dim); max-width: 50ch; }
   .meta { margin-top: 18px; display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; }
-  .cf-turnstile { max-width: 100%; overflow: hidden; } /* its flexible widget is >= 300px; don't widen 320px phones */
   .meta .v a { color: inherit; text-decoration: none; border-bottom: 1px dashed currentColor; }
   .meta b { font-weight: normal; background: var(--pri); color: var(--prifg); padding: 0 4px; }
   .ctas { margin-top: 20px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
@@ -259,15 +257,6 @@
   [data-t="9"] .meta .v { font-family: var(--read); font-weight: 500; font-size: 15px; letter-spacing: 0; text-transform: none; color: var(--hi); white-space: nowrap; padding-right: 22px; }
   /* actions in three tiers: filled, outlined, text */
   [data-t="9"] .ctas { margin-top: 18px; gap: 12px; }
-  /* the application, right under the first line: email + GitHub, then X + Apply */
-  [data-t="9"] .apf { margin-top: 22px; grid-template-columns: 1fr 1fr; gap: 12px 14px; }
-  [data-t="9"] .apf .row2 { align-items: end; }
-  [data-t="9"] .apf .row2 .b { flex: none; height: 38px; padding: 0 22px; }
-  [data-t="9"] .apf .hp, [data-t="9"] .apf .cf-turnstile, [data-t="9"] .apf .msg, [data-t="9"] .apf .sent-wide, [data-t="9"] .apf.sent > * { grid-column: 1 / -1; }
-  [data-t="9"] .apf .msg { margin-top: -4px; }
-  [data-t="9"] .sponsors .ask { margin: 14px 0 0; font-family: var(--read); font-size: 13px; color: var(--lo); }
-  [data-t="9"] .sponsors .ask a { display: inline; line-height: inherit; color: var(--mid); text-decoration: underline; text-underline-offset: 3px; }
-  [data-t="9"] .sponsors .ask a:hover { color: #c8ff00; }
   [data-t="9"] .sponsors { margin-top: 28px; border-top-color: #2a3038; }
   [data-t="9"] .sponsors .k { color: var(--lo); }
   [data-t="9"] .b { font-size: 13px; letter-spacing: .1em; padding: 12px 18px; border-color: #3a424c; color: var(--hi); }
@@ -282,14 +271,6 @@
   [data-t="9"] .list, [data-t="9"] .info { font-family: var(--read); }
   [data-t="9"] .info { font-size: 14px; }
   .info a { color: var(--pri); }
-  /* short desktop viewports (laptops): the window is taller than the screen with the form in it, so the page scrolls */
-  @media (min-width: 641px) and (max-height: 940px) {
-    body { overflow-x: hidden; overflow-y: auto; display: flex; flex-direction: column; min-height: 100svh; }
-    #root { order: 1; padding: 64px 16px 0; }
-    #main { position: relative; left: auto !important; top: auto !important; transform: none !important; margin: 0 auto; }
-    .credits { order: 2; position: static; transform: none; align-self: center; margin: 26px 12px 30px; }
-    .reticle { display: none; }
-  }
   @media (max-width: 640px) {
     .corner.tr, .reticle { display: none; }
     /* phones: the page scrolls; the main window sits in the flow below the REC label */
@@ -305,11 +286,40 @@
     [data-t="9"] .meta { grid-template-columns: auto 1fr; } [data-t="9"] .meta .v { white-space: normal; padding-right: 0; }
     .sponsors .logos { --h: 18px; gap: 14px 22px; }
     .ctas .sp { flex-basis: 100%; height: 0; }
-    [data-t="9"] .apf { grid-template-columns: 1fr; }
-    [data-t="9"] .apf .row2 .b { flex: 1 1 100%; }
     .win.pop { left: 10px !important; right: 10px; top: 70px !important; width: auto !important; }
     .switch { top: 40px; }
     [data-t="2"] .menu, [data-t="9"] .ch .k { display: none; }
+  }
+
+  /* Day-of overview stays inside the existing window and theme palette. */
+  #main { max-height: calc(100svh - 112px); }
+  #main > :not(.page) { flex-shrink: 0; }
+  #main .page { min-height: 0; overflow-y: auto; overflow-x: hidden; scrollbar-color: var(--dim) var(--pg); }
+  .overview { margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--ln); }
+  .section-head { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; margin-bottom: 14px; }
+  .section-head h2, .sponsors h2 { font: 400 13px/1.5 var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+  .section-head h2 a { color: inherit; text-decoration: none; }
+  .section-head h2 a:hover, .section-link:hover { color: var(--pri); }
+  .section-head > span { font: 12px/1.5 "IBM Plex Mono", monospace; color: var(--dim); }
+  .track-briefs { display: grid; gap: 8px; }
+  .track-brief { display: grid; grid-template-columns: 1fr auto; gap: 14px; padding: 12px 14px; border: 1px solid var(--ln); color: inherit; text-decoration: none; font: 13px/1.5 "IBM Plex Mono", monospace; }
+  .track-brief b { font-weight: 500; white-space: nowrap; }
+  .track-brief:hover { background: var(--fg); color: var(--pg); }
+  .section-link { display: inline-block; margin-top: 14px; color: var(--dim); font: 12px/1.5 "IBM Plex Mono", monospace; text-underline-offset: 3px; }
+  .schedule-brief { list-style: none; font: 13px/1.6 "IBM Plex Mono", monospace; }
+  .schedule-brief li { display: grid; grid-template-columns: 80px 1fr; gap: 16px; padding: 8px 0; border-bottom: 1px dotted var(--ln); }
+  .schedule-brief li:last-child { border-bottom: 0; }
+  .schedule-time { color: var(--dim); white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .schedule-brief a { display: inline-block; margin-left: 12px; font-size: 11px; color: var(--dim); text-underline-offset: 3px; }
+  .sponsors .sponsors-heading { display: inline; line-height: 1.5; color: inherit; text-decoration: none; opacity: 1; }
+  .sponsors .sponsors-heading:hover { text-decoration: underline; text-underline-offset: 3px; }
+  a:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
+  @media (max-width: 640px) {
+    #main { max-height: none; }
+    #main .page { overflow: visible; }
+    .section-head { flex-wrap: wrap; gap: 4px 12px; }
+    .schedule-brief li { grid-template-columns: 72px 1fr; gap: 12px; }
+    .track-brief { padding: 10px 12px; font-size: 12px; }
   }
 </style>
 </head>
@@ -321,15 +331,11 @@
 <div class="credits hud"><a href="https://theschool.nyc" target="_blank" rel="noopener">The School, NYC ↗</a><span class="sep">·</span><span class="host">Hosted by <a href="https://x.com/DistributedMarz" target="_blank" rel="noopener"><canvas id="mark" aria-hidden="true"></canvas> dmarz</a> &amp; <a href="https://x.com/BrennerSpear" target="_blank" rel="noopener">Brenner</a></span></div>
 <div id="root"></div>
 
-<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
 <script type="module">
 import { thermal } from "./shared/thermal.js";
 import { mosh } from "./shared/mosh.js";
 import { cube } from "./shared/cube.js";
 cube(document.getElementById("mark"));
-import "./shared/forms.js"; // keeps a ?ref= share code for apply.html
-import "./shared/track.js"; // keeps where the visitor came from (utm tags, ad clicks); ad tags
-import { wireApplyForm } from "./shared/apply-form.js"; // the application under the first line
 
 const N = 10;
 const V = 9;
@@ -383,6 +389,8 @@ const SPONSORS = [
   { id: "tinfoil", name: "Tinfoil", host: "tinfoil.sh", w: 3.9, s: 1.05 },
   { id: "cognee", name: "cognee", host: "cognee.ai", w: 4.0, s: 1 },
   { id: "superlinked", name: "Superlinked", host: "superlinked.com", w: 4.3, s: 1.65 },
+  { id: "flashbots", name: "Flashbots", host: "flashbots.net", w: 4.08, s: 1.35, ext: "png" },
+  { id: "gensyn", name: "Gensyn AI", host: "gensyn.ai", w: 3.4, s: 1.35, ext: "png" },
 ];
 const pageHTML = `
   ${TH.pre ? `<div class="pre">${TH.pre()}</div>` : ""}
@@ -390,24 +398,41 @@ const pageHTML = `
   <div class="copy">
     <p class="sub" data-c>New York's Sovereign AI <span style="white-space:nowrap">Hackathon <span class="ny" aria-hidden="true">🗽</span></span></p>
     <p class="line1" data-c>No one should own your AI except for you.</p>
-    <form class="apf" id="apf" autocomplete="on">
-      <label><span class="k" data-c>Email</span><input name="email" type="email" required autocomplete="email" placeholder="you@example.com"></label>
-      <label><span class="k" data-c>GitHub</span><input name="github" required maxlength="300" placeholder="username or github.com/you" autocomplete="off" autocapitalize="off" spellcheck="false"></label>
-      <label><span class="k" data-c>X</span><input name="x" maxlength="300" placeholder="@handle (optional)" autocomplete="off" autocapitalize="off" spellcheck="false"></label>
-      <div class="row2"><button class="b pri" type="submit" data-c>Apply to hack</button></div>
-      <input type="text" name="field_hp" tabindex="-1" autocomplete="off" aria-hidden="true" class="hp">
-      <div class="cf-turnstile" data-action="localhost-hacker" data-theme="dark" data-size="flexible" data-appearance="interaction-only"></div>
-      <span class="msg" id="apmsg" role="status"></span>
-    </form>
     <p class="line2" data-c>${L2}</p>
     <div class="meta"><span class="k">When</span><span class="v" data-c>Sat, Nov&nbsp;7, 2026 · 9&nbsp;AM–7&nbsp;PM</span><span class="k">Who</span><span class="v" data-c>50–100 hackers</span><span class="k">Where</span><span class="v" data-c><a href="https://www.google.com/maps/search/?api=1&amp;query=The+School%2C+29+Nassau+Ave%2C+Brooklyn%2C+NY+11222" target="_blank" rel="noopener">The School, 29&nbsp;Nassau&nbsp;Ave</a></span></div>
-    <div class="ctas">
-      <button class="b ghost" data-open="tracks" data-c>Tracks →</button><button class="b ghost" data-open="schedule" data-c>Schedule →</button>
-    </div>
+    <section class="overview" aria-labelledby="checkin-heading">
+      <div class="section-head"><h2 id="checkin-heading">Check in</h2></div>
+      <p class="line2">Arrived? Complete your check-in to let us know you're here.</p>
+      <a class="section-link" href="/checkin">Check in →</a>
+    </section>
+    <section class="overview" aria-labelledby="submission-heading">
+      <div class="section-head"><h2 id="submission-heading">Submit your project</h2><span>By 5 PM</span></div>
+      <p class="line2">Submit your public GitHub repo link and a 2-minute demo by 5 PM.</p>
+      <a class="section-link" href="/submit">Submit your project →</a>
+    </section>
+    <section class="overview" aria-labelledby="tracks-heading">
+      <div class="section-head"><h2 id="tracks-heading"><a href="/tracks">Tracks →</a></h2><span>$7,250 in prizes</span></div>
+      <div class="track-briefs">
+        <a class="track-brief" href="/tracks#organization"><span>Sovereign Agentic Organization</span><b>$2,750</b></a>
+        <a class="track-brief" href="/tracks#intelligence"><span>Sovereign Intelligence</span><b>$2,500</b></a>
+        <a class="track-brief" href="/tracks#bounties"><span>Sovereign Sponsors</span><b>$2,000</b></a>
+      </div>
+      <a class="section-link" href="/teams">Find your team →</a>
+    </section>
+    <section class="overview" aria-labelledby="schedule-heading">
+      <div class="section-head"><h2 id="schedule-heading"><a href="/schedule">Schedule →</a></h2><span>Sat, Nov 7</span></div>
+      <ol class="schedule-brief">
+        <li><span class="schedule-time">9:00 AM</span><span>Doors + breakfast</span></li>
+        <li><span class="schedule-time">10:15 AM</span><span>Kickoff</span></li>
+        <li><span class="schedule-time">10:45 AM</span><span>Team formation</span></li>
+        <li><span class="schedule-time">11:15 AM</span><span>Hacking · lunch at 1 PM, feedback at 2:30 PM</span></li>
+        <li><span class="schedule-time">5:00 PM</span><span>Submissions close<a href="/submit">How to submit →</a></span></li>
+        <li><span class="schedule-time">5:15 PM</span><span>Talks + project demos</span></li>
+      </ol>
+    </section>
     <div class="sponsors" data-c>
-      <span class="k">Root sponsors</span>
-      <div class="logos">${SPONSORS.map((s) => `<a href="https://${s.host}" target="_blank" rel="noopener" aria-label="${s.name}" title="${s.name} · ${s.host}"><img src="img/sponsors/${s.id}.svg" alt="${s.name}" style="--w:${s.w};--s:${s.s}"></a>`).join("")}</div>
-      <p class="ask">Companies: a track and a prize of your own, <a href="sponsor.html">sponsor LOCALHOST →</a></p>
+      <h2 class="k"><a class="sponsors-heading" href="/sponsors">Sponsors →</a></h2>
+      <div class="logos">${SPONSORS.map((s) => `<a href="https://${s.host}" target="_blank" rel="noopener" aria-label="${s.name}" title="${s.name} · ${s.host}"><img src="img/sponsors/${s.id}.${s.ext || "svg"}" alt="${s.name}" style="--w:${s.w};--s:${s.s}"></a>`).join("")}</div>
     </div>
   </div>
   ${TH.post ? `<div class="post">${TH.post()}</div>` : ""}`;
@@ -417,26 +442,8 @@ The authenticity of host 'localhost' can't be established.
 ED25519 key fingerprint is SHA256:${rand(43)}.
 Are you sure you want to continue connecting (yes/no)?<span class="q"><button id="yes">yes</button><button id="no">no</button></span></div>` : "";
 
-const sched = `<span class="d">draft, times will move</span>
-
-SAT 7 NOV
-  09:00  doors open
-  09:30  opening remarks
-  10:00  kickoff, hacking starts
-  13:00  lunch
-  16:30  projects in
-  17:00  demos + judging
-  18:30  awards + closing
-  19:00  doors close`;
-
 document.getElementById("root").innerHTML = `
-<div class="win focus" id="main">${TH.chrome("localhost", false)}${gate}<div class="page"${V === 10 ? " hidden" : ""}>${pageHTML}</div>${TH.foot ? TH.foot(false) : ""}</div>
-<div class="win pop" id="tracks" hidden style="width:min(460px,calc(100vw - 32px))">${TH.chrome("Tracks", true)}
-  <div class="list" id="list"><div class="hdr"><span>Name</span><span>Status</span></div></div>
-  <div class="info" id="info"><span class="k">Encrypted.</span> Tracks are set with our sponsors and decrypt closer to the day.</div>${TH.foot ? TH.foot(true) : ""}</div>
-<div class="win pop" id="schedule" hidden style="width:min(380px,calc(100vw - 32px))">${TH.chrome("Schedule", true)}
-  <div class="txt">${sched}</div>${TH.foot ? TH.foot(true) : ""}</div>`;
-wireApplyForm(document.getElementById("apf"), document.getElementById("apmsg"), { scrollTo: document.getElementById("main") });
+<div class="win focus" id="main">${TH.chrome("localhost", false)}${gate}<div class="page"${V === 10 ? " hidden" : ""}>${pageHTML}</div>${TH.foot ? TH.foot(false) : ""}</div>`;
 
 const t = thermal(document.getElementById("c"), { block: 5 });
 
@@ -449,7 +456,7 @@ let m = null;
 // before mosh's own resize listener redraws it, so it never props the page wider than the screen.
 const sizeHero = () => {
   heroEl.style.width = "100%";
-  const w = heroEl.parentElement.getBoundingClientRect().width;
+  const w = heroEl.parentElement.clientWidth;
   heroEl.style.width = w + "px"; heroEl.style.height = Math.round(w * .23) + "px";
 };
 function startHero() {
@@ -522,72 +529,9 @@ if (V === 9) {
   setWatched(true);
 }
 
-// ---------- tracks: sealed until the sponsors lock them ----------
-const list = document.getElementById("list"), info = document.getElementById("info");
-const sealed = Array.from({ length: 4 }, (_, i) => {
-  const row = document.createElement("div");
-  row.className = "row";
-  row.innerHTML = `<span></span><span class="g">sealed</span>`;
-  row.addEventListener("click", () => {
-    list.querySelectorAll(".row").forEach((r) => r.classList.toggle("sel", r === row));
-    info.innerHTML = `<div class="k">Track 0${i + 1} · sealed</div>Decrypts when its sponsor locks it in. Want to set one? <a href="sponsor.html">Sponsor a track →</a>`;
-  });
-  list.appendChild(row);
-  return row.firstChild;
-});
-const hexg = "0123456789abcdef";
-(function scramble() {
-  for (const el of sealed) el.textContent = Array.from({ length: 14 }, () => hexg[Math.random() * 16 | 0]).join("").replace(/(.{4})/g, "$1 ").trim();
-  setTimeout(scramble, 220);
-})();
-
-// ---------- windows ----------
+// ---------- window ----------
 let z = 20;
 const focus = (w) => { document.querySelectorAll(".win").forEach((o) => o.classList.toggle("focus", o === w)); w.style.zIndex = ++z; };
-function open(id) {
-  const w = document.getElementById(id);
-  if (w.hidden) {
-    w.hidden = false;
-    if (!w.dataset.placed) {
-      const mainEl = document.getElementById("main");
-      let main = mainEl.getBoundingClientRect();
-      const col = 480;
-      if (innerWidth >= main.width + col + 72 && !mainEl.dataset.moved) {
-        mainEl.dataset.moved = 1;
-        const left = Math.max(24, (innerWidth - main.width - col - 24) / 2);
-        mainEl.style.transform = "none"; mainEl.style.left = main.left + "px"; mainEl.style.top = main.top + "px";
-        mainEl.getBoundingClientRect();
-        mainEl.style.transition = "left .45s cubic-bezier(.2,.8,.2,1)";
-        mainEl.style.left = left + "px";
-        main = { left, right: left + main.width, top: main.top, bottom: main.bottom };
-      }
-      const beside = innerWidth >= main.right + 24 + 340;
-      const x = beside ? main.right + 24 : Math.min(innerWidth - w.offsetWidth - 16, main.right - 120);
-      const tr = document.getElementById("tracks");
-      const below = id === "schedule" && !tr.hidden ? tr.getBoundingClientRect().bottom + 18 : main.top + 250;
-      const y = id === "tracks" ? Math.max(60, main.top - 30) : Math.min(innerHeight - w.offsetHeight - 24, below);
-      w.style.left = Math.max(16, x + (id === "schedule" ? 40 : 0)) + "px"; w.style.top = y + "px"; w.dataset.placed = 1;
-    }
-    m?.kick(.5);
-  }
-  focus(w);
-}
-document.querySelectorAll("[data-open]").forEach((b) => {
-  b.addEventListener("pointerdown", (e) => e.stopPropagation());
-  b.addEventListener("click", (e) => { e.stopPropagation(); open(b.dataset.open); });
-});
-document.querySelectorAll(".pop [data-x]").forEach((b) => b.addEventListener("click", (e) => {
-  e.stopPropagation();
-  b.closest(".win").hidden = true;
-  const mainEl = document.getElementById("main");
-  focus(mainEl);
-  if (![...document.querySelectorAll(".pop")].some((w) => !w.hidden) && mainEl.dataset.moved && !mainEl.dataset.dragged) {
-    mainEl.style.transition = "left .45s cubic-bezier(.2,.8,.2,1)";
-    mainEl.style.left = Math.round((innerWidth - mainEl.offsetWidth) / 2) + "px";
-    delete mainEl.dataset.moved;
-    document.querySelectorAll(".pop").forEach((w) => delete w.dataset.placed);
-  }
-}));
 document.querySelectorAll(".win").forEach((w) => {
   w.addEventListener("pointerdown", () => focus(w));
   const bar = w.querySelector(".ch");

@@ -66,7 +66,7 @@ const KEY = {"iterations":600000,"salt":"fjJY_Rj3HK5cPDXbfGRdMw","iv":"pDIU9abaQ
 // On localhost, read a local GPCC Forms (`npm run dev`, :8787, or ?api=<origin>).
 const LOCAL = /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
 const API = (LOCAL ? (new URLSearchParams(location.search).get("api") || "http://127.0.0.1:8787").replace(/\/+$/, "") : "https://form.theschool.nyc") + "/api/f/";
-const FORMS = [["localhost-sponsor", "Sponsors"], ["localhost-hacker", "Hackers"], ["localhost-waitlist", "Waitlist"]];
+const FORMS = [["localhost-sponsor", "Sponsors"], ["localhost-hacker", "Hackers"], ["localhost-waitlist", "Waitlist"], ["localhost-checkin", "Check-ins"]];
 const INFO = "gpcc-forms results v1";
 const LONG = new Set(["note", "build", "built", "why"]);
 // Referral codes: hacker rows carry their own code; hacker + waitlist rows carry the code they came in through.

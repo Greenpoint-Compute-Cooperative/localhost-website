@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Submitting · LOCALHOST</title>
+<meta name="theme-color" content="#0c0e11">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/shared/base.css">
+<style>
+@font-face { font-family: "IBM Plex Mono"; src: url("/fonts/IBMPlexMono-400.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "IBM Plex Mono"; src: url("/fonts/IBMPlexMono-500.woff2") format("woff2"); font-weight: 500; font-display: swap; }
+:root { --bg: #0c0e11; --panel: #12161b; --line: #2a3038; --hi: #f2f4f6; --mid: #a7b0ba; --read: "IBM Plex Mono", ui-monospace, Menlo, monospace; }
+html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+body { height: auto; background: var(--bg); color: var(--hi); }
+p { font: 400 15px/1.7 var(--read); }
+a { color: inherit; text-underline-offset: .2em; text-decoration-color: #56606b; }
+a:hover { color: var(--acid); text-decoration-color: var(--acid); }
+a:focus-visible { outline: 2px solid var(--acid); outline-offset: 4px; }
+.wrap { width: min(1120px, 100%); margin: 0 auto; padding: 0 32px; }
+.k { font: 11px/1.5 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--mid); }
+header { position: sticky; top: 0; z-index: 10; background: rgba(12,14,17,.96); border-bottom: 1px solid var(--line); }
+header .wrap { min-height: 60px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+.brand { text-decoration: none; font-size: 16px; white-space: nowrap; }
+header nav a { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; text-decoration: none; padding: 12px 0; color: var(--mid); }
+main { padding-top: 72px; padding-bottom: 80px; }
+h1 { font: 400 clamp(40px, 5.6vw, 80px)/1.1 var(--mono); letter-spacing: -.05em; }
+h2 { font: 400 clamp(27px, 3.6vw, 42px)/1.15 var(--mono); letter-spacing: -.04em; }
+h3 { font: 500 16px/1.45 var(--read); letter-spacing: -.01em; }
+.submit { padding-top: 64px; scroll-margin-top: 80px; }
+.steps { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--line); margin-top: 26px; }
+.steps.getting-started { grid-template-columns: repeat(2, 1fr); }
+.step { min-width: 0; padding: 26px; border-right: 1px solid var(--line); background: var(--panel); }
+.step:last-child { border-right: 0; }
+.step .k { font: 400 34px/1 var(--mono); letter-spacing: -.03em; color: var(--acid); margin-bottom: 20px; }
+.step p { color: var(--mid); font-size: 14px; margin-top: 10px; }
+@media (max-width: 700px) {
+  .wrap { padding: 0 20px; }
+  main { padding-top: 48px; padding-bottom: 52px; }
+  .brand { font-size: 14px; }
+  .submit { padding-top: 44px; }
+  .steps, .steps.getting-started { grid-template-columns: 1fr; }
+  .step { border-right: 0; border-bottom: 1px solid var(--line); padding: 24px 22px; }
+  .step:last-child { border-bottom: 0; }
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+</style>
+</head>
+<body>
+<header><div class="wrap"><a class="brand" href="/">← LOCALHOST</a><nav aria-label="Main"><a href="/tracks">Tracks</a></nav></div></header>
+<main class="wrap"><h1>Submitting</h1>
+  <section class="submit" id="start" aria-labelledby="start-title">
+    <div class="k" style="color:var(--acid);margin-bottom:14px">At the beginning</div>
+    <h2 id="start-title">Getting started</h2>
+    <div class="steps getting-started">
+      <div class="step"><div class="k">01</div><h3>Create a GitHub repo</h3><p>It can stay private while you build.</p></div>
+      <div class="step"><div class="k">02</div><h3>Invite the organizers</h3><p>Add <a href="https://github.com/dmarzzz">dmarzzz</a> and <a href="https://github.com/BrennerSpear">BrennerSpear</a> as collaborators so their agents can track your progress.</p></div>
+    </div>
+  </section>
+  <section class="submit" id="submit" aria-labelledby="submit-title">
+    <div class="k" style="color:var(--acid);margin-bottom:14px">End of hack · 5 PM</div>
+    <h2 id="submit-title">Submitting</h2>
+    <div class="steps">
+      <div class="step"><div class="k">01</div><h3>Open-source the repo</h3><p>Make your GitHub repo public.</p></div>
+      <div class="step"><div class="k">02</div><h3>Submit the link and a 2-minute demo</h3><p>Form link shared on the day.</p></div>
+      <div class="step"><div class="k">03</div><h3>Demos play live</h3><p>On the big screen during presentations.</p></div>
+    </div>
+  </section>
+</main>
+</body>
+</html>

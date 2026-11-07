@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow"><meta name="theme-color" content="#0c0e11">
+<title>Find your team · LOCALHOST</title>
+<meta name="teams-api" content="https://localhost-teams.vercel.app/api/teams">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/shared/base.css"><link rel="stylesheet" href="/shared/teams.css">
+<script src="/shared/teams.js" defer></script>
+</head>
+<body>
+<header><div class="wrap"><a class="brand" href="/">← LOCALHOST</a><a href="/tracks">Explore tracks ↗</a></div></header>
+<main class="wrap">
+<div class="hero"><p class="eyebrow">Build together</p><h1 id="page-title">Find your team.</h1><p id="page-description">Share what you want to build, or what you’re interested in. Find people to build with.</p><p class="page-link"><a id="view-link" href="/teams?view=groups">Grouped by topic →</a></p></div>
+<section id="groups-section" class="groups-section" hidden aria-labelledby="groups-title"><p class="eyebrow">Shared interests</p><h2 id="groups-title">Grouped by topic <span id="group-count" class="count"></span></h2><p class="muted">Find people with related themes and ideas. Each topic includes everyone who shares that interest.</p><p id="groups-empty" class="status" hidden>No topic groups have been published yet. Add your idea to the board, then check back here.</p><div id="groups-list" class="groups-list"></div><p id="groups-updated" class="refresh-note"></p></section>
+<div class="board-layout">
+<section class="join panel" aria-labelledby="join-title"><h2 id="join-title">Put your hand up</h2><p class="muted">Your name and answers will be visible to everyone here.</p>
+<form id="join-form">
+<label for="name">Your name</label><input id="name" name="name" autocomplete="name" maxlength="80" required placeholder="What should people call you?">
+<label for="idea">Your idea or interests</label><textarea id="idea" name="idea" rows="4" maxlength="1500" required placeholder="I want to build… / I’m interested in…"></textarea>
+<label for="skills">Skills or what you can help with <span class="optional">(optional)</span></label><input id="skills" name="skills" maxlength="240" placeholder="Design, Python, agents, pitching…">
+<button class="primary" id="submit-entry" type="submit">Add me to the board →</button><p id="form-status" class="status" role="status" aria-live="polite"></p>
+</form><div id="receipt" hidden><p class="receipt-message">You’re on the board. Say hello to someone below.</p><button id="remove-entry" type="button" class="text-button">Remove my entry</button></div>
+</section>
+<section class="people" aria-labelledby="people-title"><div class="section-top"><h2 id="people-title">Who’s building <span id="people-count" class="count">0</span></h2><button id="refresh" class="text-button" type="button">Refresh</button></div>
+<label for="search" class="sr-only">Search names, ideas and skills</label><input id="search" type="search" placeholder="Search names, ideas or skills…" autocomplete="off"><p id="board-status" class="status" role="status" aria-live="polite">Loading the board…</p><div id="people-list" class="people-list"></div><p class="refresh-note">Updates automatically every 10 seconds.</p></section>
+</div>
+
+</main><footer class="wrap">LOCALHOST · Find a team, then build something.</footer>
+</body></html>

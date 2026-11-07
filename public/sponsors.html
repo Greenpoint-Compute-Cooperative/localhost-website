@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sponsors · LOCALHOST</title>
+<meta name="description" content="Meet the sponsors and people joining LOCALHOST, New York’s sovereign AI hackathon.">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:title" content="Sponsors · LOCALHOST">
+<meta property="og:description" content="The companies and people supporting LOCALHOST.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#0c0e11">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/shared/base.css">
+<style>
+@font-face { font-family: "IBM Plex Mono"; src: url("/fonts/IBMPlexMono-400.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "IBM Plex Mono"; src: url("/fonts/IBMPlexMono-500.woff2") format("woff2"); font-weight: 500; font-display: swap; }
+:root { --bg: #0c0e11; --panel: #12161b; --line: #2a3038; --hi: #f2f4f6; --mid: #a7b0ba; --read: "IBM Plex Mono", ui-monospace, monospace; }
+html { scroll-behavior: smooth; scroll-padding-top: 88px; }
+body { height: auto; background: var(--bg); color: var(--hi); }
+a { text-underline-offset: .25em; text-decoration-color: #56606b; }
+a:hover { color: var(--acid); }
+a:focus-visible { outline: 2px solid var(--acid); outline-offset: 5px; }
+.wrap { width: min(1120px, 100%); margin: auto; padding: 0 32px; }
+.skip { position: absolute; top: -100px; left: 20px; z-index: 30; background: var(--acid); color: var(--bg); padding: 12px; }
+.skip:focus { top: 10px; }
+header { position: sticky; top: 0; z-index: 20; background: rgba(12,14,17,.97); border-bottom: 1px solid var(--line); }
+header .wrap { min-height: 66px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+.brand { font-size: 16px; text-decoration: none; }
+header nav { display: flex; gap: 26px; }
+header nav a { padding: 16px 0; font-size: 11px; text-transform: uppercase; text-decoration: none; color: var(--mid); }
+header nav a[aria-current] { color: var(--acid); }
+.eyebrow { font: 11px/1.5 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--mid); }
+.hero { padding: 78px 0 42px; }
+.hero .eyebrow { color: var(--acid); margin-bottom: 26px; }
+h1 { font: 400 clamp(42px, 7.5vw, 88px)/1.05 var(--mono); letter-spacing: -.055em; }
+.sponsor { display: grid; grid-template-columns: 1fr 1.1fr; gap: 70px; padding: 50px 0 54px; border-top: 1px solid var(--line); }
+.company, .speakers, .speaker-copy { min-width: 0; }
+.company h2 { margin-top: 0; height: 64px; display: flex; align-items: center; }
+.company h2 a { display: block; }
+.logo { display: block; width: auto; height: auto; max-width: 270px; max-height: 42px; object-fit: contain; object-position: left center; }
+.logo.variant { width: 210px; }
+.logo.cognee { width: 184px; }
+.logo.tinfoil { width: 172px; }
+.logo.superlinked { width: 230px; max-height: 58px; }
+.logo.darkbloom { width: 256px; }
+.logo.gensyn { width: 190px; max-height: 56px; }
+.description { font: 400 15px/1.8 var(--read); color: #c5cdd5; margin-top: 24px; max-width: 42ch; }
+.company-link { display: inline-block; margin-top: 21px; font: 12px/1.6 var(--read); color: var(--mid); }
+.speaker { display: grid; grid-template-columns: 104px 1fr; gap: 22px; align-items: start; }
+.speaker + .speaker { margin-top: 30px; }
+.portrait { width: 104px; height: 120px; object-fit: cover; border: 1px solid var(--line); background: var(--panel); }
+.placeholder { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; color: var(--mid); }
+.placeholder span { font: 32px/1 var(--mono); }
+.placeholder small { font: 9px/1.4 var(--read); }
+h3 { font: 500 19px/1.4 var(--read); letter-spacing: -.03em; }
+.role { overflow-wrap: anywhere; font: 11px/1.6 var(--read); color: var(--acid); margin-top: 5px; }
+.bio { font: 400 13px/1.8 var(--read); color: var(--mid); margin-top: 13px; }
+footer { border-top: 1px solid var(--line); padding: 30px 0 38px; }
+footer .wrap { display: flex; justify-content: space-between; gap: 22px; flex-wrap: wrap; font: 11px/1.8 var(--read); color: var(--mid); }
+@media (max-width: 760px) {
+  .wrap { padding: 0 22px; }
+  header .wrap { min-height: 62px; gap: 14px; }
+  header nav { gap: 17px; }
+  header nav a { font-size: 10px; }
+  .brand { font-size: 14px; }
+  .hero { padding: 52px 0 34px; }
+  .sponsor { grid-template-columns: 1fr; gap: 35px; padding: 36px 0 40px; }
+  .description { margin-top: 16px; max-width: 52ch; }
+  .speaker { grid-template-columns: 90px 1fr; gap: 18px; }
+  .portrait { width: 90px; height: 108px; }
+  h3 { font-size: 18px; }
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header><div class="wrap"><a class="brand" href="/">LOCALHOST</a><nav aria-label="Main navigation"><a href="/tracks">Tracks</a><a href="/sponsors" aria-current="page">Sponsors</a></nav></div></header>
+<main id="main" class="wrap">
+  <div class="hero"><p class="eyebrow">LOCALHOST / November 7, 2026 / NYC</p><h1>Sponsors<span style="color:var(--acid)">.</span></h1></div>
+  <section class="sponsor" id="cognee" aria-labelledby="cognee-heading">
+    <div class="company">
+      <h2 id="cognee-heading"><a href="https://cognee.ai" target="_blank" rel="noopener"><img class="logo cognee" src="/img/sponsors/cognee.svg" alt="cognee" width="250" height="60"></a></h2>
+      <p class="description">cognee is an open-source memory platform for AI agents. It connects data through knowledge graphs so agents can retain and retrieve context across sessions.</p>
+      <a class="company-link" href="https://cognee.ai" target="_blank" rel="noopener">cognee.ai ↗</a>
+    </div>
+    <div class="speakers"><article class="speaker" data-speaker="veljko">
+        <img class="portrait" src="/img/speakers/veljko.png" alt="Veljko Kovac" width="104" height="120" loading="lazy">
+        <div class="speaker-copy"><h3>Veljko Kovac</h3><p class="role">Head of Forward-Deployed Engineering · cognee</p><p class="bio">Veljko leads forward-deployed engineering at cognee. His work includes making persistent memory easier to integrate into AI agent workflows.</p></div>
+      </article></div>
+  </section>
+<section class="sponsor" id="tinfoil" aria-labelledby="tinfoil-heading">
+    <div class="company">
+      <h2 id="tinfoil-heading"><a href="https://tinfoil.sh" target="_blank" rel="noopener"><img class="logo tinfoil" src="/img/sponsors/tinfoil.svg" alt="Tinfoil" width="250" height="60"></a></h2>
+      <p class="description">Tinfoil builds a private AI cloud using secure enclaves and verifiable computation. Its products cover chat, model inference and container workloads.</p>
+      <a class="company-link" href="https://tinfoil.sh" target="_blank" rel="noopener">tinfoil.sh ↗</a>
+    </div>
+    <div class="speakers"><article class="speaker" data-speaker="sacha">
+        <img class="portrait" src="/img/speakers/sacha.jpg" alt="Sacha Servan-Schreiber" width="104" height="120" loading="lazy">
+        <div class="speaker-copy"><h3>Sacha Servan-Schreiber</h3><p class="role">Co-founder · Tinfoil</p><p class="bio">Sacha co-founded Tinfoil and holds a PhD from MIT in cryptography and privacy-preserving systems.</p></div>
+      </article>
+</div>
+  </section>
+<section class="sponsor" id="superlinked" aria-labelledby="superlinked-heading">
+    <div class="company">
+      <h2 id="superlinked-heading"><a href="https://superlinked.com" target="_blank" rel="noopener"><img class="logo superlinked" src="/img/sponsors/superlinked.svg" alt="Superlinked" width="250" height="60"></a></h2>
+      <p class="description">Superlinked runs small open models for search, reranking and document processing. Its inference engine can run locally, in your own cloud or through an API.</p>
+      <a class="company-link" href="https://superlinked.com" target="_blank" rel="noopener">superlinked.com ↗</a>
+    </div>
+    <div class="speakers"><article class="speaker" data-speaker="rahul">
+        <img class="portrait" src="/img/speakers/rahul.jpg" alt="Rahul Parundekar" width="104" height="120" loading="lazy">
+        <div class="speaker-copy"><h3>Rahul Parundekar</h3><p class="role">Superlinked</p><p class="bio">Rahul co-hosts technical sessions with Superlinked on choosing models for AI agents, covering latency, cost and accuracy tradeoffs.</p></div>
+      </article></div>
+  </section>
+<section class="sponsor" id="darkbloom" aria-labelledby="darkbloom-heading">
+    <div class="company">
+      <h2 id="darkbloom-heading"><a href="https://darkbloom.ai" target="_blank" rel="noopener"><img class="logo darkbloom" src="/img/sponsors/darkbloom.svg" alt="Darkbloom" width="250" height="60"></a></h2>
+      <p class="description">Darkbloom connects Apple Silicon Macs into a decentralized inference network. Providers contribute compute, and developers access models through an OpenAI-compatible API.</p>
+      <a class="company-link" href="https://darkbloom.ai" target="_blank" rel="noopener">darkbloom.ai ↗</a>
+    </div>
+    <div class="speakers"><article class="speaker" data-speaker="kydo">
+        <img class="portrait" src="/img/speakers/kydo.jpg" alt="Kydo" width="104" height="120" loading="lazy">
+        <div class="speaker-copy"><h3>Kydo</h3><p class="role">Eigen Labs · Darkbloom</p><p class="bio">Kydo works on Darkbloom and Yukon at Eigen Labs, building an open AI compute network.</p></div>
+      </article></div>
+  </section>
+<section class="sponsor" id="variant" aria-labelledby="variant-heading">
+    <div class="company">
+      <h2 id="variant-heading"><a href="https://variant.fund" target="_blank" rel="noopener"><img class="logo variant" src="/img/sponsors/variant.svg" alt="Variant" width="250" height="60"></a></h2>
+      <p class="description">Variant is a venture capital firm investing in technologies that expand human autonomy, from infrastructure and markets to applications that give users more agency.</p>
+      <a class="company-link" href="https://variant.fund" target="_blank" rel="noopener">variant.fund ↗</a>
+    </div>
+    <div class="speakers"><article class="speaker" data-speaker="sabina">
+        <img class="portrait" src="/img/speakers/sabina.png" alt="Sabina Beleuz" width="104" height="120" loading="lazy">
+        <div class="speaker-copy"><h3>Sabina Beleuz</h3><p class="role">Deputy General Counsel &amp; Investor · Variant</p><p class="bio">Sabina helps founders navigate regulatory questions and develop new crypto products. Before Variant, she practiced law at Wachtell Lipton and earned her J.D. at Stanford.</p></div>
+      </article></div>
+  </section>
+<section class="sponsor" id="gensyn" aria-labelledby="gensyn-heading">
+    <div class="company">
+      <h2 id="gensyn-heading"><a href="https://www.gensyn.ai" target="_blank" rel="noopener"><img class="logo gensyn" src="/img/sponsors/gensyn.png" alt="Gensyn AI" width="772" height="227"></a></h2>
+      <p class="description">Gensyn AI is an AI lab building world modelling systems that continuously improve by learning from real-world outcomes.</p>
+      <a class="company-link" href="https://www.gensyn.ai" target="_blank" rel="noopener">gensyn.ai ↗</a>
+    </div>
+    <div class="speakers"><article class="speaker" data-speaker="harry">
+        <img class="portrait" src="/img/speakers/harry.jpg?v=20261107" alt="Harry Grieve" width="104" height="120" loading="lazy">
+        <div class="speaker-copy"><h3>Harry Grieve</h3><p class="role">Co-founder and CTO · Gensyn AI</p><p class="bio">Harry Grieve is Co-founder and CTO of Gensyn AI, an AI lab building world modelling systems that continuously improve by learning from real-world outcomes. He has 10 years of experience in applied machine learning, and before Gensyn AI, he developed disaster risk prediction systems.</p></div>
+      </article></div>
+  </section>
+</main>
+<footer><div class="wrap"><span>LOCALHOST · New York’s sovereign AI hackathon</span><a href="/sponsor">Interested in sponsoring? ↗</a></div></footer>
+</body>
+</html>

@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Tracks · LOCALHOST</title>
-<meta name="description" content="Three tracks at LOCALHOST, New York's sovereign AI hackathon. $7,750 in prizes.">
+<meta name="description" content="Three tracks at LOCALHOST, New York's sovereign AI hackathon. $7,250 in prizes.">
 <meta name="robots" content="noindex, nofollow">
 <meta property="og:title" content="LOCALHOST · Tracks + prizes">
-<meta property="og:description" content="Sovereign Agentic Organization, Sovereign Intelligence and Sovereign Sponsors. $7,750 in prizes.">
+<meta property="og:description" content="Sovereign Agentic Organization, Sovereign Intelligence and Sovereign Sponsors. $7,250 in prizes.">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://localhostai.nyc/img/school/leg1-thermal.jpg">
 <meta name="twitter:card" content="summary_large_image">
@@ -44,9 +44,8 @@ h1 span { color: var(--acid); }
 .lede { margin-top: 32px; max-width: 62ch; color: #cfd5db; font-size: 16px; }
 .heat { position: relative; margin-top: 52px; isolation: isolate; }
 .heat canvas { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; image-rendering: pixelated; pointer-events: none; }
-.groups { display: grid; grid-template-columns: 1fr auto 1fr; grid-template-areas: "g1 or g2" "g3 g3 g3"; gap: 18px 14px; }
+.groups { display: grid; grid-template-columns: 1fr 1fr; grid-template-areas: "g1 g2" "g3 g3"; gap: 18px 14px; }
 .g1 { grid-area: g1; } .g2 { grid-area: g2; } .g3 { grid-area: g3; }
-.or { grid-area: or; align-self: center; font: 12px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--mid); padding-top: 40px; }
 .g { display: flex; flex-direction: column; min-width: 0; }
 .g-head { display: grid; grid-template-columns: 1fr auto; gap: 2px 16px; align-items: baseline; padding: 0 2px 12px; text-decoration: none; }
 .g-head .n { font: 11px/1.4 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: #fff; }
@@ -56,7 +55,9 @@ h1 span { color: var(--acid); }
 .g-body { flex: 1; display: grid; gap: 6px; padding: 10px; border: 1px solid rgba(255,255,255,.18); box-shadow: 0 0 0 1px rgba(0,0,0,.6), 0 30px 60px -30px rgba(0,0,0,.9); }
 .g1 .g-body, .g2 .g-body { min-height: 236px; }
 .g1 .g-body { grid-template-columns: 1750fr 1000fr; }
-.g2 .g-body { grid-template-columns: repeat(2, 1fr); grid-template-rows: 1fr 1fr; }
+.g2 .g-body { grid-template-columns: repeat(6, 1fr); grid-template-rows: 1fr 1fr; }
+.g2 .p { grid-column: span 2; }
+.g2 .p:nth-child(n+4) { grid-column: span 3; }
 .g3 .g-body { grid-template-columns: repeat(4, 1fr); min-height: 118px; }
 .g3 .g-head { margin-top: 10px; }
 .p { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; min-width: 0; text-align: center; text-decoration: none; color: #fff; text-shadow: 0 1px 12px rgba(0,0,0,.85), 0 0 2px rgba(0,0,0,.6); transition: transform .2s cubic-bezier(.2,.7,.2,1); }
@@ -107,6 +108,8 @@ h3 { font: 500 16px/1.45 var(--read); letter-spacing: -.01em; }
 .sub { min-width: 0; padding: 24px 24px 26px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); display: flex; flex-direction: column; }
 .sub:nth-child(2n) { border-right: 0; }
 .sub:nth-last-child(-n+2) { border-bottom: 0; }
+.subs .sub:last-child:nth-child(odd) { grid-column: 1 / -1; }
+.subs .sub:nth-last-child(2):nth-child(even) { border-bottom: 1px solid var(--line); }
 .sub-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 14px; }
 .sub-top .k { color: var(--acid); }
 .sub-top .amt { font: 400 18px/1 var(--mono); }
@@ -130,6 +133,8 @@ h3 { font: 500 16px/1.45 var(--read); letter-spacing: -.01em; }
 
 .submit { padding-top: 104px; }
 .steps { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--line); margin-top: 30px; }
+.steps.getting-started { grid-template-columns: repeat(2, 1fr); }
+.track-top + .subs, .track-top + .sp-grid { margin-top: 32px; }
 .step { min-width: 0; padding: 24px; border-right: 1px solid var(--line); background: var(--panel); }
 .step:last-child { border-right: 0; }
 .step .k { font: 400 34px/1 var(--mono); letter-spacing: -.03em; color: var(--acid); margin-bottom: 16px; }
@@ -142,8 +147,7 @@ footer a { text-decoration: none; }
 
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 @media (max-width: 960px) {
-  .groups { grid-template-columns: 1fr; grid-template-areas: "g1" "or" "g2" "g3"; gap: 14px; }
-  .or { padding: 0; text-align: center; }
+  .groups { grid-template-columns: 1fr; grid-template-areas: "g1" "g2" "g3"; gap: 14px; }
   .g-body { grid-template-rows: none !important; grid-auto-rows: 92px; row-gap: 10px; }
   .g1 .g-body, .g2 .g-body { min-height: 0; }
   .g1 .g-body { grid-auto-rows: 130px; }
@@ -155,9 +159,10 @@ footer a { text-decoration: none; }
   .sub:nth-child(2n) { border-right: 0; }
   .sub:nth-last-child(-n+3) { border-bottom: 1px solid var(--line); }
   .sub:nth-last-child(-n+2) { border-bottom: 0; }
+  .subs .sub:nth-last-child(2):nth-child(even) { border-bottom: 1px solid var(--line); }
 }
 @media (max-width: 860px) {
-  .sp-grid, .steps { grid-template-columns: 1fr; }
+  .sp-grid, .steps, .steps.getting-started { grid-template-columns: 1fr; }
   .sp, .step { border-right: 0; border-bottom: 1px solid var(--line); }
   .sp:nth-last-child(2) { border-bottom: 1px solid var(--line); }
   .sp:last-child, .step:last-child { border-bottom: 0; }
@@ -173,10 +178,6 @@ footer a { text-decoration: none; }
   .brand { font-size: 14px; }
   header nav { gap: 14px; }
   header nav a { font-size: 10px; }
-}
-@media (max-width: 360px) {
-  header nav { gap: 10px; }
-  .brand { font-size: 12px; }
   .hero { padding: 52px 0 40px; }
   h1 { font-size: clamp(34px, 10vw, 52px); }
   .lede { font-size: 15px; }
@@ -190,20 +191,24 @@ footer a { text-decoration: none; }
   .sp, .step, .sub { min-width: 0; padding: 22px 18px; }
   .submit { padding-top: 72px; }
 }
+@media (max-width: 360px) {
+  header nav { gap: 10px; }
+  .brand { font-size: 12px; }
+}
 </style>
 </head>
 <body>
 <a class="skip" href="#organization">Skip to tracks</a>
 <header><div class="wrap">
   <a class="brand" href="/">← LOCALHOST</a>
-  <nav aria-label="Main"><a href="#organization">Tracks</a><a href="#bounties">Sponsors</a><a href="#submit">Submitting</a></nav>
+  <nav aria-label="Main"><a href="/submitting">Submitting</a></nav>
 </div></header>
 <main>
 <section class="hero" aria-labelledby="page-title">
   <canvas class="thermal" id="thermal" aria-hidden="true"></canvas>
   <div class="wrap">
     <div class="k eyebrow">LOCALHOST // Tracks + prizes</div>
-    <h1 id="page-title">Three tracks.<br><span>$7,750 in prizes.</span></h1>
+    <h1 id="page-title">Three tracks.<br><span>$7,250 in prizes.</span></h1>
     <p class="lede">Build on AI you control.</p>
     <nav class="heat" aria-label="Tracks and prizes, heat by prize money">
       <canvas id="heat" aria-hidden="true"></canvas>
@@ -212,12 +217,12 @@ footer a { text-decoration: none; }
           <a class="g-head" href="#organization"><span class="n"><i>01</i>Sovereign Agentic Organization</span><span class="tot">$2,750</span></a>
           <div class="g-body"><a class="p" data-amt="1750" href="#organization"><span class="amt">$1,750</span><span class="lbl">1st</span></a><a class="p" data-amt="1000" href="#organization"><span class="amt">$1,000</span><span class="lbl">2nd</span></a></div>
         </div>
-        <div class="or" aria-hidden="true">or</div>
+
         <div class="g g2">
-          <a class="g-head" href="#intelligence"><span class="n"><i>02</i>Sovereign Intelligence</span><span class="tot">$3,000</span></a>
+          <a class="g-head" href="#intelligence"><span class="n"><i>02</i>Sovereign Intelligence</span><span class="tot">$2,500</span></a>
           <div class="g-body">
-            <a class="p" data-amt="750" href="#intelligence"><span class="amt">$750</span><span class="lbl">Production-ready</span></a><a class="p" data-amt="750" href="#intelligence"><span class="amt">$750</span><span class="lbl">Own the model</span></a>
-            <a class="p" data-amt="750" href="#intelligence"><span class="amt">$750</span><span class="lbl">Checkable inference</span></a><a class="p" data-amt="750" href="#intelligence"><span class="amt">$750</span><span class="lbl">Private cooperation</span></a>
+            <a class="p" data-amt="500" href="#intelligence"><span class="amt">$500</span><span class="lbl">Production-ready</span></a><a class="p" data-amt="500" href="#intelligence"><span class="amt">$500</span><span class="lbl">Own the model</span></a><a class="p" data-amt="500" href="#intelligence"><span class="amt">$500</span><span class="lbl">Private routing</span></a>
+            <a class="p" data-amt="500" href="#intelligence"><span class="amt">$500</span><span class="lbl">Private cooperation</span></a><a class="p" data-amt="500" href="#intelligence"><span class="amt">$500</span><span class="lbl">Swarm memory</span></a>
           </div>
         </div>
         <div class="g g3">
@@ -239,8 +244,8 @@ footer a { text-decoration: none; }
       <div class="purse"><b>$2,750</b></div>
     </div>
     <div class="statement">
-      <p>A business that makes money and that no frontier lab can switch off. You can use closed AI, but you control the entire harness, memory and tool layer, so a change in terms of service doesn't take your business down. An agentic org that makes real $$$ in the 8 hours scores the highest.</p>
-      <p class="ex">Two recent examples: Anthropic cut Windsurf's direct access to Claude with less than five days' notice (<a href="https://techcrunch.com/2025/06/03/windsurf-says-anthropic-is-limiting-its-direct-access-to-claude-ai-models">TechCrunch, June 2025</a>), then barred Claude subscription logins from every third-party tool (<a href="https://www.theregister.com/2026/02/20/anthropic_clarifies_ban_third_party_claude_access">The Register, Feb 2026</a>).</p>
+      <p>An agentic company that makes real money on an open-source stack you control end to end.</p>
+      <p class="ex">What makes it an organization is its reach into the real world: posting, selling, buying, running ads. A dollar earned beats any proof of concept.</p>
     </div>
     <div class="prizes">
       <div class="pz"><span class="k">1st</span><b>$1,750</b></div>
@@ -251,32 +256,33 @@ footer a { text-decoration: none; }
   <section class="track t2" id="intelligence" aria-labelledby="intelligence-title">
     <div class="track-top">
       <div><div class="k">Track 02</div><h2 id="intelligence-title">Sovereign Intelligence</h2></div>
-      <div class="purse"><b>$3,000</b></div>
-    </div>
-    <div class="statement">
-      <p>Intelligence you own: a model you run yourself, a model running privately where its operator can't read your inputs, or open weights anyone can download. Pick one of the four sub-tracks below. Each pays $750.</p>
-      <p class="ex">The gap is small enough now. Open-weight models have trailed the best closed models by about four months this year (<a href="https://epoch.ai/data-insights/open-closed-eci-gap">Epoch AI</a>), and private inference can be checked instead of trusted: Tinfoil's Modelwrap puts a hash of the served weights into the enclave's attestation (<a href="https://tinfoil.sh/blog/2026-02-03-proving-model-identity">Tinfoil</a>).</p>
+      <div class="purse"><b>$2,500</b></div>
     </div>
     <div class="subs">
       <article class="sub">
-        <div class="sub-top"><span class="k">2.1</span><span class="amt">$750</span></div>
+        <div class="sub-top"><span class="k">2.1</span><span class="amt">$500</span></div>
         <h3>Most production-ready product</h3>
         <p>A product someone outside your team could start using on Monday, built on local, private or open-source AI.</p>
       </article>
       <article class="sub">
-        <div class="sub-top"><span class="k">2.2</span><span class="amt">$750</span></div>
+        <div class="sub-top"><span class="k">2.2</span><span class="amt">$500</span></div>
         <h3>Own the model</h3>
-        <p>Distill or fine-tune an open-weight model into something it couldn't do before: a job you hand a frontier model today, a voice, a skill, a domain. LoRA on a laptop counts. Distill only from a teacher whose license allows it (<a href="https://github.com/openai/gpt-oss">gpt-oss-120b</a> is Apache 2.0); <a href="https://github.com/unslothai/unsloth">Unsloth</a> and <a href="https://huggingface.co/docs/trl/distillation_trainer">TRL</a> both work.</p>
+        <p>Distill or fine-tune an open-weight model into something it couldn't do before: a task, a voice, a skill, a domain. LoRA on a laptop counts. Distill only from a teacher whose license allows it (<a href="https://github.com/openai/gpt-oss">gpt-oss-120b</a> is Apache 2.0); <a href="https://github.com/unslothai/unsloth">Unsloth</a> and <a href="https://huggingface.co/docs/trl/distillation_trainer">TRL</a> both work.</p>
       </article>
       <article class="sub">
-        <div class="sub-top"><span class="k">2.3</span><span class="amt">$750</span></div>
-        <h3>Private inference you can check</h3>
-        <p>Route requests between private providers (Tinfoil, Darkbloom, your own Macs) from inside an enclave (<a href="https://github.com/Dstack-TEE/dstack">dstack</a> or a <a href="https://docs.tinfoil.sh/containers/overview">Tinfoil container</a>), so the router's operator can't read prompts either. Or catch a host serving a smaller or more heavily quantized model than it claims, from outputs and log-probabilities alone.</p>
+        <div class="sub-top"><span class="k">2.3</span><span class="amt">$500</span></div>
+        <h3>Private inference routing</h3>
+        <p>Use confidential compute (<a href="https://github.com/Dstack-TEE/dstack">dstack</a>, <a href="https://docs.tinfoil.sh/containers/overview">Tinfoil containers</a>) to route inference requests more intelligently while keeping users' data private. Bonus points for nuanced security models.</p>
       </article>
       <article class="sub">
-        <div class="sub-top"><span class="k">2.4</span><span class="amt">$750</span></div>
-        <h3>Private cooperation</h3>
-        <p>Several people's agents, each with its own private context, climb one leaderboard together: a speedrun, a <a href="https://cooperbench.com">CooperBench</a> task, an open puzzle. No one hands over raw context or traces, and the score before and after each contribution shows who added what.</p>
+        <div class="sub-top"><span class="k">2.4</span><span class="amt">$500</span></div>
+        <h3>Private cooperation (coopetition?)</h3>
+        <p>Several people's agents, each with its own private context, climb one leaderboard together, say a <a href="https://github.com/KellerJordan/cifar10-airbench">basic speedrun</a>. No one hands over raw context, and the score shows who added what.</p>
+      </article>
+      <article class="sub">
+        <div class="sub-top"><span class="k">2.5</span><span class="amt">$500</span></div>
+        <h3>Private swarm memory</h3>
+        <p>A confidential memory layer for multiplayer agent apps: open-source memory, pluggable into any harness.</p>
       </article>
     </div>
   </section>
@@ -286,17 +292,16 @@ footer a { text-decoration: none; }
       <div><div class="k">Track 03</div><h2 id="bounties-title">Sovereign Sponsors</h2></div>
       <div class="purse"><b>$2,000</b></div>
     </div>
-    <div class="statement"><p>Each sponsor pays $500 to the best project built on what it makes.</p></div>
     <div class="sp-grid">
       <article class="sp">
         <div class="sp-top"><img src="/img/sponsors/tinfoil.svg" alt="Tinfoil"><span class="amt">$500</span></div>
-        <p class="what">Private AI on secure hardware enclaves. Call open models through an OpenAI-compatible API, or run any Docker image in a Tinfoil Container. The data stays out of reach, Tinfoil's included, and the SDKs verify that on every connection.</p>
-        <p class="wins">The best app built on Tinfoil that you'd never trust to a normal AI API.</p>
+        <p class="what">Tinfoil Containers run any Docker image inside a secure enclave (Intel TDX, AMD SEV-SNP, NVIDIA confidential GPUs). Memory is encrypted in hardware and invisible to Tinfoil, and your users' SDKs verify the enclave on every request.</p>
+        <p class="wins">The best app deployed as a Tinfoil Container.</p>
         <ul>
-          <li>Use the real data: medical records, legal files, a company's codebase, a journal.</li>
-          <li>Run your own service in a Tinfoil Container, next to the models.</li>
+          <li>Take a backend you already have, deploy it as a container, and let users check the code it runs.</li>
+          <li>Call Tinfoil's hosted open models from it, so the model host never sees plaintext either.</li>
         </ul>
-        <p class="fine"><a href="https://docs.tinfoil.sh">Docs ↗</a></p>
+        <p class="fine"><a href="https://docs.tinfoil.sh/containers/overview">Containers docs ↗</a></p>
       </article>
       <article class="sp">
         <div class="sp-top"><img src="/img/sponsors/darkbloom.svg" alt="Darkbloom"><span class="amt">$500</span></div>
@@ -310,21 +315,21 @@ footer a { text-decoration: none; }
       </article>
       <article class="sp">
         <div class="sp-top"><img src="/img/sponsors/superlinked.svg" alt="Superlinked"><span class="amt">$500</span></div>
-        <p class="what">SIE, the Superlinked Inference Engine: one open-source API for the small models behind an agent's everyday jobs, like search, reranking, document-to-text, extraction and transcription. Run it serverless or in your own cloud.</p>
+        <p class="what">SIE Serverless: small open models for an agent's everyday jobs, like search, reranking, document-to-text, extraction and transcription, behind one API. Pay per call, no GPUs to run.</p>
         <p class="wins">The best project that moves an agent's everyday jobs off a frontier model and onto SIE.</p>
         <ul>
-          <li>Hand search, reranking or extraction to SIE instead of a big model.</li>
+          <li>Start from a recipe in the cookbook, like redacting chats or triaging phishing.</li>
           <li>Measure it: the same quality for a fraction of the cost.</li>
         </ul>
-        <p class="fine"><a href="https://github.com/superlinked/sie">Repo ↗</a></p>
+        <p class="fine"><a href="https://superlinked.com/serverless">SIE Serverless ↗</a> · <a href="https://github.com/superlinked/cookbook">Cookbook ↗</a></p>
       </article>
       <article class="sp">
         <div class="sp-top"><img src="/img/sponsors/cognee.svg" alt="cognee"><span class="amt">$500</span></div>
-        <p class="what">Open-source memory for AI agents. Cognee turns documents, code and conversations into a knowledge graph that agents can search, and it runs locally on small models, no API key needed.</p>
-        <p class="wins">The best project where agents remember, across sessions, across agents or across a team.</p>
+        <p class="what">Cognee is the memory platform for AI agents. It turns data scattered across docs, code and chats into one knowledge graph that many agents share, with permissions on who can read and write what. Agents recall what others have learned, reason over real context and improve with every run. Open source, and it runs locally on small models.</p>
+        <p class="wins">The best project where agents share what they learn between each other.</p>
         <ul>
-          <li>Connect Cognee to Claude Code, Cursor or any MCP client so your agent keeps context between sessions.</li>
-          <li>Build one shared memory for a team's agents from its docs, repos and chats.</li>
+          <li>Give several agents a shared memory with clear permissions, so they collaborate smarter and become more efficient over time.</li>
+          <li>Use Cognee to make the system improve itself over time: it learns from agents' outcomes, feedback and fixes, so each run starts smarter than the last.</li>
         </ul>
         <p class="fine"><a href="https://www.cognee.ai/mcp">MCP guide ↗</a></p>
       </article>
@@ -336,13 +341,13 @@ footer a { text-decoration: none; }
     <h2 id="submit-title">Submitting</h2>
     <div class="steps">
       <div class="step"><div class="k">01</div><h3>Open-source the repo</h3><p>Make your GitHub repo public.</p></div>
-      <div class="step"><div class="k">02</div><h3>Submit the link and a 2-minute demo</h3><p>Send your GitHub link and a 2-minute demo video to the <a href="/submit">submission form</a> by 5:00 PM. Edits allowed until then.</p></div>
-      <div class="step"><div class="k">03</div><h3>Demos play live</h3><p>Every 2-minute demo runs on the big screen during presentation time.</p></div>
+      <div class="step"><div class="k">02</div><h3>Submit the link and a 1-minute demo</h3><p>Send your GitHub link and a 1-minute demo video (make it with AI: slides, demo, narration) to the <a href="/submit">submission form</a> by 5:00 PM. Edits allowed until then.</p></div>
+      <div class="step"><div class="k">03</div><h3>Demos play live</h3><p>Every 1-minute demo runs on the big screen during presentation time.</p></div>
     </div>
   </section>
 </div>
 </main>
-<footer><div class="wrap k"><a href="/">← LOCALHOST · Sat, Nov 7, 2026 · The School, 29 Nassau Ave</a><span>$7,750 in prizes</span></div></footer>
+<footer><div class="wrap k"><a href="/">← LOCALHOST · Sat, Nov 7, 2026 · The School, 29 Nassau Ave</a><span>$7,250 in prizes</span></div></footer>
 <script type="module">
 import { thermal } from "/shared/thermal.js";
 thermal(document.getElementById("thermal"), { block: 6, bodies: 5 });
