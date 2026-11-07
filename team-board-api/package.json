@@ -1,0 +1,17 @@
+{
+  "name": "localhost-team-board-api",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/*.test.js"
+  },
+  "dependencies": {
+    "@vercel/blob": "2.8.2"
+  },
+  "engines": {
+    "node": "24.x"
+  },
+  "overrides": {
+    "@vercel/cli-config": "0.3.7"
+  }
+}
