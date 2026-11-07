@@ -1,0 +1,497 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LOCALHOST Projects</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<link rel="icon" href="https://localhostai.nyc/icon-192.png" sizes="192x192" type="image/png">
+<link rel="icon" href="https://localhostai.nyc/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="https://localhostai.nyc/favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#0c0e11">
+<link rel="stylesheet" href="shared/base.css">
+<style>
+  @font-face { font-family: "IBM Plex Mono"; src: url("fonts/IBMPlexMono-400.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+  @font-face { font-family: "IBM Plex Mono"; src: url("fonts/IBMPlexMono-500.woff2") format("woff2"); font-weight: 500; font-display: swap; }
+  @font-face { font-family: "IBM Plex Mono"; src: url("fonts/IBMPlexMono-600.woff2") format("woff2"); font-weight: 600; font-display: swap; }
+  :root { --bg: #0c0e11; --panel: #12161b; --line: #2a3038; --hi: #f2f4f6; --mid: #a7b0ba; --lo: #6b747e; --bad: #ff6b6b; --read: "IBM Plex Mono", ui-monospace, Menlo, monospace; }
+  html, body { height: auto; }
+  body { background: var(--bg); color: var(--hi); font-family: var(--read); }
+  .wrap { max-width: 1280px; margin: 0 auto; padding: 32px; }
+  .k { font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--lo); }
+  a.home { color: var(--hi); text-decoration: none; } a.home:hover { color: var(--acid); }
+  h1 { font-weight: normal; font-size: clamp(36px, 6vw, 72px); margin: 28px 0 8px; }
+  .lede { color: var(--mid); line-height: 1.5; }
+  form.unlock { margin-top: 28px; display: flex; gap: 10px; flex-wrap: wrap; }
+  form.unlock[hidden] { display: none; }
+  input { font: 15px var(--read); padding: 12px; background: var(--panel); color: var(--hi); border: 1px solid var(--line); border-radius: 0; width: min(360px, 100%); }
+  input:focus { outline: 1px solid var(--acid); }
+  button, .btn2 { font: 12px var(--read); letter-spacing: .1em; text-transform: uppercase; padding: 11px 16px; background: var(--acid); color: #0b0b0c; border: 0; cursor: pointer; }
+  button.ghost { background: none; color: var(--hi); border: 1px solid var(--line); } button.ghost:hover { border-color: var(--acid); color: var(--acid); }
+  button:disabled { opacity: .5; cursor: wait; }
+  .msg { margin-top: 12px; color: var(--mid); min-height: 1.4em; } .msg.bad { color: var(--bad); }
+  .bar { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-top: 28px; border-bottom: 1px solid var(--line); padding-bottom: 12px; }
+  .bar .sum { flex: 1; min-width: 220px; color: var(--mid); font-size: 13px; } .bar .sum b { color: var(--acid); font-weight: 500; } .bar .sum .x { color: var(--bad); }
+  .scroll { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; font-size: 13px; }
+  th, td { text-align: left; vertical-align: top; padding: 10px 12px 10px 0; border-bottom: 1px solid var(--line); }
+  th { font-weight: normal; color: var(--lo); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; white-space: nowrap; }
+  td { line-height: 1.45; } td a { color: var(--hi); } td a:hover { color: var(--acid); }
+  td.n { color: var(--acid); white-space: nowrap; } td.team { font-weight: 600; min-width: 12ch; } td.pitch { min-width: 26ch; max-width: 44ch; color: var(--mid); }
+  td.mv { white-space: nowrap; } td.mv button { background: none; color: var(--lo); border: 1px solid var(--line); padding: 2px 7px; font-size: 12px; } td.mv button:hover { color: var(--acid); border-color: var(--acid); }
+  .miss { color: var(--bad); white-space: nowrap; } td.vd { white-space: nowrap; } .at { color: var(--lo); white-space: nowrap; }
+  .tag { display: inline-block; font-size: 11px; letter-spacing: .08em; padding: 2px 6px; border: 1px solid var(--line); margin: 0 4px 4px 0; white-space: nowrap; }
+  .tag.tr { border-color: var(--acid); color: var(--acid); }
+  .empty { color: var(--lo); padding: 16px 0; }
+  .note { margin-top: 40px; color: var(--lo); font-size: 12px; line-height: 1.6; }
+  .note kbd { border: 1px solid var(--line); padding: 0 5px; }
+  @media (max-width: 640px) { .wrap { padding: 20px 16px; } }
+
+  /* judging */
+  #judging { margin-top: 56px; }
+  .hd2 { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; border-bottom: 1px solid var(--line); padding-bottom: 12px; }
+  .hd2 h2 { font: 500 22px var(--read); flex: 1; }
+  .prz { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 12px; margin-top: 16px; }
+  .pz { border: 1px solid var(--line); background: var(--panel); padding: 14px; min-width: 0; }
+  .pz h3 { font: 600 15px var(--read); display: flex; gap: 8px; align-items: baseline; }
+  .pz h3 .am { color: var(--lo); font-weight: 400; font-size: 12px; margin-left: auto; white-space: nowrap; }
+  .pz .in { font-size: 12px; color: var(--lo); margin-top: 4px; } .pz .in .x { color: var(--bad); }
+  .pz .tie { margin-top: 8px; font-size: 12px; color: #0b0b0c; background: var(--hot); padding: 4px 8px; display: inline-block; }
+  .pz .fin { margin-top: 8px; font-size: 13px; color: var(--acid); }
+  .pz ol { list-style: none; margin-top: 10px; }
+  .pz li { display: grid; grid-template-columns: 1.6em 1fr auto; gap: 4px 8px; padding: 8px 0; border-top: 1px solid var(--line); font-size: 13px; align-items: start; }
+  .pz li .pl { color: var(--lo); } .pz li.lead .pl, .pz li.lead .tm2 { color: var(--acid); }
+  .pz li .tm2 { font-weight: 600; } .pz li .sc { color: var(--mid); white-space: nowrap; text-align: right; }
+  .pz li .nt { grid-column: 2 / 4; color: var(--mid); font-size: 12px; line-height: 1.5; }
+  .pz li .fb { grid-column: 2 / 4; display: flex; gap: 6px; }
+  .pz li .fb button, .pz .lock { background: none; color: var(--lo); border: 1px solid var(--line); padding: 3px 8px; font-size: 11px; }
+  .pz li .fb button.on { color: #0b0b0c; background: var(--acid); border-color: var(--acid); }
+  .pz .lock { margin-top: 10px; } .pz .lock.on { color: var(--bad); border-color: var(--bad); }
+  .jl { margin-top: 28px; } .jl h3 { font: 500 15px var(--read); margin-bottom: 8px; }
+  .jrow { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; padding: 8px 0; border-top: 1px solid var(--line); font-size: 13px; }
+  .jrow .lb { font-weight: 600; min-width: 10ch; } .jrow .pr { color: var(--mid); flex: 1; min-width: 200px; } .jrow .sn { color: var(--lo); white-space: nowrap; }
+  .jrow.rv { opacity: .45; } .jrow button { background: none; color: var(--lo); border: 1px solid var(--line); padding: 3px 8px; font-size: 11px; }
+  form.nj { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 14px; }
+  form.nj input[type=text] { width: 220px; padding: 10px; font-size: 13px; }
+  .chip { display: inline-flex; gap: 6px; align-items: center; border: 1px solid var(--line); padding: 7px 10px; font-size: 12px; color: var(--mid); cursor: pointer; }
+  .chip:has(input:checked) { border-color: var(--acid); color: var(--acid); } .chip input { accent-color: #c8ff00; width: auto; padding: 0; }
+  .newlink { margin-top: 12px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; font-size: 13px; }
+  .newlink input { flex: 1; min-width: 260px; font-size: 13px; border-style: dashed; }
+  @media (max-width: 640px) { .prz { grid-template-columns: 1fr; } }
+  /* big screen */
+  #stage { position: fixed; inset: 0; z-index: 100; background: #050309; display: none; flex-direction: column; padding: 4vh 5vw; cursor: none; }
+  #stage.on { display: flex; }
+  #stage .top { display: flex; justify-content: space-between; font: 1.6vh var(--mono); letter-spacing: .2em; text-transform: uppercase; color: rgba(255,255,255,.6); }
+  #stage .top .tm { color: var(--acid); }
+  #stage .mid { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 3.2vh; min-height: 0; }
+  #stage .trk { font: 2.4vh var(--mono); letter-spacing: .18em; text-transform: uppercase; color: var(--acid); }
+  #stage .nm { font: 600 clamp(40px, 11vh, 150px)/1.02 var(--read); color: #fff; overflow-wrap: anywhere; }
+  #stage .pt { font: clamp(20px, 4.2vh, 56px)/1.3 var(--read); color: var(--mid); max-width: 32ch; }
+  #stage .who { font: 2.4vh var(--read); color: rgba(255,255,255,.7); display: flex; gap: 2.4vh; flex-wrap: wrap; }
+  #stage .who .rp { color: #fff; }
+  #stage .bt { display: flex; gap: 1.2vh; flex-wrap: wrap; } #stage .bt .tag { font-size: 1.8vh; padding: .5vh 1.2vh; }
+  #stage .bot { display: flex; justify-content: space-between; gap: 2vw; font: 1.8vh var(--mono); letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.5); }
+  #stage .bot .play { color: var(--acid); } #stage .bot .nov { color: var(--bad); }
+  #stage .vid { position: absolute; inset: 0; background: #000; display: none; }
+  #stage .vid.on { display: block; } #stage .vid iframe, #stage .vid video { width: 100%; height: 100%; border: 0; background: #000; object-fit: contain; display: block; }
+  #stage .vid .esc { position: absolute; top: 12px; right: 16px; font: 11px var(--mono); letter-spacing: .16em; color: rgba(255,255,255,.4); text-transform: uppercase; }
+
+  /* score sheets: printed only */
+  #sheets { display: none; }
+  @media print {
+    @page { size: letter landscape; margin: 12mm; }
+    body { background: #fff; color: #000; }
+    .wrap, #stage { display: none !important; }
+    #sheets { display: block; font: 10pt var(--read); }
+    .sheet { page-break-after: always; break-after: page; }
+    .sheet h2 { font: 600 16pt var(--read); } .sheet .sub { margin: 2mm 0 5mm; display: flex; justify-content: space-between; font-size: 10pt; }
+    .sheet table { font-size: 10pt; } .sheet th, .sheet td { border: 1px solid #000; padding: 2.4mm 2mm; color: #000; }
+    .sheet th { font-size: 8pt; color: #000; } .sheet td.box { width: 16mm; } .sheet td.notes { width: 60mm; } .sheet td .p { font-size: 8.5pt; color: #333; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="home k" href="/">← LOCALHOST</a>
+  <h1>Projects</h1>
+  <p class="lede">Submissions, presentation order, the big screen and judges' sheets.</p>
+  <form class="unlock" id="unlock" autocomplete="off">
+    <input id="pp" type="password" placeholder="xxxx-xxxx-xxxx-xxxx-xxxx" aria-label="Passphrase" autocomplete="off" spellcheck="false" required>
+    <button id="go" type="submit">Unlock</button>
+  </form>
+  <div class="msg" id="msg" role="status"></div>
+  <div id="out" hidden>
+    <div class="bar">
+      <span class="sum" id="sum"></span>
+      <button id="present" type="button">Present ▶</button>
+      <button class="ghost" id="print" type="button">Score sheets</button>
+      <button class="ghost" id="refresh" type="button">Refresh</button>
+      <button class="ghost" id="csv" type="button">CSV</button>
+      <button class="ghost" id="feed" type="button" title="Presentation order for the demo stitch script (LOCALHOST src/demos)">Feed order</button>
+      <button class="ghost" id="reset" type="button">Reset order</button>
+    </div>
+    <div class="scroll"><table><thead><tr><th>#</th><th></th><th>Team</th><th>Track</th><th>Bounties</th><th>Members</th><th>Repo</th><th>Video</th><th>One line</th><th>Saved</th><th></th></tr></thead><tbody id="rows"></tbody></table></div>
+    <p class="note">Present: <kbd>→</kbd> next · <kbd>←</kbd> back · <kbd>V</kbd> play demo · <kbd>T</kbd> restart timer · <kbd>F</kbd> fullscreen · <kbd>Esc</kbd> out. Click a number to present from there. ✕ hides a double or test entry. Order and hidden rows stay in this browser and go to the judge pages.</p>
+    <section id="judging">
+      <div class="hd2"><h2>Judging</h2><span class="k" id="jstamp"></span><button class="ghost" id="jrefresh" type="button">Refresh</button><button class="ghost" id="jcsv" type="button">Ballots CSV</button></div>
+      <div class="prz" id="prizes"></div>
+      <div class="jl"><h3>Judge links</h3><div id="judges"></div>
+        <form class="nj" id="nj"><input type="text" id="njl" maxlength="60" placeholder="Label, e.g. Tinfoil judge" aria-label="Judge label"><span id="njp"></span><button type="submit">Make link</button></form>
+        <div class="newlink" id="newlink" hidden></div>
+      </div>
+    </section>
+  </div>
+</div>
+<div id="stage" aria-live="polite"></div>
+<div id="sheets"></div>
+
+<script type="module">
+import { TRACKS, BOUNTIES, embedUrl } from "./shared/projects.js";
+// Same sealed-results key as results.html (`npm run results-keys` in gpcc-forms).
+const KEY = {"iterations":600000,"salt":"fjJY_Rj3HK5cPDXbfGRdMw","iv":"pDIU9abaQ7RJ_fOt","wrapped":"YbJjkt8v-pJFmnCK9v_VzVSxc0KFwg44HB_bw6ZpNmMErZO_At-SgmuLsQrT6F292yqgdJ4UabX4dj1CD3Bl0p7-J-IZ-QZAr-3C57m2nU6v0GHJ2cgivWYs39q5L0qSCWkkUZrpwiAnVjzLX8rCSc5JoKn_VgU-zNlIMlIOjKVFToW_HKmTn2JGENv1xbOOk-elKNSCZk0rX221Sg9K1dWOn_BaTzI"};
+const LOCAL = /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
+const API = (LOCAL ? (new URLSearchParams(location.search).get("api") || "http://127.0.0.1:8787").replace(/\/+$/, "") : "https://form.theschool.nyc") + "/api/f/";
+const INFO = "gpcc-forms results v1";
+const ORDER = "localhost-project-order";
+const HIDE = "localhost-project-hidden"; // entries an organizer hid (a double submission, a test)
+// Judges' columns on the printed sheet (1–5 each).
+const CRITERIA = ["Works", "Fits the track", "Craft"];
+
+const enc = new TextEncoder();
+const unb64 = (s) => Uint8Array.from(atob(s.replace(/-/g, "+").replace(/_/g, "/")), (c) => c.charCodeAt(0));
+const b64 = (b) => btoa(String.fromCharCode(...new Uint8Array(b))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+
+async function unlock(pass) {
+  const base = await crypto.subtle.importKey("raw", enc.encode(pass.trim().toLowerCase()), "PBKDF2", false, ["deriveBits"]);
+  const bits = new Uint8Array(await crypto.subtle.deriveBits({ name: "PBKDF2", hash: "SHA-256", salt: unb64(KEY.salt), iterations: KEY.iterations }, base, 512));
+  const wrapKey = await crypto.subtle.importKey("raw", bits.slice(0, 32), "AES-GCM", false, ["decrypt"]);
+  let jwk;
+  try { jwk = JSON.parse(new TextDecoder().decode(await crypto.subtle.decrypt({ name: "AES-GCM", iv: unb64(KEY.iv) }, wrapKey, unb64(KEY.wrapped)))); } catch { return null; }
+  const priv = await crypto.subtle.importKey("jwk", { kty: "EC", crv: "P-256", ...jwk, ext: false }, { name: "ECDH", namedCurve: "P-256" }, false, ["deriveBits"]);
+  return { priv, token: b64(bits.slice(32)) };
+}
+async function openSealed(priv, j) {
+  const epk = await crypto.subtle.importKey("raw", unb64(j.epk), { name: "ECDH", namedCurve: "P-256" }, false, []);
+  const shared = await crypto.subtle.deriveBits({ name: "ECDH", public: epk }, priv, 256);
+  const hk = await crypto.subtle.importKey("raw", shared, "HKDF", false, ["deriveKey"]);
+  const key = await crypto.subtle.deriveKey({ name: "HKDF", hash: "SHA-256", salt: new Uint8Array(0), info: enc.encode(INFO) }, hk, { name: "AES-GCM", length: 256 }, false, ["decrypt"]);
+  return JSON.parse(new TextDecoder().decode(await crypto.subtle.decrypt({ name: "AES-GCM", iv: unb64(j.iv) }, key, unb64(j.ct))));
+}
+
+// One project per entry: its newest save counts. Answers arrive as labels ("2.1 Most production-ready product", "Tinfoil, Cognee").
+const trackOf = (label) => TRACKS.findIndex((t) => label && label.endsWith(t.name));
+function projects(rows) {
+  const by = new Map();
+  for (const r of rows) {
+    const id = r.entry || r.ref;
+    const p = by.get(id);
+    if (!p) by.set(id, { id, a: r.answers, at: r.at, first: r.at, saves: 1 });
+    else { p.saves++; p.first = Math.min(p.first, r.at); if (r.at > p.at) { p.a = r.answers; p.at = r.at; } }
+  }
+  return [...by.values()].map((p) => {
+    const labels = String(p.a.track || "").split(", ").filter(Boolean);
+    const tracks = TRACKS.filter((t) => labels.some((l) => l.endsWith(t.name)));
+    const t = tracks.length ? TRACKS.indexOf(tracks[0]) : -1;
+    return { ...p, t, tracks, track: tracks[0] || { n: "—", name: "Sponsor bounties" }, bounties: (p.a.bounties || "").split(", ").filter(Boolean), members: (p.a.members || "").split(/[,\s]+/).filter(Boolean) };
+  });
+}
+
+let token = null, list = [], all = [], files = {};
+const fileOf = (p) => (p.a.demo ? files[p.a.demo] : null);
+const hidden = () => { try { return new Set(JSON.parse(localStorage.getItem(HIDE) || "[]")); } catch { return new Set(); } };
+const setHidden = (h) => { try { localStorage.setItem(HIDE, JSON.stringify([...h])); } catch {} };
+const loadOrder = () => { try { return JSON.parse(localStorage.getItem(ORDER) || "[]"); } catch { return []; } };
+const saveOrder = () => { try { localStorage.setItem(ORDER, JSON.stringify(all.map((p) => p.id))); } catch {} };
+function arrange(ps) {
+  // Default: by open track (01, 2.1 … 2.4, bounties only), then who submitted first. A saved order wins; new ones go last.
+  ps.sort((x, y) => (x.t < 0 ? 99 : x.t) - (y.t < 0 ? 99 : y.t) || x.first - y.first);
+  const saved = loadOrder();
+  const pos = new Map(saved.map((id, i) => [id, i]));
+  if (saved.length) ps.sort((x, y) => (pos.has(x.id) ? pos.get(x.id) : 1e6) - (pos.has(y.id) ? pos.get(y.id) : 1e6));
+  return ps;
+}
+
+const when = (t) => new Date(t * 1000).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
+const short = (u) => String(u).replace(/^https?:\/\/(www\.)?/, "");
+function render() {
+  const h = hidden();
+  list = all.filter((p) => !h.has(p.id));
+  const repos = new Map(); for (const p of list) repos.set(p.a.repo, (repos.get(p.a.repo) || 0) + 1);
+  const noVid = list.filter((p) => !p.a.video && !fileOf(p)).length, noFile = list.filter((p) => !fileOf(p)).length, noRepo = list.filter((p) => !p.a.repo).length, big = list.filter((p) => p.members.length > 6).length;
+  $("sum").innerHTML = `<b>${list.length}</b> projects` + (noVid ? ` · <span class="x">${noVid} missing video</span>` : "") + (noFile ? ` · ${list.length - noFile}/${list.length} files uploaded` : ` · all files uploaded`) + (noRepo ? ` · <span class="x">${noRepo} missing repo</span>` : "") + (big ? ` · <span class="x">${big} over 6 members</span>` : "") + (h.size ? ` · <a href="#" id="unhide">${h.size} hidden</a>` : "") + ` · ${TRACKS.map((t) => `${t.n}: ${list.filter((p) => p.tracks.includes(t)).length}`).join(" · ")}`;
+  $("rows").innerHTML = list.length
+    ? list.map((p, i) => `<tr>
+      <td class="n"><a href="#" data-go="${i}" title="Present from here">${String(i + 1).padStart(2, "0")}</a></td>
+      <td class="mv"><button data-up="${i}" aria-label="Move up">↑</button> <button data-dn="${i}" aria-label="Move down">↓</button></td>
+      <td class="team">${esc(p.a.team)}${repos.get(p.a.repo) > 1 ? ' <span class="miss" title="Another entry has the same repo: a double submission?">same repo</span>' : ""}</td>
+      <td>${p.tracks.length ? p.tracks.map((t) => `<span class="tag tr" title="${esc(t.name)}">${esc(t.n)}</span>`).join("") : "—"}</td>
+      <td>${p.bounties.map((b) => `<span class="tag">${esc(b)}</span>`).join("")}</td>
+      <td>${p.members.map((m) => `<a href="https://github.com/${esc(m)}" target="_blank" rel="noopener noreferrer">${esc(m)}</a>`).join(", ")}${p.members.length > 6 ? ' <span class="miss">over 6</span>' : ""}</td>
+      <td>${p.a.repo ? `<a href="${esc(p.a.repo)}" target="_blank" rel="noopener noreferrer">${esc(short(p.a.repo).replace(/^github\.com\//, ""))}</a>` : '<span class="miss">missing</span>'}</td>
+      <td class="vd">${fileOf(p) ? `<a href="${esc(fileOf(p).url)}" target="_blank" rel="noopener noreferrer" title="Uploaded file">▶ file ${Math.max(1, Math.round(fileOf(p).size / 1048576))} MB</a>` : p.a.video ? `<a href="${esc(p.a.video)}" target="_blank" rel="noopener noreferrer">${embedUrl(p.a.video) ? "▶ link" : "↗ link"}</a> <span class="miss" title="No uploaded file">no file</span>` : '<span class="miss">missing</span>'}</td>
+      <td class="pitch">${esc(p.a.pitch)}</td>
+      <td class="at" title="${p.saves} save${p.saves > 1 ? "s" : ""}">${when(p.at)}${p.saves > 1 ? ` ·${p.saves}` : ""}</td>
+      <td class="mv"><button data-hide="${esc(p.id)}" title="Hide this entry (kept in this browser)" aria-label="Hide">✕</button></td></tr>`).join("")
+    : '<tr><td colspan="11" class="empty">Nothing submitted yet.</td></tr>';
+  sheets();
+  queuePush();
+  $("unhide")?.addEventListener("click", (e) => { e.preventDefault(); setHidden(new Set()); render(); });
+}
+$("rows").addEventListener("click", (e) => {
+  const b = e.target.closest("[data-up],[data-dn],[data-go],[data-hide]");
+  if (!b) return;
+  e.preventDefault();
+  if (b.dataset.hide) { const h = hidden(); h.add(b.dataset.hide); setHidden(h); return render(); }
+  if (b.dataset.go !== undefined) return present(+b.dataset.go);
+  const i = +(b.dataset.up ?? b.dataset.dn), j = b.dataset.up !== undefined ? i - 1 : i + 1;
+  if (j < 0 || j >= list.length) return;
+  const ai = all.indexOf(list[i]), aj = all.indexOf(list[j]);
+  [all[ai], all[aj]] = [all[aj], all[ai]];
+  saveOrder(); render();
+});
+
+async function load() {
+  const r = await fetch(API + "localhost-project/results", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ token: token.token }), cache: "no-store" });
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok || !j.ok) throw new Error(j.error || `HTTP ${r.status}`);
+  const d = await openSealed(token.priv, j);
+  // Signed 12 h links to the uploaded demo files (R2, lib/demos.ts in gpcc-forms).
+  try {
+    const sr = await fetch(API + "localhost-project/demo/sign", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ token: token.token }), cache: "no-store" });
+    const sj = await sr.json().catch(() => ({}));
+    files = sr.ok && sj.ok ? sj.files : {};
+  } catch { files = {}; }
+  all = arrange(projects(d.rows));
+  render();
+  loadJudging();
+  $("msg").textContent = `Loaded ${new Date().toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", second: "2-digit" })}. Reload the page to lock.`;
+}
+
+$("unlock").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const msg = $("msg"), go = $("go");
+  msg.className = "msg"; msg.textContent = "Unlocking…"; go.disabled = true;
+  try {
+    token = await unlock($("pp").value);
+    if (!token) { msg.className = "msg bad"; msg.textContent = "That passphrase doesn't unlock it."; return; }
+    await load();
+    $("pp").value = ""; $("unlock").hidden = true; $("out").hidden = false;
+  } catch (err) { msg.className = "msg bad"; msg.textContent = `Couldn't load the projects (${err.message}).`; }
+  finally { go.disabled = false; }
+});
+$("refresh").onclick = () => load().catch((err) => { $("msg").className = "msg bad"; $("msg").textContent = `Couldn't refresh (${err.message}).`; });
+$("reset").onclick = () => { try { localStorage.removeItem(ORDER); } catch {} all = arrange(all); render(); };
+$("print").onclick = () => window.print();
+$("feed").onclick = () => {
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([JSON.stringify({ order: list.map((p) => ({ entry: p.id, team: p.a.team })) }, null, 1)], { type: "application/json" }));
+  a.download = "feed-order.json";
+  a.click();
+};
+$("csv").onclick = () => {
+  const q = (s) => `"${String(s ?? "").replace(/"/g, '""')}"`;
+  const head = ["Order", "Team", "Track", "Bounties", "Members", "Repo", "Video", "One line", "Email", "X handles", "Tweet", "Last saved", "Saves"];
+  const lines = [head.map(q).join(","), ...list.map((p, i) => [i + 1, p.a.team, p.tracks.map((t) => `${t.n} ${t.name}`).join("; "), p.bounties.join(" "), p.members.join(" "), p.a.repo, p.a.video, p.a.pitch, p.a.email, p.a.x_handles, p.a.tweet, new Date(p.at * 1000).toISOString(), p.saves].map(q).join(","))];
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([lines.join("\n")], { type: "text/csv" }));
+  a.download = `localhost-projects-${new Date().toISOString().slice(0, 10)}.csv`;
+  a.click();
+};
+
+// Judges' sheets: one page per open track, one per sponsor bounty, in presentation order.
+function sheets() {
+  const page = (title, ps) => `<section class="sheet"><h2>${esc(title)}</h2><div class="sub"><span>LOCALHOST · Sat, Nov 7 · score 1–5</span><span>Judge: ______________________</span></div>
+    <table><thead><tr><th>#</th><th>Team · one line</th>${CRITERIA.map((c) => `<th>${esc(c)}</th>`).join("")}<th>Total</th><th>Notes</th></tr></thead><tbody>
+    ${ps.length ? ps.map((p) => `<tr><td>${list.indexOf(p) + 1}</td><td><b>${esc(p.a.team)}</b><div class="p">${esc(p.a.pitch)}</div></td>${CRITERIA.map(() => '<td class="box"></td>').join("")}<td class="box"></td><td class="notes"></td></tr>`).join("") : '<tr><td colspan="9">No entries.</td></tr>'}
+    </tbody></table></section>`;
+  $("sheets").innerHTML =
+    TRACKS.map((t) => page(`Track ${t.n} · ${t.name}`, list.filter((p) => p.tracks.includes(t)))).join("") +
+    BOUNTIES.map((b) => page(`${b.name} bounty`, list.filter((p) => p.bounties.includes(b.name)))).join("");
+}
+
+// --- judging (gpcc-forms src/lib/judging.ts) ------------------------------------------------------
+const admin = async (action, extra = {}) => {
+  const r = await fetch(API + "localhost-project/judging/admin", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ token: token.token, action, ...extra }), cache: "no-store" });
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok || !j.ok) throw new Error(j.error || `HTTP ${r.status}`);
+  return j;
+};
+// The presentation order and hidden rows go to the server, so judge pages list projects in the same order.
+let pushed = "", pushTimer = null;
+function queuePush() {
+  if (!token) return;
+  clearTimeout(pushTimer);
+  pushTimer = setTimeout(async () => {
+    const order = all.map((p) => p.id), hide = [...hidden()];
+    const sig = JSON.stringify([order, hide]);
+    if (sig === pushed) return;
+    try { await admin("set", { k: "order", v: order }); await admin("set", { k: "hidden", v: hide }); pushed = sig; } catch { pushed = ""; }
+  }, 600);
+}
+const setNow = (entry) => { if (token) admin("set", { k: "now", v: entry }).catch(() => {}); };
+
+let J = null;
+const PRIZE_LABEL = (p) => (p.id.startsWith("bounty:") ? `${p.name} bounty` : `Track ${p.name}`);
+const teamOf = (e) => J?.teams[e] || all.find((p) => p.id === e)?.a.team || e;
+async function loadJudging() {
+  try { J = await admin("list"); } catch (e) { $("prizes").innerHTML = `<p class="empty">Judging unavailable (${esc(e.message)}).</p>`; return; }
+  $("jstamp").textContent = "updated " + new Date().toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", second: "2-digit" });
+  renderJudging();
+}
+// Rank prizes: Borda, 1st = 3 points, 2nd = 2, 3rd = 1; ties broken by more 1sts, then more 2nds; a tie left at the top is flagged.
+function tally(p) {
+  const judges = J.judges.filter((j) => !j.revoked && j.prizes.includes(p.id));
+  const bs = J.ballots.filter((b) => b.prize === p.id && judges.some((j) => j.id === b.judge));
+  const rows = p.entries.map((e) => ({ e, pts: 0, r: [0, 0, 0], stars: 0, notes: [] }));
+  const by = new Map(rows.map((r) => [r.e, r]));
+  for (const b of bs) {
+    const who = J.judges.find((j) => j.id === b.judge)?.label || "?";
+    for (const [e, v] of Object.entries(b.ballot)) {
+      const r = by.get(e); if (!r) continue;
+      if (v.rank) { r.pts += 4 - v.rank; r.r[v.rank - 1]++; }
+      if (v.star) r.stars++;
+      if (v.note) r.notes.push(`${who}: ${v.note}`);
+    }
+  }
+  const key = p.kind === "rank" ? (r) => [r.pts, r.r[0], r.r[1]] : (r) => [r.stars, r.notes.length, 0];
+  rows.sort((a, b) => { const x = key(a), y = key(b); return y[0] - x[0] || y[1] - x[1] || y[2] - x[2]; });
+  const same = (a, b) => a && b && JSON.stringify(key(a)) === JSON.stringify(key(b)) && key(a)[0] > 0;
+  const missing = judges.filter((j) => !bs.some((b) => b.judge === j.id));
+  return { rows, judges, voted: bs.length, missing, tieTop: same(rows[0], rows[1]), tie2: same(rows[1], rows[2]) };
+}
+function renderJudging() {
+  const final = J.kv.final || {};
+  $("prizes").innerHTML = J.prizes.map((p) => {
+    const t = tally(p), f = final[p.id] || {}, locked = !!J.kv["locked:" + p.id];
+    const places = p.id === "t01" ? [["first", "1st"], ["second", "2nd"]] : [["first", "Winner"]];
+    return `<div class="pz"><h3>${esc(PRIZE_LABEL(p))}<span class="am">${esc(p.amount)}</span></h3>
+      <div class="in">${p.entries.length} projects · ${t.voted}/${t.judges.length} judges in${t.missing.length ? ` · <span class="x">waiting: ${t.missing.map((j) => esc(j.label)).join(", ")}</span>` : ""}${p.kind === "star" ? " · stars, then discussion" : " · Borda 3/2/1"}</div>
+      ${t.tieTop && p.kind === "rank" ? '<div class="tie">tie for 1st: decide</div>' : ""}${t.tieTop && p.kind === "star" ? '<div class="tie">level at the top</div>' : ""}
+      ${f.first ? `<div class="fin">Final: ${esc(teamOf(f.first))}${f.second ? " · 2nd " + esc(teamOf(f.second)) : ""}</div>` : ""}
+      <ol>${t.rows.map((r, i) => `<li class="${i === 0 && (r.pts || r.stars) && !t.tieTop ? "lead" : ""}"><span class="pl">${i + 1}</span><span class="tm2">${esc(teamOf(r.e))}</span>
+        <span class="sc">${p.kind === "rank" ? `${r.pts} pts · ${r.r.join("/")}` : `${"★".repeat(r.stars) || "–"}`}</span>
+        ${r.notes.length ? `<span class="nt">${r.notes.map(esc).join("<br>")}</span>` : ""}
+        <span class="fb">${places.map(([k, l]) => `<button type="button" class="${f[k] === r.e ? "on" : ""}" data-final="${esc(p.id)}" data-place="${k}" data-e="${esc(r.e)}">${l}</button>`).join("")}</span></li>`).join("") || '<li><span></span><span class="pl">No entries.</span></li>'}</ol>
+      <button type="button" class="lock${locked ? " on" : ""}" data-lock="${esc(p.id)}">${locked ? "Ballots closed · reopen" : "Close ballots"}</button></div>`;
+  }).join("");
+  $("judges").innerHTML = J.judges.length ? J.judges.map((j) => `<div class="jrow${j.revoked ? " rv" : ""}"><span class="lb">${esc(j.label)}</span><span class="pr">${j.prizes.map((id) => esc(PRIZE_LABEL(J.prizes.find((p) => p.id === id) || { id, name: id }))).join(", ")}</span><span class="sn">${j.revoked ? "revoked" : j.seen ? "seen " + when(j.seen) : "not opened"}</span>${j.revoked ? "" : `<button type="button" data-revoke="${esc(j.id)}">Revoke</button>`}</div>`).join("") : '<p class="empty">No judge links yet.</p>';
+  if (!$("njp").childElementCount) $("njp").innerHTML = J.prizes.map((p) => `<label class="chip"><input type="checkbox" value="${esc(p.id)}">${esc(p.id.startsWith("bounty:") ? p.name : p.name.split(" ")[0])}</label>`).join(" ");
+}
+$("prizes").addEventListener("click", async (e) => {
+  const b = e.target.closest("[data-final],[data-lock]");
+  if (!b) return;
+  try {
+    if (b.dataset.lock) await admin("set", { k: "locked:" + b.dataset.lock, v: !J.kv["locked:" + b.dataset.lock] });
+    else {
+      const final = { ...(J.kv.final || {}) }, f = { ...(final[b.dataset.final] || {}) };
+      f[b.dataset.place] = f[b.dataset.place] === b.dataset.e ? undefined : b.dataset.e;
+      for (const k of Object.keys(f)) if (!f[k]) delete f[k];
+      final[b.dataset.final] = f;
+      await admin("set", { k: "final", v: final });
+    }
+    await loadJudging();
+  } catch (err) { alert(err.message); }
+});
+$("judges").addEventListener("click", async (e) => {
+  const b = e.target.closest("[data-revoke]");
+  if (!b || !confirm("Revoke this judge link? Its ballots stay out of the tally.")) return;
+  await admin("revoke", { id: b.dataset.revoke }).catch((err) => alert(err.message));
+  loadJudging();
+});
+$("njp").addEventListener("change", (e) => {
+  // A first prize ticked with no label names the link after it.
+  if (e.target.checked && !$("njl").value.trim()) $("njl").value = e.target.parentElement.textContent.trim() + " judge";
+});
+$("nj").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const prizes = [...$("njp").querySelectorAll("input:checked")].map((i) => i.value);
+  if (!$("njl").value.trim() || !prizes.length) { alert("A label and at least one prize."); return; }
+  try {
+    const j = await admin("create", { label: $("njl").value.trim(), prizes });
+    const base = /^(localhost|127\.0\.0\.1)$/.test(location.hostname) ? location.origin : "https://localhostai.nyc";
+    const link = `${base}/judge?j=${j.code}`;
+    $("newlink").hidden = false;
+    $("newlink").innerHTML = `<span class="k">${esc($("njl").value.trim())}: shown once</span><input readonly value="${esc(link)}" id="nlv"><button type="button" class="ghost" id="nlc">Copy</button>`;
+    $("nlc").onclick = async () => { try { await navigator.clipboard.writeText(link); $("nlc").textContent = "Copied"; } catch { $("nlv").select(); } };
+    $("njl").value = ""; for (const i of $("njp").querySelectorAll("input")) i.checked = false;
+    loadJudging();
+  } catch (err) { alert(err.message); }
+});
+$("jrefresh").onclick = loadJudging;
+$("jcsv").onclick = () => {
+  const q = (s) => `"${String(s ?? "").replace(/"/g, '""')}"`;
+  const lines = [["Prize", "Judge", "Team", "Rank", "Star", "Note", "Saved"].map(q).join(",")];
+  for (const b of J.ballots) for (const [e, v] of Object.entries(b.ballot)) lines.push([b.prize, J.judges.find((j) => j.id === b.judge)?.label, teamOf(e), v.rank || "", v.star ? "yes" : "", v.note || "", new Date(b.at * 1000).toISOString()].map(q).join(","));
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([lines.join("\n")], { type: "text/csv" }));
+  a.download = `localhost-ballots-${new Date().toISOString().slice(0, 10)}.csv`;
+  a.click();
+};
+setInterval(() => { if (token && document.visibilityState === "visible" && !$("stage").classList.contains("on")) loadJudging(); }, 15000);
+
+// The big screen.
+const stage = $("stage");
+let cur = 0, t0 = 0, timer = null;
+function present(i = 0) {
+  if (!list.length) return;
+  cur = Math.max(0, Math.min(i, list.length - 1));
+  stage.classList.add("on");
+  stage.requestFullscreen?.().catch(() => {});
+  t0 = Date.now();
+  clearInterval(timer);
+  timer = setInterval(() => { const el = stage.querySelector(".tm"); if (el) { const s = Math.floor((Date.now() - t0) / 1000); el.textContent = `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`; el.style.color = s >= 70 ? "var(--bad)" : ""; } }, 500);
+  card();
+}
+function card() {
+  const p = list[cur], next = list[cur + 1];
+  const em = fileOf(p) ? "file" : p.a.video ? embedUrl(p.a.video) : null;
+  stage.innerHTML = `<div class="top"><span>LOCALHOST · ${String(cur + 1).padStart(2, "0")} / ${String(list.length).padStart(2, "0")}</span><span class="tm">0:00</span></div>
+    <div class="mid">
+      <div class="trk">${esc(p.tracks.map((t) => t.n + " " + t.name).join(" · ") || "Sponsor bounties")}</div>
+      <div class="nm">${esc(p.a.team)}</div>
+      <div class="pt">${esc(p.a.pitch)}</div>
+      <div class="who"><span>${p.members.map((m) => "@" + esc(m)).join("  ")}</span>${p.a.repo ? `<span class="rp">${esc(short(p.a.repo))}</span>` : ""}</div>
+      ${p.bounties.length ? `<div class="bt">${p.bounties.map((b) => `<span class="tag">${esc(b)}</span>`).join("")}</div>` : ""}
+    </div>
+    <div class="bot">${fileOf(p) || p.a.video ? `<span class="play">V ▶ play demo${em ? "" : " (new tab)"}</span>` : '<span class="nov">no demo video</span>'}<span>${next ? "next: " + esc(next.a.team) : "last one"}</span></div>
+    <div class="vid" id="vid"></div>`;
+  t0 = Date.now();
+  setNow(p.id); // judge pages highlight this team
+}
+function play() {
+  const p = list[cur];
+  if (!p) return;
+  const v0 = $("vid"), f = fileOf(p);
+  if (f) {
+    v0.innerHTML = `<video src="${esc(f.url)}" autoplay controls playsinline></video><span class="esc">Esc back</span>`;
+    v0.classList.add("on");
+    v0.querySelector("video").addEventListener("ended", () => stopVideo());
+    return;
+  }
+  if (!p.a.video) return;
+  const em = embedUrl(p.a.video);
+  if (!em) { window.open(p.a.video, "_blank", "noopener"); return; }
+  const v = $("vid");
+  v.innerHTML = `<iframe src="${esc(em)}" allow="autoplay; fullscreen; encrypted-media; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe><span class="esc">Esc back</span>`;
+  v.classList.add("on");
+}
+function stopVideo() { const v = $("vid"); if (v?.classList.contains("on")) { v.classList.remove("on"); v.innerHTML = ""; return true; } return false; }
+function exit() { stopVideo(); setNow(null); stage.classList.remove("on"); clearInterval(timer); if (document.fullscreenElement) document.exitFullscreen().catch(() => {}); }
+$("present").onclick = () => present(0);
+document.addEventListener("keydown", (e) => {
+  if (!stage.classList.contains("on")) return;
+  const k = e.key;
+  if (k === "Escape") { if (!stopVideo()) exit(); }
+  else if (k === "ArrowRight" || k === " " || k === "PageDown") { e.preventDefault(); stopVideo(); if (cur < list.length - 1) { cur++; card(); } }
+  else if (k === "ArrowLeft" || k === "PageUp") { e.preventDefault(); stopVideo(); if (cur > 0) { cur--; card(); } }
+  else if (k === "v" || k === "V" || k === "Enter") play();
+  else if (k === "t" || k === "T") t0 = Date.now();
+  else if (k === "f" || k === "F") (document.fullscreenElement ? document.exitFullscreen() : stage.requestFullscreen?.())?.catch?.(() => {});
+});
+// Leaving fullscreen with the browser's own Esc keeps the stage up; a second Esc closes it.
+</script>
+</body>
+</html>
