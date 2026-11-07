@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Tracks · LOCALHOST</title>
-<meta name="description" content="Three tracks at LOCALHOST, New York's sovereign AI hackathon. $7,750 in prizes.">
+<meta name="description" content="Three tracks at LOCALHOST, New York's sovereign AI hackathon. $7,250 in prizes.">
 <meta name="robots" content="noindex, nofollow">
 <meta property="og:title" content="LOCALHOST · Tracks + prizes">
-<meta property="og:description" content="Sovereign Agentic Organization, Sovereign Intelligence and Sovereign Sponsors. $7,750 in prizes.">
+<meta property="og:description" content="Sovereign Agentic Organization, Sovereign Intelligence and Sovereign Sponsors. $7,250 in prizes.">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://localhostai.nyc/img/school/leg1-thermal.jpg">
 <meta name="twitter:card" content="summary_large_image">
@@ -55,7 +55,9 @@ h1 span { color: var(--acid); }
 .g-body { flex: 1; display: grid; gap: 6px; padding: 10px; border: 1px solid rgba(255,255,255,.18); box-shadow: 0 0 0 1px rgba(0,0,0,.6), 0 30px 60px -30px rgba(0,0,0,.9); }
 .g1 .g-body, .g2 .g-body { min-height: 236px; }
 .g1 .g-body { grid-template-columns: 1750fr 1000fr; }
-.g2 .g-body { grid-template-columns: repeat(2, 1fr); grid-template-rows: 1fr 1fr; }
+.g2 .g-body { grid-template-columns: repeat(6, 1fr); grid-template-rows: 1fr 1fr; }
+.g2 .p { grid-column: span 2; }
+.g2 .p:nth-child(n+4) { grid-column: span 3; }
 .g3 .g-body { grid-template-columns: repeat(4, 1fr); min-height: 118px; }
 .g3 .g-head { margin-top: 10px; }
 .p { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; min-width: 0; text-align: center; text-decoration: none; color: #fff; text-shadow: 0 1px 12px rgba(0,0,0,.85), 0 0 2px rgba(0,0,0,.6); transition: transform .2s cubic-bezier(.2,.7,.2,1); }
@@ -106,6 +108,8 @@ h3 { font: 500 16px/1.45 var(--read); letter-spacing: -.01em; }
 .sub { min-width: 0; padding: 24px 24px 26px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); display: flex; flex-direction: column; }
 .sub:nth-child(2n) { border-right: 0; }
 .sub:nth-last-child(-n+2) { border-bottom: 0; }
+.subs .sub:last-child:nth-child(odd) { grid-column: 1 / -1; }
+.subs .sub:nth-last-child(2):nth-child(even) { border-bottom: 1px solid var(--line); }
 .sub-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 14px; }
 .sub-top .k { color: var(--acid); }
 .sub-top .amt { font: 400 18px/1 var(--mono); }
@@ -154,6 +158,7 @@ footer a { text-decoration: none; }
   .sub:nth-child(2n) { border-right: 0; }
   .sub:nth-last-child(-n+3) { border-bottom: 1px solid var(--line); }
   .sub:nth-last-child(-n+2) { border-bottom: 0; }
+  .subs .sub:nth-last-child(2):nth-child(even) { border-bottom: 1px solid var(--line); }
 }
 @media (max-width: 860px) {
   .sp-grid, .steps, .steps.getting-started { grid-template-columns: 1fr; }
@@ -202,7 +207,7 @@ footer a { text-decoration: none; }
   <canvas class="thermal" id="thermal" aria-hidden="true"></canvas>
   <div class="wrap">
     <div class="k eyebrow">LOCALHOST // Tracks + prizes</div>
-    <h1 id="page-title">Three tracks.<br><span>$7,750 in prizes.</span></h1>
+    <h1 id="page-title">Three tracks.<br><span>$7,250 in prizes.</span></h1>
     <p class="lede">Build on AI you control.</p>
     <nav class="heat" aria-label="Tracks and prizes, heat by prize money">
       <canvas id="heat" aria-hidden="true"></canvas>
@@ -213,10 +218,10 @@ footer a { text-decoration: none; }
         </div>
 
         <div class="g g2">
-          <a class="g-head" href="#intelligence"><span class="n"><i>02</i>Sovereign Intelligence</span><span class="tot">$3,000</span></a>
+          <a class="g-head" href="#intelligence"><span class="n"><i>02</i>Sovereign Intelligence</span><span class="tot">$2,500</span></a>
           <div class="g-body">
-            <a class="p" data-amt="750" href="#intelligence"><span class="amt">$750</span><span class="lbl">Production-ready</span></a><a class="p" data-amt="750" href="#intelligence"><span class="amt">$750</span><span class="lbl">Own the model</span></a>
-            <a class="p" data-amt="750" href="#intelligence"><span class="amt">$750</span><span class="lbl">Checkable inference</span></a><a class="p" data-amt="750" href="#intelligence"><span class="amt">$750</span><span class="lbl">Private cooperation</span></a>
+            <a class="p" data-amt="500" href="#intelligence"><span class="amt">$500</span><span class="lbl">Production-ready</span></a><a class="p" data-amt="500" href="#intelligence"><span class="amt">$500</span><span class="lbl">Own the model</span></a><a class="p" data-amt="500" href="#intelligence"><span class="amt">$500</span><span class="lbl">Private routing</span></a>
+            <a class="p" data-amt="500" href="#intelligence"><span class="amt">$500</span><span class="lbl">Private cooperation</span></a><a class="p" data-amt="500" href="#intelligence"><span class="amt">$500</span><span class="lbl">Swarm memory</span></a>
           </div>
         </div>
         <div class="g g3">
@@ -238,8 +243,8 @@ footer a { text-decoration: none; }
       <div class="purse"><b>$2,750</b></div>
     </div>
     <div class="statement">
-      <p>A business that makes real money in the 8 hours, on a stack you control end to end.</p>
-      <p class="ex">Use any model you like, closed ones included; you own the harness, memory and tools.</p>
+      <p>An agentic company that makes real money on an open-source stack you control end to end.</p>
+      <p class="ex">What makes it an organization is its reach into the real world: posting, selling, buying, running ads. A dollar earned beats any proof of concept.</p>
     </div>
     <div class="prizes">
       <div class="pz"><span class="k">1st</span><b>$1,750</b></div>
@@ -250,28 +255,33 @@ footer a { text-decoration: none; }
   <section class="track t2" id="intelligence" aria-labelledby="intelligence-title">
     <div class="track-top">
       <div><div class="k">Track 02</div><h2 id="intelligence-title">Sovereign Intelligence</h2></div>
-      <div class="purse"><b>$3,000</b></div>
+      <div class="purse"><b>$2,500</b></div>
     </div>
     <div class="subs">
       <article class="sub">
-        <div class="sub-top"><span class="k">2.1</span><span class="amt">$750</span></div>
+        <div class="sub-top"><span class="k">2.1</span><span class="amt">$500</span></div>
         <h3>Most production-ready product</h3>
         <p>A product someone outside your team could start using on Monday, built on local, private or open-source AI.</p>
       </article>
       <article class="sub">
-        <div class="sub-top"><span class="k">2.2</span><span class="amt">$750</span></div>
+        <div class="sub-top"><span class="k">2.2</span><span class="amt">$500</span></div>
         <h3>Own the model</h3>
         <p>Distill or fine-tune an open-weight model into something it couldn't do before: a task, a voice, a skill, a domain. LoRA on a laptop counts. Distill only from a teacher whose license allows it (<a href="https://github.com/openai/gpt-oss">gpt-oss-120b</a> is Apache 2.0); <a href="https://github.com/unslothai/unsloth">Unsloth</a> and <a href="https://huggingface.co/docs/trl/distillation_trainer">TRL</a> both work.</p>
       </article>
       <article class="sub">
-        <div class="sub-top"><span class="k">2.3</span><span class="amt">$750</span></div>
-        <h3>Private inference you can check</h3>
-        <p>Route requests between private providers (Tinfoil, Darkbloom, your own Macs) from inside an enclave (<a href="https://github.com/Dstack-TEE/dstack">dstack</a> or a <a href="https://docs.tinfoil.sh/containers/overview">Tinfoil container</a>), so the router's operator can't read prompts either. Or catch a host serving a smaller or more heavily quantized model than it claims, from outputs and log-probabilities alone.</p>
+        <div class="sub-top"><span class="k">2.3</span><span class="amt">$500</span></div>
+        <h3>Private inference routing</h3>
+        <p>Use confidential compute (<a href="https://github.com/Dstack-TEE/dstack">dstack</a>, <a href="https://docs.tinfoil.sh/containers/overview">Tinfoil containers</a>) to route inference requests more intelligently while keeping users' data private. Bonus points for nuanced security models.</p>
       </article>
       <article class="sub">
-        <div class="sub-top"><span class="k">2.4</span><span class="amt">$750</span></div>
-        <h3>Private cooperation</h3>
-        <p>Several people's agents, each with its own private context, climb one leaderboard together: a speedrun, a <a href="https://cooperbench.com">CooperBench</a> task, an open puzzle. No one hands over raw context or traces, and the score before and after each contribution shows who added what.</p>
+        <div class="sub-top"><span class="k">2.4</span><span class="amt">$500</span></div>
+        <h3>Private cooperation (coopetition?)</h3>
+        <p>Several people's agents, each with its own private context, climb one leaderboard together, say a <a href="https://github.com/KellerJordan/cifar10-airbench">basic speedrun</a>. No one hands over raw context, and the score shows who added what.</p>
+      </article>
+      <article class="sub">
+        <div class="sub-top"><span class="k">2.5</span><span class="amt">$500</span></div>
+        <h3>Private swarm memory</h3>
+        <p>A confidential memory layer for multiplayer agent apps: open-source memory, pluggable into any harness.</p>
       </article>
     </div>
   </section>
@@ -326,7 +336,7 @@ footer a { text-decoration: none; }
   </section>
 </div>
 </main>
-<footer><div class="wrap k"><a href="/">← LOCALHOST · Sat, Nov 7, 2026 · The School, 29 Nassau Ave</a><span>$7,750 in prizes</span></div></footer>
+<footer><div class="wrap k"><a href="/">← LOCALHOST · Sat, Nov 7, 2026 · The School, 29 Nassau Ave</a><span>$7,250 in prizes</span></div></footer>
 <script type="module">
 import { thermal } from "/shared/thermal.js";
 thermal(document.getElementById("thermal"), { block: 6, bodies: 5 });
