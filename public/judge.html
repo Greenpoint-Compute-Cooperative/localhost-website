@@ -57,6 +57,27 @@
   .vid { position: fixed; inset: 0; z-index: 50; background: #000; display: flex; flex-direction: column; }
   .vid video { flex: 1; width: 100%; min-height: 0; background: #000; }
   .vid button { font: 12px var(--mono); letter-spacing: .14em; text-transform: uppercase; padding: 14px; background: #111; color: var(--hi); border: 0; border-top: 1px solid var(--line); }
+  .sc { margin-top: 12px; border-top: 1px solid var(--line); padding-top: 10px; }
+  .sc .pz { font: 11px var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--acid); display: flex; justify-content: space-between; }
+  .sc .pz .st { color: var(--lo); }
+  .nums { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 8px; }
+  .num { font: 18px var(--mono); padding: 13px 0; border: 1px solid #3a424c; background: none; color: var(--hi); cursor: pointer; touch-action: manipulation; }
+  .num.on { background: var(--acid); color: #0b0b0c; border-color: var(--acid); }
+  .scale { display: flex; justify-content: space-between; font-size: 11px; color: var(--lo); margin-top: 4px; }
+  .tags { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 6px; font: 11px var(--mono); letter-spacing: .06em; }
+  .tag { padding: 3px 7px; border: 1px solid var(--line); color: var(--mid); }
+  .tag.mine { border-color: #3b4a10; color: var(--acid); }
+  .watch { margin-top: 12px; font-size: 13px; color: var(--lo); border: 1px dashed var(--line); padding: 10px; }
+  .card video, .card iframe { width: 100%; aspect-ratio: 16/9; margin-top: 12px; background: #000; border: 0; display: block; }
+  .sum h2 { font: 600 18px/1.3 var(--read); margin: 28px 0 4px; }
+  .sum table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .sum td { padding: 8px 4px; border-top: 1px solid var(--line); vertical-align: middle; }
+  .sum td.t { color: var(--hi); } .sum td.t a { color: inherit; }
+  .sum .mini { display: flex; gap: 4px; justify-content: flex-end; }
+  .sum .mini .num { font-size: 14px; padding: 8px 10px; }
+  .who { padding: 60px 0; display: grid; gap: 12px; }
+  .who input { font: 18px var(--read); padding: 12px; background: #000; color: var(--hi); border: 1px solid var(--line); }
+  .who button { font: 13px var(--mono); letter-spacing: .1em; text-transform: uppercase; padding: 13px; background: var(--acid); color: #0b0b0c; border: 0; }
   [hidden] { display: none !important; }
 </style>
 </head>
@@ -64,195 +85,188 @@
 <div class="wrap">
   <header id="hdr" hidden>
     <div class="top"><span>LOCALHOST</span><span class="me" id="me"></span><span class="sync ok" id="sync">saved</span></div>
-    <nav class="tabs" id="tabs"></nav>
+    <nav class="tabs" id="tabs"><button class="tab on" type="button" data-to="list">Projects</button><button class="tab" type="button" data-to="sum">My scores <span class="d" id="cnt"></span></button><button class="tab" type="button" id="refresh">↻ new projects</button></nav>
   </header>
   <main id="main"><p class="empty">Loading…</p></main>
 </div>
 <button class="jump" id="jump" type="button" hidden></button>
-<div class="vid" id="vid" hidden><video id="video" controls playsinline></video><button type="button" id="vclose">Close</button></div>
 
 <script type="module">
 import { FORMS_API } from "./shared/forms.js";
-// Judge links: /judge?j=<code>, made on /projects. Ballots save to this phone first, then to GPCC Forms
-// (src/lib/judging.ts); a failed save retries until it lands. The team on the big screen is polled.
+import { embedUrl } from "./shared/projects.js";
+// /judge?j=<first name>. Every project is shown; a project gets 1-4 score buttons for each prize it
+// entered that this judge judges (GPCC Forms src/lib/judging.ts JUDGES). Each tap saves to this phone
+// first, then to the server, retrying until it lands. "My scores" lists every score to change later.
 const API = `${FORMS_API}/api/f/localhost-project/judging/`;
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
-const store = { get(k) { try { return JSON.parse(localStorage.getItem(k) || "null"); } catch { return null; } }, set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} } };
-const q = new URLSearchParams(location.search);
-const code = (q.get("j") || store.get("localhost-judge-code") || "").trim().toLowerCase();
-const RK = ["1st", "2nd", "3rd"];
-const SHORT = { t01: "01 Agentic org", t21: "2.1 Production", t22: "2.2 Own model", t23: "2.3 Inference", t24: "2.4 Cooperation" };
-let data = null, tab = null, now = null;
-const ballots = {};   // prize -> {entry: {rank?, star?, note?}}
-const dirty = new Set();
-
+const code = (new URLSearchParams(location.search).get("j") || "").trim().toLowerCase();
+const QKEY = "lh-judge-queue:" + code;
+const SHORT = (p) => (p.id.startsWith("bounty:") ? p.name : p.name);
 const post = async (path, body) => {
   const r = await fetch(API + path, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ code, ...body }) });
   const j = await r.json().catch(() => ({}));
-  if (!r.ok || !j.ok) throw Object.assign(new Error(j.error || `HTTP ${r.status}`), { status: r.status });
+  if (!r.ok || !j.ok) { const e = new Error(j.error || "HTTP " + r.status); e.status = r.status; throw e; }
   return j;
 };
-const lsKey = (prize) => `localhost-judge:${code}:${prize}`;
 
-function sync(state, text) { const s = $("sync"); s.className = "sync " + state; s.textContent = text; }
+if (!code) {
+  $("main").innerHTML = `<form class="who" id="who"><p class="head"><b>Judging · LOCALHOST</b></p><label>Your first name<br><input id="nm" autocomplete="given-name" autocapitalize="off"></label><button>Start judging</button></form>`;
+  $("who").onsubmit = (e) => { e.preventDefault(); const v = $("nm").value.trim().toLowerCase(); if (v) location.search = "?j=" + encodeURIComponent(v); };
+  throw new Error("no code");
+}
+
+let D, mine, scores = {}; // scores["prize|entry"] = {score, note}
+const k = (prize, entry) => prize + "|" + entry;
+let queue = {};
+try { queue = JSON.parse(localStorage.getItem(QKEY) || "{}"); } catch {}
+const saveQ = () => { try { localStorage.setItem(QKEY, JSON.stringify(queue)); } catch {} };
 
 async function load() {
-  if (!/^[a-z2-7]{26}$/.test(code)) { $("main").innerHTML = '<p class="bad"><b>No judge link.</b> Open the link an organizer sent you.</p>'; return; }
-  try { data = await post("me", {}); }
+  try { D = await post("me", {}); }
   catch (e) {
-    $("main").innerHTML = e.status === 404 ? `<p class="bad"><b>This judge link isn't active.</b> Ask an organizer for a new one.</p>` : `<p class="bad"><b>Can't reach the server.</b> Check the wifi; this page retries.</p>`;
-    if (e.status !== 404) setTimeout(load, 5000);
+    $("main").innerHTML = e.status === 404 ? `<p class="bad"><b>“${esc(code)}” isn't a judge.</b><br>Use your first name, e.g. localhostai.nyc/judge?j=veljko</p>` : `<p class="bad"><b>Couldn't load.</b> ${esc(e.message)}. Pull to reload.</p>`;
     return;
   }
-  store.set("localhost-judge-code", code);
-  if (q.get("j")) history.replaceState(null, "", location.pathname + "?j=" + code);
-  for (const p of data.prizes) {
-    const server = data.ballots[p.id] || { ballot: {}, at: 0 };
-    const local = store.get(lsKey(p.id));
-    // Unsaved changes on this phone win over the server copy; otherwise the server's.
-    if (local && local.dirty && (local.at || 0) >= server.at) { ballots[p.id] = local.ballot; dirty.add(p.id); }
-    else ballots[p.id] = server.ballot;
-  }
-  now = data.now;
-  tab = data.prizes.some((p) => p.id === store.get(`localhost-judge-tab:${code}`)) ? store.get(`localhost-judge-tab:${code}`) : data.prizes[0]?.id;
-  $("me").textContent = data.judge.label;
+  mine = new Map(D.prizes.map((p) => [p.id, p]));
+  scores = {};
+  for (const [prize, b] of Object.entries(D.ballots || {})) for (const [entry, v] of Object.entries(b.ballot || {})) scores[k(prize, entry)] = v;
+  for (const [kk, v] of Object.entries(queue)) scores[kk] = v; // unsent taps win
   $("hdr").hidden = false;
+  $("me").textContent = `${D.judge.label} · ${D.prizes.map(SHORT).join(", ")}`;
   render();
-  if (dirty.size) flush();
-  else sync("ok", "saved");
+  flush();
 }
 
-const projectBy = (e) => data.projects.find((p) => p.entry === e);
-
+const prizeName = (id) => (D.allPrizes.find((p) => p.id === id) || { name: id }).name;
+const tagName = (id) => (id.startsWith("bounty:") ? prizeName(id) : prizeName(id).split(" ")[0]);
+function buttons(prize, entry, cls = "nums") {
+  const v = scores[k(prize, entry)] || {};
+  return `<div class="${cls}">${[1, 2, 3, 4].map((n) => `<button type="button" class="num${v.score === n ? " on" : ""}" data-p="${esc(prize)}" data-e="${esc(entry)}" data-s="${n}">${n}</button>`).join("")}</div>`;
+}
+function video(p) {
+  if (p.file) return `<video controls playsinline preload="none" src="${esc(p.file)}"></video>`;
+  if (p.video) { const em = embedUrl(p.video); return em ? `<iframe src="${esc(em.replace("autoplay=1", "autoplay=0"))}" allow="fullscreen; picture-in-picture" loading="lazy"></iframe>` : `<div class="links"><a class="lk play" href="${esc(p.video)}" target="_blank" rel="noopener noreferrer">▶ demo (new tab)</a></div>`; }
+  return `<div class="links"><span class="lk none">no demo video</span></div>`;
+}
+function card(p) {
+  const judgeable = p.prizes.filter((id) => mine.has(id));
+  const others = p.prizes.filter((id) => !mine.has(id));
+  return `<article class="card${D.now === p.entry ? " now" : ""}" id="c-${esc(p.entry)}">
+    <div class="n"><span>${String(p.n).padStart(2, "0")}</span>${D.now === p.entry ? '<span class="live">ON SCREEN</span>' : ""}</div>
+    <h2>${esc(p.team)}</h2><p class="pt">${esc(p.pitch)}</p>
+    <div class="tags">${p.prizes.map((id) => `<span class="tag${mine.has(id) ? " mine" : ""}">${esc(tagName(id))}</span>`).join("")}</div>
+    ${video(p)}
+    <div class="links">${p.repo ? `<a class="lk" href="${esc(p.repo)}" target="_blank" rel="noopener noreferrer">repo ↗</a>` : ""}</div>
+    ${judgeable.map((id) => { const v = scores[k(id, p.entry)] || {}; return `<div class="sc"><div class="pz"><span>${esc(prizeName(id))}</span><span class="st">${v.score ? "scored " + v.score : "not scored"}</span></div>${buttons(id, p.entry)}<div class="scale"><span>1 weak</span><span>4 great</span></div>
+      <input class="note" maxlength="280" placeholder="note (optional)" data-p="${esc(id)}" data-e="${esc(p.entry)}" value="${esc(v.note || "")}"></div>`; }).join("")}
+    ${!judgeable.length ? `<div class="watch">You're not judging this one${others.length ? ` (entered: ${others.map(tagName).map(esc).join(", ")})` : ""}. Watch only.</div>` : others.length ? `<div class="watch">Also entered: ${others.map(tagName).map(esc).join(", ")} (not yours)</div>` : ""}
+  </article>`;
+}
+function summary() {
+  let total = 0, done = 0;
+  const html = D.prizes.map((pz) => {
+    const ps = D.projects.filter((p) => p.prizes.includes(pz.id));
+    total += ps.length; done += ps.filter((p) => scores[k(pz.id, p.entry)]?.score).length;
+    return `<h2>${esc(pz.name)}</h2><table>${ps.length ? ps.map((p) => `<tr><td class="t"><a href="#c-${esc(p.entry)}">${esc(p.team)}</a></td><td>${buttons(pz.id, p.entry, "mini")}</td></tr>`).join("") : '<tr><td class="t">No entries.</td></tr>'}</table>`;
+  }).join("");
+  $("cnt").textContent = `${done}/${total}`;
+  return `<section class="sum" id="sum"><h2 style="font-size:22px">My scores · ${done}/${total}</h2><p class="pt" style="color:var(--mid);font-size:13px">Tap any number to change it. Every tap is saved.</p>${html}</section>`;
+}
 function render() {
-  $("tabs").innerHTML = data.prizes.length > 1 ? data.prizes.map((p) => {
-    const b = ballots[p.id] || {};
-    const done = p.kind === "rank" ? Object.values(b).filter((x) => x.rank).length + "/" + Math.min(3, p.entries.length) : Object.values(b).filter((x) => x.star).length + "★";
-    return `<button class="tab${p.id === tab ? " on" : ""}" data-tab="${esc(p.id)}">${esc(SHORT[p.id] || p.name)}<span class="d">${done}</span></button>`;
-  }).join("") : "";
-  const p = data.prizes.find((x) => x.id === tab);
-  if (!p) { $("main").innerHTML = '<p class="empty">No prizes on this link.</p>'; return; }
-  const b = ballots[p.id] || {};
-  const list = p.entries.map(projectBy).filter(Boolean);
-  const byRank = (r) => Object.entries(b).find(([, v]) => v.rank === r)?.[0];
-  $("main").innerHTML = `<div class="head"><h1>${esc(p.id.startsWith("bounty:") ? p.name + " bounty" : "Track " + p.name)} · ${esc(p.amount)}</h1>
-      <p class="how">${p.kind === "rank" ? "Tap 1st, 2nd, 3rd." : "Star the ones worth discussing. One line each."}</p>
-      ${p.kind === "rank" ? `<div class="picks">${[1, 2, 3].map((r) => { const e = byRank(r); return `<div class="pick${e ? " set" : ""}"><b>${RK[r - 1]}</b>${e ? esc(projectBy(e)?.team) : "—"}</div>`; }).join("")}</div>` : ""}
-    </div>` +
-    (list.length ? list.map((x) => card(p, x, b[x.entry] || {})).join("") : '<p class="empty">No projects entered this prize.</p>');
-  showJump();
+  const y = scrollY, focused = document.activeElement?.classList.contains("note") ? [document.activeElement.dataset.p, document.activeElement.dataset.e] : null;
+  $("main").innerHTML = `<section id="list"><div class="head"><h1>Score 1–4</h1><p class="how">Each project shows a row of 1–4 for every prize it entered that you judge. 4 = great. Scores save as you tap.</p></div>${D.projects.length ? D.projects.map(card).join("") : '<p class="empty">No projects yet.</p>'}</section>${summary()}`;
+  scrollTo(0, y);
+  if (focused) document.querySelector(`.note[data-p="${focused[0]}"][data-e="${focused[1]}"]`)?.focus();
+  jumpBtn();
 }
 
-function card(p, x, v) {
-  const video = x.file ? `<button class="lk play" data-play="${esc(x.entry)}">▶ Demo</button>` : x.video ? `<a class="lk play" href="${esc(x.video)}" target="_blank" rel="noopener noreferrer">▶ Demo ↗</a>` : `<span class="lk none">no demo</span>`;
-  const ctl = p.kind === "rank"
-    ? `<div class="rank">${[1, 2, 3].map((r) => `<button class="rk${v.rank === r ? " on" : ""}" data-rank="${r}" data-e="${esc(x.entry)}" aria-pressed="${v.rank === r}">${RK[r - 1]}</button>`).join("")}</div>`
-    : `<button class="star${v.star ? " on" : ""}" data-star="${esc(x.entry)}" aria-pressed="${!!v.star}">${v.star ? "★ Starred" : "☆ Star"}</button>`;
-  return `<section class="card${x.entry === now ? " now" : ""}" id="c-${esc(x.entry)}">
-    <div class="n"><span>#${String(x.n).padStart(2, "0")}</span>${x.entry === now ? '<span class="live">● on screen</span>' : ""}</div>
-    <h2>${esc(x.team)}</h2><p class="pt">${esc(x.pitch)}</p>
-    <div class="links">${video}${x.repo ? `<a class="lk" href="${esc(x.repo)}" target="_blank" rel="noopener noreferrer">Repo ↗</a>` : ""}</div>
-    ${ctl}
-    <input class="note" data-note="${esc(x.entry)}" maxlength="140" placeholder="One line (optional)" value="${esc(v.note || "")}" autocomplete="off">
-  </section>`;
+// After a tap: update just that score's buttons, label and the count, so a playing video keeps playing.
+function paint(prize, entry) {
+  const v = scores[k(prize, entry)] || {};
+  for (const b of document.querySelectorAll(`.num[data-p="${CSS.escape(prize)}"][data-e="${CSS.escape(entry)}"]`)) b.classList.toggle("on", Number(b.dataset.s) === v.score);
+  const st = document.querySelector(`#c-${CSS.escape(entry)} .sc .num[data-p="${CSS.escape(prize)}"]`)?.closest(".sc")?.querySelector(".st");
+  if (st) st.textContent = v.score ? "scored " + v.score : "not scored";
+  let total = 0, done = 0;
+  for (const pz of D.prizes) for (const p of D.projects) if (p.prizes.includes(pz.id)) { total++; if (scores[k(pz.id, p.entry)]?.score) done++; }
+  $("cnt").textContent = `${done}/${total}`;
+  const h = document.querySelector("#sum > h2"); if (h) h.textContent = `My scores · ${done}/${total}`;
 }
-
-function change(entry, fn) {
-  const b = (ballots[tab] ||= {});
-  const v = { ...(b[entry] || {}) };
-  fn(v, b);
-  if (!v.rank) delete v.rank;
-  if (!v.star) delete v.star;
-  if (!v.note) delete v.note;
-  if (Object.keys(v).length) b[entry] = v; else delete b[entry];
-  dirty.add(tab);
-  store.set(lsKey(tab), { ballot: b, dirty: true, at: Math.floor(Date.now() / 1000) });
-  queueFlush();
+function setScore(prize, entry, patch) {
+  const cur = { ...(scores[k(prize, entry)] || {}) };
+  Object.assign(cur, patch);
+  if (!cur.score) delete cur.score;
+  if (!cur.note) delete cur.note;
+  scores[k(prize, entry)] = cur;
+  queue[k(prize, entry)] = cur;
+  saveQ();
+  flush();
 }
-
+let sending = false, delay = 1000;
+const sync = (cls, t) => { $("sync").className = "sync " + cls; $("sync").textContent = t; };
+async function flush() {
+  if (sending) return;
+  const keys = Object.keys(queue);
+  if (!keys.length) return sync("ok", "saved ✓");
+  sending = true; sync("busy", "saving…");
+  try {
+    for (const kk of keys) {
+      const v = queue[kk];
+      const [prize, entry] = kk.split("|");
+      try { await post("ballot", { prize, entry, score: v.score ?? null, note: v.note || "" }); }
+      catch (e) { if (e.status && e.status < 500 && e.status !== 429) { sync("off", e.message); delete queue[kk]; saveQ(); continue; } throw e; }
+      if (queue[kk] === v) delete queue[kk];
+      saveQ();
+    }
+    delay = 1000; sending = false;
+    if (Object.keys(queue).length) return flush();
+    sync("ok", "saved ✓");
+  } catch {
+    sending = false; sync("off", "offline · retrying");
+    setTimeout(flush, delay); delay = Math.min(delay * 2, 15000);
+  }
+}
 document.addEventListener("click", (e) => {
-  const t = e.target.closest("[data-tab],[data-rank],[data-star],[data-play]");
-  if (!t) return;
-  if (t.dataset.tab) { tab = t.dataset.tab; store.set(`localhost-judge-tab:${code}`, tab); render(); scrollTo({ top: 0 }); return; }
-  if (t.dataset.play) { const x = projectBy(t.dataset.play); $("video").src = x.file; $("vid").hidden = false; $("video").play().catch(() => {}); return; }
-  if (t.dataset.rank) {
-    const r = +t.dataset.rank, entry = t.dataset.e;
-    change(entry, (v, b) => {
-      if (v.rank === r) { v.rank = 0; return; }
-      for (const [k, o] of Object.entries(b)) if (k !== entry && o.rank === r) { delete o.rank; if (!Object.keys(o).length) delete b[k]; }
-      v.rank = r;
-    });
-    render();
+  const b = e.target.closest(".num");
+  if (b) {
+    const n = Number(b.dataset.s), cur = scores[k(b.dataset.p, b.dataset.e)]?.score;
+    setScore(b.dataset.p, b.dataset.e, { score: cur === n ? 0 : n });
+    paint(b.dataset.p, b.dataset.e);
     return;
   }
-  if (t.dataset.star) { change(t.dataset.star, (v) => (v.star = !v.star)); render(); }
+  const t = e.target.closest(".tab");
+  if (t) { for (const x of document.querySelectorAll(".tab")) x.classList.toggle("on", x === t); $(t.dataset.to)?.scrollIntoView({ behavior: "smooth" }); }
 });
-document.addEventListener("input", (e) => { if (e.target.dataset.note !== undefined) change(e.target.dataset.note, (v) => (v.note = e.target.value.slice(0, 140))); });
-$("vclose").onclick = () => { $("video").pause(); $("video").removeAttribute("src"); $("video").load(); $("vid").hidden = true; };
+let noteT;
+document.addEventListener("input", (e) => {
+  if (!e.target.classList.contains("note")) return;
+  const { p, e: en } = e.target.dataset, v = e.target.value;
+  clearTimeout(noteT);
+  noteT = setTimeout(() => setScore(p, en, { note: v.trim() }), 700);
+});
+window.addEventListener("online", flush);
 
-// Saving: debounced, one prize at a time, retried with backoff until it lands.
-let timer = null, flushing = false, backoff = 1000;
-function queueFlush() { sync("busy", "saving…"); clearTimeout(timer); timer = setTimeout(flush, 500); }
-async function flush() {
-  if (flushing) return;
-  flushing = true;
+// The team on the big screen (set by Present on /projects): highlight it, offer a jump.
+function jumpBtn() {
+  const p = D.projects.find((x) => x.entry === D.now);
+  const j = $("jump");
+  if (!p) { j.hidden = true; return; }
+  j.hidden = false; j.textContent = `On screen: ${p.team} ↓`;
+  j.onclick = () => document.getElementById("c-" + p.entry)?.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+setInterval(async () => {
+  if (!D) return;
   try {
-    for (const prize of [...dirty]) {
-      const sent = JSON.stringify(ballots[prize] || {});
-      const j = await post("ballot", { prize, ballot: JSON.parse(sent) });
-      if (JSON.stringify(ballots[prize] || {}) === sent) { dirty.delete(prize); store.set(lsKey(prize), { ballot: ballots[prize] || {}, dirty: false, at: j.at }); }
+    const { now } = await post("now", {});
+    if (now !== D.now) {
+      D.now = now;
+      for (const c of document.querySelectorAll(".card")) c.classList.toggle("now", c.id === "c-" + now);
+      jumpBtn();
     }
-    backoff = 1000;
-    if (dirty.size) { flushing = false; return flush(); }
-    sync("ok", "saved ✓");
-  } catch (e) {
-    if (e.status === 409) { sync("off", "closed"); dirty.clear(); }
-    else if (e.status === 422 || e.status === 403) { sync("off", "not saved: " + e.message); }
-    else { sync("off", "offline · retrying"); setTimeout(() => { flushing = false; flush(); }, backoff); backoff = Math.min(30000, backoff * 2); return; }
-  }
-  flushing = false;
-}
-window.addEventListener("online", () => dirty.size && flush());
-window.addEventListener("beforeunload", (e) => { if (dirty.size) { e.preventDefault(); e.returnValue = ""; } });
-
-// The team on the big screen: polled while this page is open.
-function markNow() {
-  for (const el of document.querySelectorAll(".card")) {
-    const on = el.id === "c-" + now;
-    el.classList.toggle("now", on);
-    const n = el.querySelector(".n"), live = n.querySelector(".live");
-    if (on && !live) n.insertAdjacentHTML("beforeend", '<span class="live">● on screen</span>');
-    if (!on && live) live.remove();
-  }
-  showJump();
-}
-function showJump() {
-  const j = $("jump"), el = now && document.getElementById("c-" + now), x = now && projectBy(now);
-  if (!el || !x) { j.hidden = true; return; }
-  const r = el.getBoundingClientRect();
-  j.hidden = r.top < innerHeight && r.bottom > 130;
-  j.textContent = "On screen: " + x.team + (r.top > 0 ? " ↓" : " ↑");
-}
-$("jump").onclick = () => document.getElementById("c-" + now)?.scrollIntoView({ behavior: "smooth", block: "start" });
-addEventListener("scroll", showJump, { passive: true });
-async function poll() {
-  if (data && document.visibilityState === "visible") {
-    try {
-      const j = await post("now", {});
-      if (j.now !== now) {
-        now = j.now;
-        markNow();
-        // Follow the screen unless the judge is typing a note.
-        const typing = document.activeElement?.dataset?.note !== undefined;
-        if (!typing && now) document.getElementById("c-" + now)?.scrollIntoView({ behavior: "smooth", block: "start" });
-      }
-    } catch {}
-  }
-  setTimeout(poll, 5000);
-}
-await load();
-poll();
+  } catch {}
+}, 5000);
+$("refresh").onclick = () => load();
+load();
 </script>
 </body>
 </html>

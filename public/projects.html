@@ -341,26 +341,27 @@ async function loadJudging() {
   $("jstamp").textContent = "updated " + new Date().toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", second: "2-digit" });
   renderJudging();
 }
-// Rank prizes: Borda, 1st = 3 points, 2nd = 2, 3rd = 1; ties broken by more 1sts, then more 2nds; a tie left at the top is flagged.
+// Scores 1-4 per judge: ranked by average, then by how many judges scored; a level top is flagged.
 function tally(p) {
   const judges = J.judges.filter((j) => !j.revoked && j.prizes.includes(p.id));
   const bs = J.ballots.filter((b) => b.prize === p.id && judges.some((j) => j.id === b.judge));
-  const rows = p.entries.map((e) => ({ e, pts: 0, r: [0, 0, 0], stars: 0, notes: [] }));
+  const rows = p.entries.map((e) => ({ e, sum: 0, n: 0, avg: 0, each: [], notes: [] }));
   const by = new Map(rows.map((r) => [r.e, r]));
   for (const b of bs) {
     const who = J.judges.find((j) => j.id === b.judge)?.label || "?";
     for (const [e, v] of Object.entries(b.ballot)) {
       const r = by.get(e); if (!r) continue;
-      if (v.rank) { r.pts += 4 - v.rank; r.r[v.rank - 1]++; }
-      if (v.star) r.stars++;
+      if (v.score) { r.sum += v.score; r.n++; r.each.push(`${who} ${v.score}`); }
       if (v.note) r.notes.push(`${who}: ${v.note}`);
     }
   }
-  const key = p.kind === "rank" ? (r) => [r.pts, r.r[0], r.r[1]] : (r) => [r.stars, r.notes.length, 0];
-  rows.sort((a, b) => { const x = key(a), y = key(b); return y[0] - x[0] || y[1] - x[1] || y[2] - x[2]; });
-  const same = (a, b) => a && b && JSON.stringify(key(a)) === JSON.stringify(key(b)) && key(a)[0] > 0;
-  const missing = judges.filter((j) => !bs.some((b) => b.judge === j.id));
-  return { rows, judges, voted: bs.length, missing, tieTop: same(rows[0], rows[1]), tie2: same(rows[1], rows[2]) };
+  for (const r of rows) r.avg = r.n ? r.sum / r.n : 0;
+  const key = (r) => [r.avg, r.n, 0];
+  rows.sort((a, b) => b.avg - a.avg || b.n - a.n);
+  const same = (a, b) => a && b && a.avg === b.avg && a.avg > 0;
+  const scored = (j) => bs.find((b) => b.judge === j.id && Object.values(b.ballot).some((v) => v.score));
+  const missing = judges.filter((j) => !scored(j));
+  return { rows, judges, voted: judges.length - missing.length, missing, tieTop: same(rows[0], rows[1]), tie2: same(rows[1], rows[2]) };
 }
 function renderJudging() {
   const final = J.kv.final || {};
@@ -368,16 +369,16 @@ function renderJudging() {
     const t = tally(p), f = final[p.id] || {}, locked = !!J.kv["locked:" + p.id];
     const places = p.id === "t01" ? [["first", "1st"], ["second", "2nd"]] : [["first", "Winner"]];
     return `<div class="pz"><h3>${esc(PRIZE_LABEL(p))}<span class="am">${esc(p.amount)}</span></h3>
-      <div class="in">${p.entries.length} projects · ${t.voted}/${t.judges.length} judges in${t.missing.length ? ` · <span class="x">waiting: ${t.missing.map((j) => esc(j.label)).join(", ")}</span>` : ""}${p.kind === "star" ? " · stars, then discussion" : " · Borda 3/2/1"}</div>
-      ${t.tieTop && p.kind === "rank" ? '<div class="tie">tie for 1st: decide</div>' : ""}${t.tieTop && p.kind === "star" ? '<div class="tie">level at the top</div>' : ""}
+      <div class="in">${p.entries.length} projects · ${t.voted}/${t.judges.length} judges in${t.missing.length ? ` · <span class="x">waiting: ${t.missing.map((j) => esc(j.label)).join(", ")}</span>` : ""} · average of 1–4</div>
+      ${t.tieTop ? '<div class="tie">tie for 1st: decide</div>' : ""}
       ${f.first ? `<div class="fin">Final: ${esc(teamOf(f.first))}${f.second ? " · 2nd " + esc(teamOf(f.second)) : ""}</div>` : ""}
-      <ol>${t.rows.map((r, i) => `<li class="${i === 0 && (r.pts || r.stars) && !t.tieTop ? "lead" : ""}"><span class="pl">${i + 1}</span><span class="tm2">${esc(teamOf(r.e))}</span>
-        <span class="sc">${p.kind === "rank" ? `${r.pts} pts · ${r.r.join("/")}` : `${"★".repeat(r.stars) || "–"}`}</span>
+      <ol>${t.rows.map((r, i) => `<li class="${i === 0 && r.n && !t.tieTop ? "lead" : ""}"><span class="pl">${i + 1}</span><span class="tm2">${esc(teamOf(r.e))}</span>
+        <span class="sc">${r.n ? `${r.avg.toFixed(2)} · ${r.each.map(esc).join(", ")}` : "–"}</span>
         ${r.notes.length ? `<span class="nt">${r.notes.map(esc).join("<br>")}</span>` : ""}
         <span class="fb">${places.map(([k, l]) => `<button type="button" class="${f[k] === r.e ? "on" : ""}" data-final="${esc(p.id)}" data-place="${k}" data-e="${esc(r.e)}">${l}</button>`).join("")}</span></li>`).join("") || '<li><span></span><span class="pl">No entries.</span></li>'}</ol>
       <button type="button" class="lock${locked ? " on" : ""}" data-lock="${esc(p.id)}">${locked ? "Ballots closed · reopen" : "Close ballots"}</button></div>`;
   }).join("");
-  $("judges").innerHTML = J.judges.length ? J.judges.map((j) => `<div class="jrow${j.revoked ? " rv" : ""}"><span class="lb">${esc(j.label)}</span><span class="pr">${j.prizes.map((id) => esc(PRIZE_LABEL(J.prizes.find((p) => p.id === id) || { id, name: id }))).join(", ")}</span><span class="sn">${j.revoked ? "revoked" : j.seen ? "seen " + when(j.seen) : "not opened"}</span>${j.revoked ? "" : `<button type="button" data-revoke="${esc(j.id)}">Revoke</button>`}</div>`).join("") : '<p class="empty">No judge links yet.</p>';
+  $("judges").innerHTML = J.judges.length ? J.judges.map((j) => `<div class="jrow${j.revoked ? " rv" : ""}"><span class="lb">${esc(j.label)}${j.id.startsWith("judge:") ? ` <a href="/judge?j=${esc(j.label.toLowerCase())}" target="_blank" rel="noopener">localhostai.nyc/judge?j=${esc(j.label.toLowerCase())}</a>` : ""}</span><span class="pr">${j.prizes.map((id) => esc(PRIZE_LABEL(J.prizes.find((p) => p.id === id) || { id, name: id }))).join(", ")}</span><span class="sn">${j.revoked ? "revoked" : j.seen ? "seen " + when(j.seen) : "not opened"}</span>${j.revoked || j.id.startsWith("judge:") ? "" : `<button type="button" data-revoke="${esc(j.id)}">Revoke</button>`}</div>`).join("") : '<p class="empty">No judge links yet.</p>';
   if (!$("njp").childElementCount) $("njp").innerHTML = J.prizes.map((p) => `<label class="chip"><input type="checkbox" value="${esc(p.id)}">${esc(p.id.startsWith("bounty:") ? p.name : p.name.split(" ")[0])}</label>`).join(" ");
 }
 $("prizes").addEventListener("click", async (e) => {
