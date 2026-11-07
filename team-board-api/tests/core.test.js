@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { participantInput, validateTeams, publicParticipant, sameSecret, tokenHash } from '../lib/core.js';
-import { body, isAdmin } from '../lib/http.js';
+import { body } from '../lib/http.js';
 const people = ['a', 'b', 'c', 'd'].map(id => ({ id }));
 const team = members => ({ name: 'Memory', summary: 'Build shared agent memory.', members });
 test('participant input trims and bounds fields and treats instructions as data', () => {
@@ -14,16 +14,10 @@ test('group publication rejects duplicate, missing, unknown and singleton assign
   assert.throws(() => validateTeams([team(['a', 'b'])], [...people.slice(0, 2), { id: 'new arrival' }]), { status: 400 });
   assert.equal(validateTeams([team(['a'])], people.slice(0, 1))[0].members[0], 'a');
 });
-test('public response omits private edit token hash, organizer comparison fails closed', () => {
+test('public response omits private edit token hash and entry tokens compare safely', () => {
   assert.equal(Object.hasOwn(publicParticipant({ id: 'a', name: 'A', idea: 'x', editTokenHash: 'private' }), 'editTokenHash'), false);
   assert.equal(sameSecret(tokenHash('good'), tokenHash('bad')), false);
-  const previous = process.env.TEAM_ADMIN_KEY;
-  process.env.TEAM_ADMIN_KEY = 'organizer';
-  assert.equal(isAdmin({ headers: { authorization: 'Bearer organizer' } }), true);
-  assert.equal(isAdmin({ headers: { authorization: 'Bearer nope' } }), false);
-  delete process.env.TEAM_ADMIN_KEY;
-  assert.equal(isAdmin({ headers: {} }), false);
-  if (previous) process.env.TEAM_ADMIN_KEY = previous;
+
 });
 test('request boundary rejects malformed, nonobject and oversized JSON', async () => {
   for (const raw of ['[]', 'bad', 'null', JSON.stringify({ idea: 'x'.repeat(8192) })]) await assert.rejects(body({ headers: {}, body: raw }));

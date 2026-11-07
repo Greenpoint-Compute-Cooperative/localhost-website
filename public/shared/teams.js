@@ -4,7 +4,6 @@
   let participants = [];
   let receipt = null;
   let refreshing = false;
-  let draftTeams = null;
   const groupsView = new URLSearchParams(location.search).get('view') === 'groups';
   if (groupsView) {
     document.querySelector('.board-layout').hidden = true;
@@ -84,7 +83,7 @@
       const data = await api('');
       participants = Array.isArray(data.participants) ? data.participants : [];
       renderPeople();
-      if (!draftTeams) renderGroups(data.groups);
+      renderGroups(data.groups);
 
     } catch (error) { status('board-status', `${error.message} The board will retry automatically.`, true); if (groupsView) { $('groups-empty').hidden = false; $('groups-empty').textContent = `${error.message} Retrying automatically.`; } }
     finally { refreshing = false; $('refresh').disabled = false; }
@@ -128,49 +127,10 @@
   });
   $('search').addEventListener('input', renderPeople);
   $('refresh').addEventListener('click', refresh);
-  const keyFromHash = new URLSearchParams(location.hash.slice(1)).get('key');
-  if (keyFromHash) { writeStored('localhost-team-organizer', keyFromHash, sessionStorage); history.replaceState(null, '', location.pathname + location.search); }
-  if (new URLSearchParams(location.search).has('organizer') || keyFromHash || readStored('localhost-team-organizer', sessionStorage)) {
-    $('organizer').hidden = false;
-    $('organizer-key').value = readStored('localhost-team-organizer', sessionStorage) || '';
-    $('organizer-key').addEventListener('input', () => writeStored('localhost-team-organizer', $('organizer-key').value, sessionStorage));
-    $('suggest').addEventListener('click', async () => {
-      if ($('suggest').disabled) return;
-      const key = $('organizer-key').value.trim();
-      if (!key) { status('organizer-status', 'Enter your organizer key to suggest teams.', true); return; }
-      $('suggest').disabled = true;
-      status('organizer-status', 'Finding people with shared interests…');
-      try {
-        const result = await api('/group', { method: 'POST', headers: { Authorization: `Bearer ${key}` }, body: '{}' });
-        if (!Array.isArray(result.teams) || !result.teams.length) throw new Error('No team suggestions were returned.');
-        draftTeams = result.teams;
-        renderGroups({ teams: draftTeams });
-        $('draft-notice').hidden = false;
-        $('publish').hidden = false;
-        status('organizer-status', 'Draft teams are ready. Review them above, then publish.');
-        $('groups-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
-      } catch (error) { status('organizer-status', error.message, true); }
-      finally { $('suggest').disabled = false; }
-    });
-    $('publish').addEventListener('click', async () => {
-      if (!draftTeams || $('publish').disabled) return;
-      $('publish').disabled = true;
-      try {
-        await api('/group', { method: 'POST', headers: { Authorization: `Bearer ${$('organizer-key').value.trim()}` }, body: JSON.stringify({ teams: draftTeams }) });
-        draftTeams = null;
-        $('draft-notice').hidden = true;
-        $('publish').hidden = true;
-        status('organizer-status', 'Published. Everyone can now see the suggested teams.');
-        await refresh();
-      } catch (error) { status('organizer-status', error.message, true); }
-      finally { $('publish').disabled = false; }
-    });
-    $('export').addEventListener('click', async () => {
-      if (!participants.length) { status('organizer-status', 'There are no entries to copy yet.', true); return; }
-      const text = JSON.stringify({ participants }, null, 2);
-      try { await navigator.clipboard.writeText(text); status('organizer-status', 'Copied names, ideas and IDs. Paste them into your chat to suggest teams.'); }
-      catch { status('organizer-status', 'Clipboard access failed. Allow clipboard access and try again.', true); }
-    });
+  // Discard credentials left by the retired organizer page.
+  try { sessionStorage.removeItem('localhost-team-organizer'); } catch { /* Browser storage may be unavailable. */ }
+  if (new URLSearchParams(location.hash.slice(1)).has('key')) {
+    history.replaceState(null, '', location.pathname + location.search);
   }
   refresh();
   setInterval(() => { if (!document.hidden) refresh(); }, 10000);

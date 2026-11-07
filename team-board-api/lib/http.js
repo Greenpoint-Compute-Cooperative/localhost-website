@@ -1,4 +1,4 @@
-import { ApiError, sameSecret } from './core.js';
+import { ApiError } from './core.js';
 export function headers(res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS');
@@ -10,8 +10,6 @@ export function headers(res) {
 }
 export const reply = (res, status, data) => { res.statusCode = status; res.end(data === undefined ? undefined : JSON.stringify(data)); };
 export const bearer = req => /^Bearer (.+)$/i.exec(req.headers.authorization || '')?.[1] || '';
-export function isAdmin(req) { return sameSecret(bearer(req), process.env.TEAM_ADMIN_KEY); }
-export function requireAdmin(req) { if (!isAdmin(req)) throw new ApiError(401, 'Organizer key required.'); }
 export async function body(req, maxBytes = 8192) {
   if (Number(req.headers['content-length'] || 0) > maxBytes) throw new ApiError(413, 'Request is too large.');
   let raw;

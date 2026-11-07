@@ -1,6 +1,6 @@
 import { randomBytes, randomUUID } from 'node:crypto';
 import { ApiError, participantInput, publicParticipant, sameSecret, tokenHash } from '../lib/core.js';
-import { headers, reply, body, bearer, isAdmin, failure } from '../lib/http.js';
+import { headers, reply, body, bearer, failure } from '../lib/http.js';
 import * as store from '../lib/store.js';
 export default async function handler(req, res) {
   headers(res);
@@ -21,7 +21,7 @@ export default async function handler(req, res) {
       const id = new URL(req.url, 'https://board.invalid').searchParams.get('id');
       const record = await store.participant(id);
       if (!record) throw new ApiError(404, 'Entry not found.');
-      if (!isAdmin(req) && !sameSecret(tokenHash(bearer(req)), record.editTokenHash)) throw new ApiError(401, 'Your entry token or organizer key is required.');
+      if (!sameSecret(tokenHash(bearer(req)), record.editTokenHash)) throw new ApiError(401, 'Your entry token is required.');
       await store.removeParticipant(id);
       return reply(res, 200, { deleted: id });
     }
