@@ -574,7 +574,8 @@
 <a href="/tracks">Explore the tracks →</a>
 </div>
 </footer>
-<script>
+<script type="module">
+import { burstConfetti } from '/shared/winners-confetti.js';
 const tools=document.querySelector('.tools'),search=document.querySelector('#search'),filter=document.querySelector('#winner-filter'),rows=[...document.querySelectorAll('.project')];tools.hidden=false;
 function update(){const q=search.value.trim().toLocaleLowerCase(),only=filter.getAttribute('aria-pressed')==='true';let count=0;for(const row of rows){row.hidden=!(row.textContent.toLocaleLowerCase().includes(q)&&(!only||row.dataset.winner==='true'));if(!row.hidden)count++;}document.querySelector('#empty').hidden=count!==0;document.querySelector('#count').textContent=count+' project'+(count===1?'':'s')+' shown';const status=document.querySelector('#search-status');status.hidden=false;status.textContent=count+' project'+(count===1?'':'s')+' shown';}
 search.addEventListener('input',update);filter.addEventListener('click',()=>{filter.setAttribute('aria-pressed',filter.getAttribute('aria-pressed')!=='true');update();});
@@ -586,7 +587,7 @@ for(const seal of document.querySelectorAll('.seal')){
     clearTimeout(timer);
     seal.classList.remove('revealing');
     seal.querySelector('.seal-action-label').textContent=seal.open?'Revealed':'Unseal';
-    if(seal.open){seal.classList.add('revealing');timer=setTimeout(()=>seal.classList.remove('revealing'),550);}
+    if(seal.open){seal.classList.add('revealing');burstConfetti(seal);timer=setTimeout(()=>seal.classList.remove('revealing'),550);}
   });
 }
 function showLinkedProject(){if(location.hash.startsWith('#project-')&&document.getElementById(location.hash.slice(1))){directory.open=true;search.value='';filter.setAttribute('aria-pressed','false');update();}}

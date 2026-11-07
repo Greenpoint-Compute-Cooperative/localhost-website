@@ -1,4 +1,5 @@
 /* The seal opens immediately; the short scan adds ceremony without slowing the show. */
+.award-confetti{position:fixed;inset:0;width:100%;height:100%;z-index:20;pointer-events:none;image-rendering:pixelated}
 .grid{align-items:start}
 .award.seal{display:block;position:relative;transition:border-color .18s ease,box-shadow .18s ease}
 .seal:not([open]):hover{border-color:#788852;box-shadow:0 0 24px #b8e45c08}
@@ -50,6 +51,7 @@
   .directory-toggle>span:last-child{max-width:130px;font-size:10px;gap:10px}
 }
 @media(prefers-reduced-motion:reduce){
+  .award-confetti{display:none}
   .award.seal,.seal-action,.seal-plus{transition:none}
   .seal.revealing,.seal.revealing .seal-content{animation:none}
   .seal.revealing .seal-body::before{display:none}
