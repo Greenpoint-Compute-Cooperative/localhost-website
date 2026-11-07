@@ -1,0 +1,531 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Winners · LOCALHOST</title>
+<meta name="description" content="The winners and projects from LOCALHOST, New York’s sovereign AI hackathon. November 7, 2026. $7,750 awarded.">
+<meta property="og:title" content="LOCALHOST · Winners">
+<meta property="og:description" content="Meet the winning projects. $7,750 awarded across 10 categories.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#0c0e11">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/shared/base.css">
+<style>
+@font-face{font-family:"IBM Plex Mono";src:url("/fonts/IBMPlexMono-400.woff2") format("woff2");font-weight:400;font-display:swap}
+:root{--bg:#0c0e11;--panel:#13171b;--line:#30363b;--mid:#b1b9c1;--read:"IBM Plex Mono",ui-monospace,monospace}html{scroll-behavior:smooth;scroll-padding-top:85px}body{height:auto;background:var(--bg);color:#f3f5f6}a{color:inherit;text-underline-offset:.22em}a:hover{color:var(--acid)}a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--acid);outline-offset:5px}.wrap{max-width:1180px;margin:auto;padding:0 32px}.k{font:11px/1.5 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--mid)}.skip{position:absolute;top:-100px;background:var(--acid);color:#0c0e11;padding:15px;z-index:30}.skip:focus{top:8px}header{position:sticky;top:0;z-index:10;background:rgba(12,14,17,.97);border-bottom:1px solid var(--line)}header .wrap{min-height:64px;display:flex;justify-content:space-between;align-items:center;gap:24px}.brand{text-decoration:none;font-size:16px}nav{display:flex;gap:24px}nav a{font:11px var(--mono);text-transform:uppercase;text-decoration:none;color:var(--mid);padding:20px 0}.hero{padding:76px 0 46px;background:radial-gradient(ellipse at 90% 0%,#26311088,transparent 58%);border-bottom:1px solid var(--line)}.hero .k{color:var(--acid)}h1{font:400 clamp(54px,9vw,108px)/1.08 var(--mono);letter-spacing:-.06em;margin-top:22px}.intro{font:15px/1.8 var(--read);color:var(--mid);max-width:64ch;margin-top:22px}.stats{display:flex;gap:48px;flex-wrap:wrap;margin-top:42px}.stat strong{display:block;font:400 28px/1.3 var(--mono);color:var(--acid)}.stat span{font:11px/1.8 var(--read);color:var(--mid)}.section{padding-top:64px}.section-head{display:flex;align-items:baseline;justify-content:space-between;gap:20px;margin-bottom:22px}.section-head h2{font:400 24px/1.4 var(--mono);letter-spacing:-.03em}.section-head p{font:12px/1.6 var(--read);color:var(--mid)}.award{padding:26px;background:var(--panel);border:1px solid var(--line);min-width:0;display:flex;flex-direction:column;gap:24px}.award-label{display:flex;flex-direction:column;gap:10px}.award-label h3{font:400 16px/1.6 var(--read)}.recipient{display:flex;align-items:baseline;justify-content:space-between;gap:20px}.recipient+.recipient{margin-top:20px}.recipient h4{font:400 24px/1.4 var(--mono);letter-spacing:-.035em;min-width:0;overflow-wrap:anywhere}.recipient a{text-decoration:none}.amount{font:18px/1.5 var(--mono);color:var(--acid);white-space:nowrap}.split{font:12px/1.7 var(--read);color:var(--mid)}.featured{background:linear-gradient(135deg,#1f2719,#13171b 70%);border-color:#52643b;padding:34px}.featured .recipients{display:grid;grid-template-columns:1fr 1fr;gap:48px}.featured .recipient+.recipient{margin:0}.featured .recipient h4{font-size:38px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.grid .recipients{margin-top:auto}.tools{display:flex;flex-wrap:wrap;gap:14px;margin:24px 0}.tools input{flex:1;min-width:180px;background:var(--panel);border:1px solid var(--line);color:#fff;font:14px var(--read);padding:13px 16px}.tools button{background:var(--panel);color:#fff;border:1px solid var(--line);font:12px var(--read);padding:12px 16px;cursor:pointer}.tools button[aria-pressed=true]{background:var(--acid);border-color:var(--acid);color:#0c0e11}.project-list{list-style:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 32px}.project{padding:26px 0;border-top:1px solid var(--line);min-width:0;scroll-margin-top:90px}.project-head{display:flex;justify-content:space-between;gap:16px;align-items:baseline}.project h3{font:400 20px/1.5 var(--mono);overflow-wrap:anywhere}.winner{font:10px/1.5 var(--mono);color:var(--acid);text-transform:uppercase;letter-spacing:.09em}.project p{font:13px/1.8 var(--read);color:var(--mid);margin-top:10px}.badges{list-style:none;margin-top:14px;display:flex;gap:8px;flex-wrap:wrap}.badges li{font:10px/1.7 var(--read);border:1px solid #425335;background:#192215;color:#e0efcb;padding:5px 8px}.badges span{color:var(--acid);white-space:nowrap}.repo{display:inline-block;margin-top:15px;font:11px/1.7 var(--read);color:var(--mid)}.empty{font:14px/1.8 var(--read);padding:30px 0;color:var(--mid)}footer{padding:70px 0 30px;color:var(--mid);font:11px/1.8 var(--read)}footer .wrap{border-top:1px solid var(--line);padding-top:24px;display:flex;justify-content:space-between;gap:24px}footer a{text-decoration:none}[hidden]{display:none!important}@media(max-width:760px){.wrap{padding:0 20px}.hero{padding-top:48px}.stats{gap:28px}.grid,.project-list{grid-template-columns:1fr}.featured .recipients{grid-template-columns:1fr;gap:22px}.featured .recipient h4{font-size:30px}.featured,.award{padding:24px}.section{padding-top:44px}.section-head{display:block}.section-head p{margin-top:8px}nav{gap:16px}.recipient h4{font-size:23px}.section-head h2{font-size:22px}footer .wrap{flex-direction:column;gap:12px}}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to winners</a>
+<header>
+<div class="wrap">
+<a class="brand" href="/">LOCALHOST</a>
+<nav aria-label="Page navigation">
+<a href="#awards">Winners</a>
+<a href="#projects">All projects</a>
+<a href="/tracks">Tracks</a>
+</nav>
+</div>
+</header>
+<main id="main">
+<section class="hero">
+<div class="wrap">
+<p class="k">November 7, 2026 · The School, NYC</p>
+<h1>The winners.</h1>
+<p class="intro">A day of building AI you can own. Meet the winning projects and explore everything submitted at LOCALHOST.</p>
+<div class="stats">
+<div class="stat">
+<strong>$7,750</strong>
+<span>awarded</span>
+</div>
+<div class="stat">
+<strong>10</strong>
+<span>award categories</span>
+</div>
+<div class="stat">
+<strong>27</strong>
+<span>projects submitted</span>
+</div>
+</div>
+</div>
+</section>
+<div class="wrap">
+<section class="section" id="awards" aria-labelledby="organization-heading">
+<div class="section-head">
+<h2 id="organization-heading">Sovereign Agentic Organization</h2>
+<p>Track 01 · Equal winners</p>
+</div>
+<div class="featured award">
+<div class="award-label">
+<span class="k">01</span>
+<h3>Sovereign Agentic Organization</h3>
+</div>
+<div class="recipients">
+<div class="recipient">
+<h4>
+<a href="#project-8dc16692ff4f">Fightroom</a>
+</h4>
+<span class="amount">$1,375</span>
+</div>
+<div class="recipient">
+<h4>
+<a href="#project-b5888ccb675b">Atelier</a>
+</h4>
+<span class="amount">$1,375</span>
+</div>
+</div>
+<p class=split>$2,750 split equally</p>
+</div>
+</section>
+<section class="section" aria-labelledby="intelligence-heading">
+<div class="section-head">
+<h2 id="intelligence-heading">Sovereign Intelligence</h2>
+<p>Track 02 · $500 per category</p>
+</div>
+<div class="grid">
+<article class="award" id="award-t21">
+<div class="award-label">
+<span class="k">2.1</span>
+<h3>Most production-ready product</h3>
+</div>
+<div class="recipients">
+<div class="recipient">
+<h4>
+<a href="#project-23f103bf2e11">PillSpark</a>
+</h4>
+<span class="amount">$500</span>
+</div>
+</div>
+</article>
+<article class="award" id="award-t22">
+<div class="award-label">
+<span class="k">2.2</span>
+<h3>Own the model</h3>
+</div>
+<div class="recipients">
+<div class="recipient">
+<h4>
+<a href="#project-975b8343c952">heretic-toolcalls</a>
+</h4>
+<span class="amount">$500</span>
+</div>
+</div>
+</article>
+<article class="award" id="award-t23">
+<div class="award-label">
+<span class="k">2.3</span>
+<h3>Private inference routing</h3>
+</div>
+<div class="recipients">
+<div class="recipient">
+<h4>
+<a href="#project-b10de1b28098">Query Sharding</a>
+</h4>
+<span class="amount">$500</span>
+</div>
+</div>
+</article>
+<article class="award" id="award-t24">
+<div class="award-label">
+<span class="k">2.4</span>
+<h3>Private cooperation</h3>
+</div>
+<div class="recipients">
+<div class="recipient">
+<h4>
+<a href="#project-bec9754069b3">Settled</a>
+</h4>
+<span class="amount">$500</span>
+</div>
+</div>
+</article>
+<article class="award" id="award-t25">
+<div class="award-label">
+<span class="k">2.5</span>
+<h3>Private swarm memory</h3>
+</div>
+<div class="recipients">
+<div class="recipient">
+<h4>
+<a href="#project-782a66b15ce1">Flybrain</a>
+</h4>
+<span class="amount">$500</span>
+</div>
+</div>
+</article>
+</div>
+</section>
+<section class="section" aria-labelledby="sponsors-heading">
+<div class="section-head">
+<h2 id="sponsors-heading">Sponsor awards</h2>
+<p>$2,500 in sponsor prizes</p>
+</div>
+<div class="grid">
+<article class="award" id="award-tinfoil">
+<div class="award-label">
+<span class="k">Sponsor</span>
+<h3>Tinfoil</h3>
+</div>
+<div class="recipients">
+<div class="recipient">
+<h4>
+<a href="#project-3826f89d8bb5">witnessdesk</a>
+</h4>
+<span class="amount">$500</span>
+</div>
+</div>
+</article>
+<article class="award" id="award-darkbloom">
+<div class="award-label">
+<span class="k">Sponsor</span>
+<h3>Darkbloom</h3>
+</div>
+<div class="recipients">
+<div class="recipient">
+<h4>
+<a href="#project-b10de1b28098">Query Sharding</a>
+</h4>
+<span class="amount">$500</span>
+</div>
+</div>
+</article>
+<article class="award" id="award-superlinked">
+<div class="award-label">
+<span class="k">Sponsor</span>
+<h3>Superlinked</h3>
+</div>
+<div class="recipients">
+<div class="recipient">
+<h4>
+<a href="#project-23f103bf2e11">PillSpark</a>
+</h4>
+<span class="amount">$500</span>
+</div>
+<div class="recipient">
+<h4>
+<a href="#project-68a3acfce61c">Kinship</a>
+</h4>
+<span class="amount">$500</span>
+</div>
+</div>
+<p class=split>Two winners · $500 each</p>
+</article>
+<article class="award" id="award-cognee">
+<div class="award-label">
+<span class="k">Sponsor</span>
+<h3>cognee</h3>
+</div>
+<div class="recipients">
+<div class="recipient">
+<h4>
+<a href="#project-6cf1a9434af5">Membrane</a>
+</h4>
+<span class="amount">$500</span>
+</div>
+</div>
+</article>
+</div>
+</section>
+<section class="section" id="projects" aria-labelledby="projects-heading">
+<div class="section-head">
+<h2 id="projects-heading">All projects</h2>
+<p id="count">27 projects · 10 winning teams</p>
+</div>
+<div class="tools" hidden>
+<label for="search" class="k" style="position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)">Search projects</label>
+<input id="search" type="search" placeholder="Search projects" autocomplete="off">
+<button type="button" id="winner-filter" aria-pressed="false">Winners only</button>
+</div>
+<ul class="project-list">
+<li class="project" id="project-077c5b2f7536" data-winner="false">
+<div class="project-head">
+<h3>Ask the room</h3>
+</div>
+<p>Creates shared, private, queryable memory of a live stream.</p>
+<a class="repo" href="https://github.com/0xmigi/ask-the-room" target="_blank" rel="noopener noreferrer">View code <span aria-hidden="true">↗</span>
+</a>
+</li>
+<li class="project" id="project-b5888ccb675b" data-winner="true">
+<div class="project-head">
+<h3>Atelier</h3>
+<span class=winner>Winner</span>
+</div>
+<p>An AI team for small boutiques, with campaign planning and simulated shopper testing.</p>
+<ul class=badges>
+<li>Sovereign Agentic Organization <span>$1,375</span>
+</li>
+</ul>
+<a class="repo" href="https://github.com/atelierlocalhost/atelier" target="_blank" rel="noopener noreferrer">View code <span aria-hidden="true">↗</span>
+</a>
+</li>
+<li class="project" id="project-121af6b74e40" data-winner="false">
+<div class="project-head">
+<h3>Constellate</h3>
+</div>
+<p>Offers relationship astrology readings and private chats inside a Tinfoil enclave.</p>
+<a class="repo" href="https://github.com/wakesync/constellate" target="_blank" rel="noopener noreferrer">View code <span aria-hidden="true">↗</span>
+</a>
+</li>
+<li class="project" id="project-380726a8a831" data-winner="false">
+<div class="project-head">
+<h3>Counteractive</h3>
+</div>
+<p>Provides private, anonymous, metered inference.</p>
+<a class="repo" href="https://github.com/Qwuke/counteractive" target="_blank" rel="noopener noreferrer">View code <span aria-hidden="true">↗</span>
+</a>
+</li>
+<li class="project" id="project-6fa8fc69b38d" data-winner="false">
+<div class="project-head">
+<h3>Cubiczan</h3>
+</div>
+<p>Triages risk in financial filings locally, with evidence linked to each finding.</p>
+<a class="repo" href="https://github.com/icohangar-ops/meshcfo-filing-radar" target="_blank" rel="noopener noreferrer">View code <span aria-hidden="true">↗</span>
+</a>
+</li>
+<li class="project" id="project-fee1690aadd7" data-winner="false">
+<div class="project-head">
+<h3>echo</h3>
+</div>
+<p>Lets people inspect app prompts and use AI apps with attestation.</p>
+<a class="repo" href="https://github.com/ekrembal/attested-apps" target="_blank" rel="noopener noreferrer">View code <span aria-hidden="true">↗</span>
+</a>
+</li>
+<li class="project" id="project-8dc16692ff4f" data-winner="true">
+<div class="project-head">
+<h3>Fightroom</h3>
+<span class=winner>Winner</span>
+</div>
+<p>Analyzes UFC fights and evaluates potential bets.</p>
+<ul class=badges>
+<li>Sovereign Agentic Organization <span>$1,375</span>
+</li>
+</ul>
+<a class="repo" href="https://github.com/thetradingdoc/trade-fightroom" target="_blank" rel="noopener noreferrer">View code <span aria-hidden="true">↗</span>
+</a>
+</li>
+<li class="project" id="project-782a66b15ce1" data-winner="true">
+<div class="project-head">
+<h3>Flybrain</h3>
+<span class=winner>Winner</span>
+</div>
+<p>Combines a fruit fly connectome, open models and shared memory to coordinate a simulated drone swarm.</p>
+<ul class=badges>
+<li>Private swarm memory <span>$500</span>
+</li>
+</ul>
+<a class="repo" href="https://github.com/AUW160150/superlinked" target="_blank" rel="noopener noreferrer">View code <span aria-hidden="true">↗</span>
+</a>
+</li>
+<li class="project" id="project-8f3d5cf3d42a" data-winner="false">
+<div class="project-head">
+<h3>FusionEdges</h3>
+</div>
+<p>Integrates software components across repositories.</p>
+<a class="repo" href="https://github.com/ssachis/FusionEdges" target="_blank" rel="noopener noreferrer">View code <span aria-hidden="true">↗</span>
+</a>
+</li>
+<li class="project" id="project-a9fa205ba22e" data-winner="false">
+<div class="project-head">
+<h3>Greenpeace</h3>
+</div>
+<p>Experiments with AI agents editing model weights directly to play a game.</p>
+<a class="repo" href="https://github.com/mvyleteljr/weight-space" target="_blank" rel="noopener noreferrer">View code <span aria-hidden="true">↗</span>
+</a>
+</li>
+<li class="project" id="project-975b8343c952" data-winner="true">
+<div class="project-head">
+<h3>heretic-toolcalls</h3>
+<span class=winner>Winner</span>
+</div>
+<p>Adds tool calling to Heretic, a workflow for decensoring open-weight models.</p>
+<ul class=badges>
+<li>Own the model <span>$500</span>
+</li>
+</ul>
+<a class="repo" href="https://github.com/p-e-w/heretic" target="_blank" rel="noopener noreferrer">View code <span aria-hidden="true">↗</span>
+</a>
+</li>
+<li class="project" id="project-cc976a80db65" data-winner="false">
+<div class="project-head">
+<h3>Hitchers</h3>
+</div>
+<p>A private AI coach for relationships, friendship and life.</p>
+<a class="repo" href="https://github.com/keeeeeeeks/hitch" target="_blank" rel="noopener noreferrer">View code <span aria-hidden="true">↗</span>
+</a>
+</li>
+<li class="project" id="project-eea29ea1c043" data-winner="false">
+<div class="project-head">
+<h3>hive mind</h3>
+</div>
+<p>Shares agent memory over a peer-to-peer network.</p>
+<a class="repo" href="https://github.com/caiogondim/agent-knowledge" target="_blank" rel="noopener noreferrer">View code <span aria-hidden="true">↗</span>
+</a>
+</li>
+<li class="project" id="project-68a3acfce61c" data-winner="true">
+<div class="project-head">
+<h3>Kinship</h3>
+<span class=winner>Winner</span>
+</div>
+<p>Fine-tunes a small open model to use Hindi kinship terms correctly across family relationships.</p>
+<ul class=badges>
+<li>Superlinked <span>$500</span>
+</li>
+</ul>
+<a class="repo" href="https://github.com/sahilpardasani/kinship-qlora" target="_blank" rel="noopener noreferrer">View code <span aria-hidden="true">↗</span>
+</a>
+</li>
+<li class="project" id="project-6cf1a9434af5" data-winner="true">
+<div class="project-head">
+<h3>Membrane</h3>
+<span class=winner>Winner</span>
+</div>
+<p>Stores agent memory in a secure enclave and controls what each model can access.</p>
+<ul class=badges>
+<li>cognee <span>$500</span>
+</li>
+</ul>
+<a class="repo" href="https://github.com/wakesync/hivemind" target="_blank" rel="noopener noreferrer">View code <span aria-hidden="true">↗</span>
+</a>
+</li>
+<li class="project" id="project-888bc6fa5e7f" data-winner="false">
+<div class="project-head">
+<h3>MokPok</h3>
+</div>
+<p>Helps people create their own board games.</p>
+<a class="repo" href="https://github.com/MikeFraietta/mocpok" target="_blank" rel="noopener noreferrer">View code <span aria-hidden="true">↗</span>
+</a>
+</li>
+<li class="project" id="project-1f41fdf9a45c" data-winner="false">
+<div class="project-head">
+<h3>opencomputemesh</h3>
+</div>
+<p>Coordinates contributed GPU machines into a shared compute mesh.</p>
+<a class="repo" href="https://github.com/roshaninfordham/opencomputemesh" target="_blank" rel="noopener noreferrer">View code <span aria-hidden="true">↗</span>
+</a>
+</li>
+<li class="project" id="project-ca5735a64f81" data-winner="false">
+<div class="project-head">
+<h3>Openmaxxing</h3>
+</div>
+<p>Answers questions about NYC open data using an open model inside a Tinfoil enclave.</p>
+<a class="repo" href="https://github.com/npstorey/openmaxxing" target="_blank" rel="noopener noreferrer">View code <span aria-hidden="true">↗</span>
+</a>
+</li>
+<li class="project" id="project-23f103bf2e11" data-winner="true">
+<div class="project-head">
+<h3>PillSpark</h3>
+<span class=winner>Winner</span>
+</div>
+<p>Turns faxed prescriptions into pharmacy orders for pharmacist review.</p>
+<ul class=badges>
+<li>Most production-ready product <span>$500</span>
+</li>
+<li>Superlinked <span>$500</span>
+</li>
+</ul>
+<a class="repo" href="https://github.com/AUW160150/pillspark_superlinked" target="_blank" rel="noopener noreferrer">View code <span aria-hidden="true">↗</span>
+</a>
+</li>
+<li class="project" id="project-b10de1b28098" data-winner="true">
+<div class="project-head">
+<h3>Query Sharding</h3>
+<span class=winner>Winner</span>
+</div>
+<p>Splits sensitive queries across inference providers to limit what any one provider sees.</p>
+<ul class=badges>
+<li>Private inference routing <span>$500</span>
+</li>
+<li>Darkbloom <span>$500</span>
+</li>
+</ul>
+<a class="repo" href="https://github.com/njeans/query-router" target="_blank" rel="noopener noreferrer">View code <span aria-hidden="true">↗</span>
+</a>
+</li>
+<li class="project" id="project-a0300a366907" data-winner="false">
+<div class="project-head">
+<h3>ReflectionConnection</h3>
+</div>
+<p>Uses local AI body tracking to control interactive art simulations.</p>
+<a class="repo" href="https://github.com/owen-ackerman/theaterPublic" target="_blank" rel="noopener noreferrer">View code <span aria-hidden="true">↗</span>
+</a>
+</li>
+<li class="project" id="project-abe4147501f0" data-winner="false">
+<div class="project-head">
+<h3>Seraph</h3>
+</div>
+<p>Brings local AI models and tools into one agent app.</p>
+<a class="repo" href="https://github.com/Mkultra00/kov-unleashed-project" target="_blank" rel="noopener noreferrer">View code <span aria-hidden="true">↗</span>
+</a>
+</li>
+<li class="project" id="project-bec9754069b3" data-winner="true">
+<div class="project-head">
+<h3>Settled</h3>
+<span class=winner>Winner</span>
+</div>
+<p>Helps friends choose a plan through private AI agents that negotiate for each person.</p>
+<ul class=badges>
+<li>Private cooperation <span>$500</span>
+</li>
+</ul>
+<a class="repo" href="https://github.com/ysc06/localhost_hackathon_Nov7" target="_blank" rel="noopener noreferrer">View code <span aria-hidden="true">↗</span>
+</a>
+</li>
+<li class="project" id="project-c9c210cfeeab" data-winner="false">
+<div class="project-head">
+<h3>Shareference</h3>
+</div>
+<p>A marketplace for software services and inference.</p>
+<a class="repo" href="https://github.com/7dracoder/shareference" target="_blank" rel="noopener noreferrer">View code <span aria-hidden="true">↗</span>
+</a>
+</li>
+<li class="project" id="project-369e89623f31" data-winner="false">
+<div class="project-head">
+<h3>Tanu</h3>
+</div>
+<p>Tests AI agents against security threats with and without a protective shield.</p>
+<a class="repo" href="https://github.com/tu2090-ops/breachbench-localhost" target="_blank" rel="noopener noreferrer">View code <span aria-hidden="true">↗</span>
+</a>
+</li>
+<li class="project" id="project-3826f89d8bb5" data-winner="true">
+<div class="project-head">
+<h3>witnessdesk</h3>
+<span class=winner>Winner</span>
+</div>
+<p>A private, local workflow for whistleblower intake and newsroom investigations.</p>
+<ul class=badges>
+<li>Tinfoil <span>$500</span>
+</li>
+</ul>
+<a class="repo" href="https://github.com/sweetpea22/witnessdesk" target="_blank" rel="noopener noreferrer">View code <span aria-hidden="true">↗</span>
+</a>
+</li>
+<li class="project" id="project-e4763f894ffe" data-winner="false">
+<div class="project-head">
+<h3>~</h3>
+</div>
+<p>Runs a persistent Pi agent on an Android phone with Tinfoil inference and remote access.</p>
+<a class="repo" href="https://github.com/jharveyb/phone-pwa-agent" target="_blank" rel="noopener noreferrer">View code <span aria-hidden="true">↗</span>
+</a>
+</li>
+</ul>
+<p class="empty" id="empty" hidden>No projects match your search.</p>
+<p id="search-status" role="status" class="k" hidden>
+</p>
+</section>
+</div>
+</main>
+<footer>
+<div class="wrap">
+<p>LOCALHOST · November 7, 2026 · The School, NYC</p>
+<a href="/tracks">Explore the tracks →</a>
+</div>
+</footer>
+<script>
+const tools=document.querySelector('.tools'),search=document.querySelector('#search'),filter=document.querySelector('#winner-filter'),rows=[...document.querySelectorAll('.project')];tools.hidden=false;
+function update(){const q=search.value.trim().toLocaleLowerCase(),only=filter.getAttribute('aria-pressed')==='true';let count=0;for(const row of rows){row.hidden=!(row.textContent.toLocaleLowerCase().includes(q)&&(!only||row.dataset.winner==='true'));if(!row.hidden)count++;}document.querySelector('#empty').hidden=count!==0;document.querySelector('#count').textContent=count+' project'+(count===1?'':'s')+' shown';const status=document.querySelector('#search-status');status.hidden=false;status.textContent=count+' project'+(count===1?'':'s')+' shown';}
+search.addEventListener('input',update);filter.addEventListener('click',()=>{filter.setAttribute('aria-pressed',filter.getAttribute('aria-pressed')!=='true');update();});
+for(const link of document.querySelectorAll('.recipient a'))link.addEventListener('click',()=>{search.value='';filter.setAttribute('aria-pressed','false');update();});
+</script>
+</body>
+</html>
