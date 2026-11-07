@@ -76,6 +76,11 @@
   .done .row { margin-top: 18px; display: flex; gap: 10px; flex-wrap: wrap; }
   .msg { min-height: 1.6em; padding: 6px 20px 18px; font: 12px var(--mono); letter-spacing: .06em; color: var(--mid); }
   .msg.err { color: #ff6b5e; }
+  .telegram { padding: 24px 20px; border-top: 1px solid var(--ln); text-align: center; }
+  .telegram a { display: inline-flex; flex-direction: column; align-items: center; gap: 16px; max-width: 100%; font: 600 16px/1.5 var(--read); color: var(--hi); text-decoration: none; }
+  .telegram a:hover { color: var(--pri); }
+  .telegram a:focus-visible { outline: 2px solid var(--pri); outline-offset: 6px; }
+  .telegram img { display: block; width: 222px; max-width: 100%; height: auto; background: #fff; }
   @media (max-width: 640px) {
     .corner.tr, .ch .k { display: none; }
     .win { margin-top: 58px; margin-bottom: 8px; }
@@ -122,6 +127,12 @@
     <p>Grab a seat, find wifi and power, and say hi to the crew.</p>
     <div class="row"><a class="b pri" href="/schedule">Schedule →</a><a class="b" href="/tracks">Tracks →</a></div>
   </div>
+  <section class="telegram" aria-label="Telegram group">
+    <a href="https://t.me/+ZFZhhIcRQH1mYjgx" target="_blank" rel="noopener">
+      <span>Join the Telegram group</span>
+      <img src="img/telegram-group-qr.png" width="888" height="888" alt="QR code to join the Telegram group">
+    </a>
+  </section>
 </main>
 <nav class="foot hud"><a href="/">← localhost</a><span class="host">Hosted by <a href="https://x.com/DistributedMarz" target="_blank" rel="noopener"><canvas id="mark" aria-hidden="true"></canvas>dmarz</a></span></nav>
 
