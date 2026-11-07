@@ -91,6 +91,8 @@
     .apf .row2 .b { flex: 1 1 100%; text-align: center; }
   }
   .cf-turnstile { max-width: 100%; overflow: hidden; }
+  .ai { font: 13px/1.55 var(--read); color: var(--hi); border-left: 2px solid var(--pri); padding: 2px 0 2px 12px; margin: 0; }
+  .sep { margin-top: 10px; padding-top: 14px; border-top: 1px solid var(--ln); }
 </style>
 </head>
 <body>
@@ -102,18 +104,8 @@
   <div class="head"><h1 id="h1">Submit your project</h1><p class="when" id="when">Edits until 5:00 PM · presentations 5:15</p></div>
   <p class="mode" id="mode" hidden></p>
   <form class="apf" id="form" novalidate>
-    <label><span class="k">Team name</span><input name="team" required maxlength="60" autocomplete="off"></label>
-    <fieldset><legend class="k">Members <i>GitHub, 1–4</i></legend>
-      <div class="mem">
-        <input name="m1" required maxlength="60" placeholder="username" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Member 1 GitHub">
-        <input name="m2" maxlength="60" placeholder="username" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Member 2 GitHub">
-        <input name="m3" maxlength="60" placeholder="username" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Member 3 GitHub">
-        <input name="m4" maxlength="60" placeholder="username" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Member 4 GitHub">
-      </div>
-    </fieldset>
-    <label><span class="k">Email <i>the edit link goes here</i></span><input name="email" type="email" required autocomplete="email" placeholder="you@example.com"></label>
-    <label><span class="k">Public GitHub repo</span><input name="repo" required maxlength="300" placeholder="github.com/team/project" autocomplete="off" autocapitalize="off" spellcheck="false"></label>
-    <fieldset><legend class="k">2-minute demo video <i>upload by 4:30, the wifi slows at 5</i></legend>
+    <p class="ai">Make the 1-minute demo with AI: slides, screen demo and narration. Script it with a model, voice it with TTS, cut it together. One minute, not more.</p>
+    <fieldset><legend class="k">1-minute demo <i>60 s max · upload early, the wifi slows at 5</i></legend>
       <div class="up" id="upbox">
         <label class="drop" id="drop"><input type="file" id="file" accept="video/mp4,video/quicktime,video/webm,.mp4,.mov,.webm,.m4v"><span class="ic">↑</span><span id="fileTxt">Choose the video file · mp4, mov or webm, up to 500 MB</span></label>
         <div class="prog" id="prog" hidden><i id="bar"></i></div>
@@ -121,11 +113,21 @@
       </div>
       <input name="video" maxlength="300" placeholder="or paste a YouTube / Loom link" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Demo video link">
     </fieldset>
-    <label><span class="k">One line <span class="n" id="cnt">0/140</span></span><input name="pitch" required maxlength="140" placeholder="What it does, in one line" autocomplete="off"></label>
-    <fieldset><legend class="k">Open track <i>pick one</i></legend>
-      <div class="opts" id="tracks"></div>
+    <label><span class="k">Public GitHub repo</span><input name="repo" required maxlength="300" placeholder="github.com/team/project" autocomplete="off" autocapitalize="off" spellcheck="false"></label>
+    <fieldset><legend class="k">Members <i>GitHub, 1–6</i></legend>
+      <div class="mem" id="mem"></div>
     </fieldset>
-    <fieldset><legend class="k">Sponsor bounties <i>any</i></legend>
+    <fieldset><legend class="k">If we tweet a clip of you <i>optional</i></legend>
+      <p class="k" style="text-transform:none;letter-spacing:.02em;color:var(--mid)">We'll tweet clips. Any X handles to tag, and anything you want us to include?</p>
+      <input name="x_handles" maxlength="200" placeholder="@you, @teammate" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="X handles">
+      <textarea name="tweet" maxlength="500" rows="3" placeholder="Anything else for the tweet" aria-label="Anything else for the tweet" style="font:inherit;padding:10px;background:#000;color:var(--hi);border:1px solid var(--ln);resize:vertical"></textarea>
+    </fieldset>
+    <p class="sep k">The rest</p>
+    <label><span class="k">Team name</span><input name="team" required maxlength="60" autocomplete="off"></label>
+    <label><span class="k">Email <i>the edit link goes here</i></span><input name="email" type="email" required autocomplete="email" placeholder="you@example.com"></label>
+    <label><span class="k">One line <span class="n" id="cnt">0/140</span></span><input name="pitch" required maxlength="140" placeholder="What it does, in one line" autocomplete="off"></label>
+    <fieldset><legend class="k">Prizes <i>tick every one you want to be considered for</i></legend>
+      <div class="opts" id="tracks"></div>
       <div class="chips" id="bounties"></div>
     </fieldset>
     <input type="text" name="field_hp" tabindex="-1" autocomplete="off" aria-hidden="true" class="hp">
@@ -140,7 +142,7 @@
 <script type="module">
 import { thermal } from "./shared/thermal.js";
 import { FORMS_API } from "./shared/forms.js";
-import { TRACKS, BOUNTIES, ghUser, repoUrl, videoUrl } from "./shared/projects.js";
+import { TRACKS, BOUNTIES, ghUser, repoUrl, videoUrl, xHandle } from "./shared/projects.js";
 import { checkFile, uploadDemo } from "./shared/demo-upload.js";
 thermal(document.getElementById("c"), { block: 5 });
 const $ = (id) => document.getElementById(id);
@@ -151,7 +153,9 @@ const form = $("form"), msg = $("msg"), go = $("go");
 let picked = null, haveFile = 0, uploading = false;
 const mb = (n) => (n >= 1048576 ? Math.round(n / 1048576) + " MB" : Math.max(1, Math.round(n / 1024)) + " KB");
 
-$("tracks").innerHTML = TRACKS.map((t) => `<label class="opt"><input type="radio" name="track" value="${t.value}" required><span class="t">${t.n}</span>${esc(t.name)}</label>`).join("");
+const MEMBERS = ["m1", "m2", "m3", "m4", "m5", "m6"];
+$("mem").innerHTML = MEMBERS.map((n, i) => `<input name="${n}" ${i ? "" : "required"} maxlength="60" placeholder="username" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Member ${i + 1} GitHub">`).join("");
+$("tracks").innerHTML = TRACKS.map((t) => `<label class="opt"><input type="checkbox" name="track" value="${t.value}"><span class="t">${t.n}</span>${esc(t.name)}</label>`).join("");
 $("bounties").innerHTML = BOUNTIES.map((b) => `<label class="opt"><input type="checkbox" name="bounties" value="${b.value}">${esc(b.name)}</label>`).join("");
 form.elements.pitch.addEventListener("input", (e) => ($("cnt").textContent = `${e.target.value.length}/140`));
 
@@ -186,10 +190,11 @@ let key = okKey((new URLSearchParams(location.search).get("e") || "").trim().toL
 if (!key) { try { key = okKey(localStorage.getItem(STORE)); } catch {} }
 
 function fill(a) {
-  for (const n of ["team", "email", "repo", "video", "pitch"]) if (a[n] !== undefined) form.elements[n].value = a[n];
+  for (const n of ["team", "email", "repo", "video", "pitch", "x_handles", "tweet"]) if (a[n] !== undefined) form.elements[n].value = a[n];
   const ms = String(a.members || "").split(/[,\s]+/).filter(Boolean);
-  ["m1", "m2", "m3", "m4"].forEach((n, i) => (form.elements[n].value = ms[i] || ""));
-  for (const r of form.querySelectorAll("[name=track]")) r.checked = r.value === a.track;
+  MEMBERS.forEach((n, i) => (form.elements[n].value = ms[i] || ""));
+  const ts = new Set(Array.isArray(a.track) ? a.track : [a.track]);
+  for (const r of form.querySelectorAll("[name=track]")) r.checked = ts.has(r.value);
   const bs = new Set(Array.isArray(a.bounties) ? a.bounties : []);
   for (const c of form.querySelectorAll("[name=bounties]")) c.checked = bs.has(c.value);
   $("cnt").textContent = `${form.elements.pitch.value.length}/140`;
@@ -251,7 +256,7 @@ function collect() {
   const v = (n) => form.elements[n].value.trim();
   if (!v("team")) return fail("team", "Team name.");
   const members = [];
-  for (const n of ["m1", "m2", "m3", "m4"]) {
+  for (const n of MEMBERS) {
     if (!v(n)) continue;
     const u = ghUser(v(n));
     if (!u) return fail(n, `“${v(n)}” isn't a GitHub username.`);
@@ -264,14 +269,38 @@ function collect() {
   let video = "";
   if (v("video")) { video = videoUrl(v("video")); if (!video) return fail("video", "Video: a full link (https://…)."); }
   if (!v("pitch")) return fail("pitch", "One line about it.");
-  const track = form.querySelector("[name=track]:checked")?.value;
-  if (!track) { $("tracks").scrollIntoView({ block: "center", behavior: "smooth" }); return fail(null, "Pick one open track (or sponsor bounties only)."); }
+  const track = [...form.querySelectorAll("[name=track]:checked")].map((c) => c.value);
   const bounties = [...form.querySelectorAll("[name=bounties]:checked")].map((c) => c.value);
-  if (track === "none" && !bounties.length) return fail(null, "Sponsor bounties only: tick at least one bounty.");
-  const body = { team: v("team"), members: members.join(", "), email: v("email"), repo, pitch: v("pitch"), track, bounties, field_hp: form.elements.field_hp.value };
+  if (!track.length && !bounties.length) { $("tracks").scrollIntoView({ block: "center", behavior: "smooth" }); return fail(null, "Tick at least one prize."); }
+  const handles = [];
+  for (const h of v("x_handles").split(/[\s,]+/).filter(Boolean)) {
+    const x = xHandle(h);
+    if (!x) return fail("x_handles", `“${h}” isn't an X handle.`);
+    if (!handles.includes(x)) handles.push(x);
+  }
+  const body = { team: v("team"), members: members.join(", "), email: v("email"), repo, pitch: v("pitch"), track, bounties, x_handles: handles.join(" "), tweet: v("tweet"), field_hp: form.elements.field_hp.value };
   if (video) body.video = video;
   if (key) body.edit = key;
   return body;
+}
+
+// GitHub: every member and the repo must exist (and the repo be public). If GitHub can't be
+// reached the check says "unknown" and the save goes through.
+async function ghOk(body) {
+  msg.className = "msg";
+  msg.textContent = "checking GitHub…";
+  let j;
+  try {
+    const r = await fetch(FORMS_API + "/api/f/localhost-project/check", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ members: body.members.split(", "), repo: body.repo }) });
+    j = await r.json();
+  } catch { return true; }
+  if (!j || !j.ok) return true;
+  for (const n of MEMBERS) {
+    const u = ghUser(form.elements[n].value.trim() || "-");
+    if (u && j.members[u] === "missing") { fail(n, `GitHub has no user “${u}”.`); return false; }
+  }
+  if (j.repo === "missing") { fail("repo", "That repo isn't on GitHub or isn't public yet. Make it public, then submit."); return false; }
+  return true;
 }
 
 form.addEventListener("submit", async (e) => {
@@ -281,6 +310,7 @@ form.addEventListener("submit", async (e) => {
   const body = collect();
   if (!body) return;
   go.disabled = true;
+  if (!(await ghOk(body))) { go.disabled = false; return; }
   if (!token()) {
     msg.textContent = "checking you're human…";
     for (const t0 = Date.now(); !token() && Date.now() - t0 < 20000; ) await new Promise((r) => setTimeout(r, 250));
@@ -307,9 +337,23 @@ function upStatus(text, cls = "", retry = false) {
   u.innerHTML = esc(text) + (retry ? ' <button type="button" id="retry">Retry</button>' : "");
   if (retry) $("retry").onclick = () => startUpload();
 }
-$("file").addEventListener("change", () => {
+// Demo length: 60 s asked, up to 70 s accepted. Read from the file's metadata in the browser.
+const MAX_SECONDS = 70;
+const duration = (file) => new Promise((res) => {
+  const v = document.createElement("video");
+  const url = URL.createObjectURL(file);
+  const end = (d) => { URL.revokeObjectURL(url); res(d); };
+  v.preload = "metadata";
+  v.onloadedmetadata = () => end(isFinite(v.duration) ? v.duration : null);
+  v.onerror = () => end(null);
+  setTimeout(() => end(null), 8000);
+  v.src = url;
+});
+$("file").addEventListener("change", async () => {
   const file = $("file").files[0];
   if (!file) return;
+  const secs = await duration(file);
+  if (secs && secs > MAX_SECONDS) { picked = null; $("file").value = ""; return upStatus(`That video is ${Math.round(secs)} s. Demos are 1 minute max; trim it and pick it again.`, "err"); }
   const bad = checkFile(file);
   if (bad) { picked = null; $("file").value = ""; return upStatus(bad, "err"); }
   picked = file;
@@ -342,7 +386,7 @@ function done(body, edited) {
   const ok = $("ok");
   ok.hidden = false;
   ok.innerHTML = `<h2>${edited ? "Saved" : "Submitted"} 🗽</h2>
-    <p>${esc(body.team)} · ${esc(TRACKS.find((t) => t.value === body.track)?.name || "")}${body.video || haveFile || picked ? "" : " · <span style='color:var(--bad)'>no video yet</span>"}</p>
+    <p>${esc(body.team)} · ${esc([...TRACKS.filter((t) => body.track.includes(t.value)).map((t) => t.n), ...BOUNTIES.filter((b) => body.bounties.includes(b.value)).map((b) => b.name)].join(", "))}${body.video || haveFile || picked ? "" : " · <span style='color:var(--bad)'>no video yet</span>"}</p>
     <div id="upslot"></div>
     <p>Your edit link, until 5:00 PM. Also sent to ${esc(body.email)}.</p>
     <div class="link"><input id="lnk" readonly value="${esc(link)}" aria-label="Edit link"><button class="b" type="button" id="cp">Copy</button></div>

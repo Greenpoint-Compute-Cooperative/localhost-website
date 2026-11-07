@@ -8,7 +8,6 @@ export const TRACKS = [
   { value: "t22", n: "2.2", name: "Own the model" },
   { value: "t23", n: "2.3", name: "Private inference you can check" },
   { value: "t24", n: "2.4", name: "Private cooperation" },
-  { value: "none", n: "—", name: "Sponsor bounties only" },
 ];
 export const BOUNTIES = [
   { value: "tinfoil", name: "Tinfoil" },
@@ -55,4 +54,13 @@ export function embedUrl(v) {
   if (h === "vimeo.com") { const m = u.pathname.match(/^\/(\d{5,12})/); if (m) return `https://player.vimeo.com/video/${m[1]}?autoplay=1`; }
   if (h === "drive.google.com") { const m = u.pathname.match(/^\/file\/d\/([\w-]{10,})/); if (m) return `https://drive.google.com/file/d/${m[1]}/preview`; }
   return null;
+}
+
+/** "@ada", "x.com/ada" → "@ada"; null if not an X handle. */
+export function xHandle(v) {
+  let s = String(v).trim();
+  const m = s.match(/^(?:https?:\/\/)?(?:www\.)?(?:x|twitter)\.com\/([^/?#]+)\/?$/i);
+  if (m) s = m[1];
+  s = s.replace(/^@/, "");
+  return /^[A-Za-z0-9_]{1,15}$/.test(s) ? "@" + s : null;
 }

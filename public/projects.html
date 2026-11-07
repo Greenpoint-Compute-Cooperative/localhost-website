@@ -192,8 +192,10 @@ function projects(rows) {
     else { p.saves++; p.first = Math.min(p.first, r.at); if (r.at > p.at) { p.a = r.answers; p.at = r.at; } }
   }
   return [...by.values()].map((p) => {
-    const t = trackOf(p.a.track);
-    return { ...p, t, track: TRACKS[t] || { n: "?", name: p.a.track || "?" }, bounties: (p.a.bounties || "").split(", ").filter(Boolean), members: (p.a.members || "").split(/[,\s]+/).filter(Boolean) };
+    const labels = String(p.a.track || "").split(", ").filter(Boolean);
+    const tracks = TRACKS.filter((t) => labels.some((l) => l.endsWith(t.name)));
+    const t = tracks.length ? TRACKS.indexOf(tracks[0]) : -1;
+    return { ...p, t, tracks, track: tracks[0] || { n: "—", name: "Sponsor bounties" }, bounties: (p.a.bounties || "").split(", ").filter(Boolean), members: (p.a.members || "").split(/[,\s]+/).filter(Boolean) };
   });
 }
 
@@ -218,16 +220,16 @@ function render() {
   const h = hidden();
   list = all.filter((p) => !h.has(p.id));
   const repos = new Map(); for (const p of list) repos.set(p.a.repo, (repos.get(p.a.repo) || 0) + 1);
-  const noVid = list.filter((p) => !p.a.video && !fileOf(p)).length, noFile = list.filter((p) => !fileOf(p)).length, noRepo = list.filter((p) => !p.a.repo).length, big = list.filter((p) => p.members.length > 4).length;
-  $("sum").innerHTML = `<b>${list.length}</b> projects` + (noVid ? ` · <span class="x">${noVid} missing video</span>` : "") + (noFile ? ` · ${list.length - noFile}/${list.length} files uploaded` : ` · all files uploaded`) + (noRepo ? ` · <span class="x">${noRepo} missing repo</span>` : "") + (big ? ` · <span class="x">${big} over 4 members</span>` : "") + (h.size ? ` · <a href="#" id="unhide">${h.size} hidden</a>` : "") + ` · ${TRACKS.slice(0, 5).map((t) => `${t.n}: ${list.filter((p) => p.track === t).length}`).join(" · ")}`;
+  const noVid = list.filter((p) => !p.a.video && !fileOf(p)).length, noFile = list.filter((p) => !fileOf(p)).length, noRepo = list.filter((p) => !p.a.repo).length, big = list.filter((p) => p.members.length > 6).length;
+  $("sum").innerHTML = `<b>${list.length}</b> projects` + (noVid ? ` · <span class="x">${noVid} missing video</span>` : "") + (noFile ? ` · ${list.length - noFile}/${list.length} files uploaded` : ` · all files uploaded`) + (noRepo ? ` · <span class="x">${noRepo} missing repo</span>` : "") + (big ? ` · <span class="x">${big} over 6 members</span>` : "") + (h.size ? ` · <a href="#" id="unhide">${h.size} hidden</a>` : "") + ` · ${TRACKS.slice(0, 5).map((t) => `${t.n}: ${list.filter((p) => p.tracks.includes(t)).length}`).join(" · ")}`;
   $("rows").innerHTML = list.length
     ? list.map((p, i) => `<tr>
       <td class="n"><a href="#" data-go="${i}" title="Present from here">${String(i + 1).padStart(2, "0")}</a></td>
       <td class="mv"><button data-up="${i}" aria-label="Move up">↑</button> <button data-dn="${i}" aria-label="Move down">↓</button></td>
       <td class="team">${esc(p.a.team)}${repos.get(p.a.repo) > 1 ? ' <span class="miss" title="Another entry has the same repo: a double submission?">same repo</span>' : ""}</td>
-      <td><span class="tag tr">${esc(p.track.n)}</span>${esc(p.track.name)}</td>
+      <td>${p.tracks.length ? p.tracks.map((t) => `<span class="tag tr" title="${esc(t.name)}">${esc(t.n)}</span>`).join("") : "—"}</td>
       <td>${p.bounties.map((b) => `<span class="tag">${esc(b)}</span>`).join("")}</td>
-      <td>${p.members.map((m) => `<a href="https://github.com/${esc(m)}" target="_blank" rel="noopener noreferrer">${esc(m)}</a>`).join(", ")}${p.members.length > 4 ? ' <span class="miss">over 4</span>' : ""}</td>
+      <td>${p.members.map((m) => `<a href="https://github.com/${esc(m)}" target="_blank" rel="noopener noreferrer">${esc(m)}</a>`).join(", ")}${p.members.length > 6 ? ' <span class="miss">over 6</span>' : ""}</td>
       <td>${p.a.repo ? `<a href="${esc(p.a.repo)}" target="_blank" rel="noopener noreferrer">${esc(short(p.a.repo).replace(/^github\.com\//, ""))}</a>` : '<span class="miss">missing</span>'}</td>
       <td class="vd">${fileOf(p) ? `<a href="${esc(fileOf(p).url)}" target="_blank" rel="noopener noreferrer" title="Uploaded file">▶ file ${Math.max(1, Math.round(fileOf(p).size / 1048576))} MB</a>` : p.a.video ? `<a href="${esc(p.a.video)}" target="_blank" rel="noopener noreferrer">${embedUrl(p.a.video) ? "▶ link" : "↗ link"}</a> <span class="miss" title="No uploaded file">no file</span>` : '<span class="miss">missing</span>'}</td>
       <td class="pitch">${esc(p.a.pitch)}</td>
@@ -291,8 +293,8 @@ $("feed").onclick = () => {
 };
 $("csv").onclick = () => {
   const q = (s) => `"${String(s ?? "").replace(/"/g, '""')}"`;
-  const head = ["Order", "Team", "Track", "Bounties", "Members", "Repo", "Video", "One line", "Email", "Last saved", "Saves"];
-  const lines = [head.map(q).join(","), ...list.map((p, i) => [i + 1, p.a.team, `${p.track.n} ${p.track.name}`, p.bounties.join(" "), p.members.join(" "), p.a.repo, p.a.video, p.a.pitch, p.a.email, new Date(p.at * 1000).toISOString(), p.saves].map(q).join(","))];
+  const head = ["Order", "Team", "Track", "Bounties", "Members", "Repo", "Video", "One line", "Email", "X handles", "Tweet", "Last saved", "Saves"];
+  const lines = [head.map(q).join(","), ...list.map((p, i) => [i + 1, p.a.team, p.tracks.map((t) => `${t.n} ${t.name}`).join("; "), p.bounties.join(" "), p.members.join(" "), p.a.repo, p.a.video, p.a.pitch, p.a.email, p.a.x_handles, p.a.tweet, new Date(p.at * 1000).toISOString(), p.saves].map(q).join(","))];
   const a = document.createElement("a");
   a.href = URL.createObjectURL(new Blob([lines.join("\n")], { type: "text/csv" }));
   a.download = `localhost-projects-${new Date().toISOString().slice(0, 10)}.csv`;
@@ -306,7 +308,7 @@ function sheets() {
     ${ps.length ? ps.map((p) => `<tr><td>${list.indexOf(p) + 1}</td><td><b>${esc(p.a.team)}</b><div class="p">${esc(p.a.pitch)}</div></td>${CRITERIA.map(() => '<td class="box"></td>').join("")}<td class="box"></td><td class="notes"></td></tr>`).join("") : '<tr><td colspan="9">No entries.</td></tr>'}
     </tbody></table></section>`;
   $("sheets").innerHTML =
-    TRACKS.slice(0, 5).map((t) => page(`Track ${t.n} · ${t.name}`, list.filter((p) => p.track === t))).join("") +
+    TRACKS.slice(0, 5).map((t) => page(`Track ${t.n} · ${t.name}`, list.filter((p) => p.tracks.includes(t)))).join("") +
     BOUNTIES.map((b) => page(`${b.name} bounty`, list.filter((p) => p.bounties.includes(b.name)))).join("");
 }
 
@@ -440,7 +442,7 @@ function present(i = 0) {
   stage.requestFullscreen?.().catch(() => {});
   t0 = Date.now();
   clearInterval(timer);
-  timer = setInterval(() => { const el = stage.querySelector(".tm"); if (el) { const s = Math.floor((Date.now() - t0) / 1000); el.textContent = `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`; el.style.color = s >= 180 ? "var(--bad)" : ""; } }, 500);
+  timer = setInterval(() => { const el = stage.querySelector(".tm"); if (el) { const s = Math.floor((Date.now() - t0) / 1000); el.textContent = `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`; el.style.color = s >= 70 ? "var(--bad)" : ""; } }, 500);
   card();
 }
 function card() {
@@ -448,7 +450,7 @@ function card() {
   const em = fileOf(p) ? "file" : p.a.video ? embedUrl(p.a.video) : null;
   stage.innerHTML = `<div class="top"><span>LOCALHOST · ${String(cur + 1).padStart(2, "0")} / ${String(list.length).padStart(2, "0")}</span><span class="tm">0:00</span></div>
     <div class="mid">
-      <div class="trk">${esc(p.track.n === "—" ? "" : "Track " + p.track.n + " · ")}${esc(p.track.name)}</div>
+      <div class="trk">${esc(p.tracks.map((t) => t.n + " " + t.name).join(" · ") || "Sponsor bounties")}</div>
       <div class="nm">${esc(p.a.team)}</div>
       <div class="pt">${esc(p.a.pitch)}</div>
       <div class="who"><span>${p.members.map((m) => "@" + esc(m)).join("  ")}</span>${p.a.repo ? `<span class="rp">${esc(short(p.a.repo))}</span>` : ""}</div>
