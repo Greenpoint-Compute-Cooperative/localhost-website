@@ -56,3 +56,9 @@
   .seal.revealing,.seal.revealing .seal-content{animation:none}
   .seal.revealing .seal-body::before{display:none}
 }
+
+/* Winner demos stay dormant until their award is unsealed. */
+.recipient{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px 20px;align-content:start}
+.winner-video{display:block;grid-column:1/-1;width:100%;aspect-ratio:16/9;object-fit:contain;background:#07090c;border:1px solid var(--line)}
+.winner-video:focus-visible{outline:2px solid var(--acid);outline-offset:4px}
+.winner-video-missing{display:grid;place-items:center;grid-column:1/-1;aspect-ratio:16/9;border:1px solid var(--line);padding:24px 16px;font:12px/1.8 var(--read);color:var(--mid)}

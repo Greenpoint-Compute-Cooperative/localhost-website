@@ -72,12 +72,14 @@
 <a href="#project-8dc16692ff4f">Fightroom</a>
 </h4>
 <span class="amount">$1,375</span>
+<video class="winner-video" controls preload="none" playsinline poster="/videos/winners/fightroom.jpg" data-src="/videos/winners/fightroom.mp4" aria-label="Fightroom demo video">Your browser does not support embedded video.</video>
 </div>
 <div class="recipient">
 <h4>
 <a href="#project-b5888ccb675b">Atelier</a>
 </h4>
 <span class="amount">$1,375</span>
+<p class="winner-video-missing">Demo video awaiting a public link.</p>
 </div>
 </div>
 <p class=split>$2,750 split equally</p>
@@ -105,6 +107,7 @@
 <a href="#project-23f103bf2e11">PillSpark</a>
 </h4>
 <span class="amount">$500</span>
+<video class="winner-video" controls preload="none" playsinline poster="/videos/winners/pillspark.jpg" data-src="/videos/winners/pillspark.mp4" aria-label="PillSpark demo video">Your browser does not support embedded video.</video>
 </div>
 </div>
 </div></div>
@@ -124,6 +127,7 @@
 <a href="#project-975b8343c952">heretic-toolcalls</a>
 </h4>
 <span class="amount">$500</span>
+<video class="winner-video" controls preload="none" playsinline poster="/videos/winners/heretic-toolcalls.jpg" data-src="/videos/winners/heretic-toolcalls.mp4" aria-label="heretic-toolcalls demo video">Your browser does not support embedded video.</video>
 </div>
 </div>
 </div></div>
@@ -143,6 +147,7 @@
 <a href="#project-b10de1b28098">Query Sharding</a>
 </h4>
 <span class="amount">$500</span>
+<video class="winner-video" controls preload="none" playsinline poster="/videos/winners/query-sharding.jpg" data-src="/videos/winners/query-sharding.mp4" aria-label="Query Sharding demo video">Your browser does not support embedded video.</video>
 </div>
 </div>
 </div></div>
@@ -162,6 +167,7 @@
 <a href="#project-bec9754069b3">Settled</a>
 </h4>
 <span class="amount">$500</span>
+<video class="winner-video" controls preload="none" playsinline poster="/videos/winners/settled.jpg" data-src="/videos/winners/settled.mp4" aria-label="Settled demo video">Your browser does not support embedded video.</video>
 </div>
 </div>
 </div></div>
@@ -181,6 +187,7 @@
 <a href="#project-eea29ea1c043">hive mind</a>
 </h4>
 <span class="amount">$500</span>
+<video class="winner-video" controls preload="none" playsinline poster="/videos/winners/hive-mind.jpg" data-src="/videos/winners/hive-mind.mp4" aria-label="hive mind demo video">Your browser does not support embedded video.</video>
 </div>
 </div>
 </div></div>
@@ -208,6 +215,7 @@
 <a href="#project-3826f89d8bb5">witnessdesk</a>
 </h4>
 <span class="amount">$500</span>
+<video class="winner-video" controls preload="none" playsinline poster="/videos/winners/witnessdesk.jpg" data-src="/videos/winners/witnessdesk.mp4" aria-label="witnessdesk demo video">Your browser does not support embedded video.</video>
 </div>
 </div>
 </div></div>
@@ -227,6 +235,7 @@
 <a href="#project-b10de1b28098">Query Sharding</a>
 </h4>
 <span class="amount">$500</span>
+<video class="winner-video" controls preload="none" playsinline poster="/videos/winners/query-sharding.jpg" data-src="/videos/winners/query-sharding.mp4" aria-label="Query Sharding demo video">Your browser does not support embedded video.</video>
 </div>
 </div>
 </div></div>
@@ -246,12 +255,14 @@
 <a href="#project-23f103bf2e11">PillSpark</a>
 </h4>
 <span class="amount">$500</span>
+<video class="winner-video" controls preload="none" playsinline poster="/videos/winners/pillspark.jpg" data-src="/videos/winners/pillspark.mp4" aria-label="PillSpark demo video">Your browser does not support embedded video.</video>
 </div>
 <div class="recipient">
 <h4>
 <a href="#project-68a3acfce61c">Kinship</a>
 </h4>
 <span class="amount">$500</span>
+<video class="winner-video" controls preload="none" playsinline poster="/videos/winners/kinship.jpg" data-src="/videos/winners/kinship.mp4" aria-label="Kinship demo video">Your browser does not support embedded video.</video>
 </div>
 </div>
 <p class=split>Two winners · $500 each</p>
@@ -272,6 +283,7 @@
 <a href="#project-6cf1a9434af5">Membrane</a>
 </h4>
 <span class="amount">$500</span>
+<video class="winner-video" controls preload="none" playsinline poster="/videos/winners/membrane.jpg" data-src="/videos/winners/membrane.mp4" aria-label="Membrane demo video">Your browser does not support embedded video.</video>
 </div>
 </div>
 </div></div>
@@ -587,9 +599,14 @@ for(const seal of document.querySelectorAll('.seal')){
     clearTimeout(timer);
     seal.classList.remove('revealing');
     seal.querySelector('.seal-action-label').textContent=seal.open?'Revealed':'Unseal';
-    if(seal.open){seal.classList.add('revealing');burstConfetti(seal);timer=setTimeout(()=>seal.classList.remove('revealing'),550);}
+    if(seal.open){
+      for(const video of seal.querySelectorAll('video[data-src]')){video.src=video.dataset.src;delete video.dataset.src;video.load();}
+      seal.classList.add('revealing');burstConfetti(seal);timer=setTimeout(()=>seal.classList.remove('revealing'),550);
+    }else{for(const video of seal.querySelectorAll('video'))video.pause();}
   });
 }
+const videos=[...document.querySelectorAll('.winner-video')];
+for(const video of videos)video.addEventListener('play',()=>{for(const other of videos)if(other!==video)other.pause();});
 function showLinkedProject(){if(location.hash.startsWith('#project-')&&document.getElementById(location.hash.slice(1))){directory.open=true;search.value='';filter.setAttribute('aria-pressed','false');update();}}
 showLinkedProject();window.addEventListener('hashchange',showLinkedProject);
 </script>
