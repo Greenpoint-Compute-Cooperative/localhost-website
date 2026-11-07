@@ -15,7 +15,7 @@
   :root { --bg: #0c0e11; --panel: #12161b; --line: #2a3038; --hi: #f2f4f6; --mid: #a7b0ba; --lo: #6b747e; --bad: #ff6b6b; --read: "IBM Plex Mono", ui-monospace, Menlo, monospace; }
   html, body { height: auto; }
   body { background: var(--bg); color: var(--hi); font-family: var(--read); -webkit-font-smoothing: antialiased; padding-bottom: env(safe-area-inset-bottom); }
-  .wrap { max-width: 640px; margin: 0 auto; padding: 0 16px 120px; }
+  .wrap { max-width: 640px; margin: 0 auto; padding: 0 16px 150px; }
   header { position: sticky; top: 0; z-index: 20; background: rgba(12,14,17,.96); backdrop-filter: blur(6px); border-bottom: 1px solid var(--line); margin: 0 -16px; padding: 12px 16px 0; }
   .top { display: flex; align-items: center; gap: 10px; font: 11px var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--lo); }
   .top .me { color: var(--hi); flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -53,7 +53,12 @@
   .note::placeholder { color: var(--lo); }
   .empty, .bad { padding: 40px 0; color: var(--mid); font-size: 14px; line-height: 1.6; }
   .bad b { color: var(--bad); font-weight: 500; }
-  .jump { position: fixed; left: 50%; bottom: calc(16px + env(safe-area-inset-bottom)); transform: translateX(-50%); z-index: 30; font: 12px var(--mono); letter-spacing: .1em; text-transform: uppercase; padding: 12px 16px; background: var(--acid); color: #0b0b0c; border: 0; max-width: calc(100vw - 32px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer; box-shadow: 0 6px 24px rgba(0,0,0,.6); }
+  .pager { position: fixed; left: 0; right: 0; bottom: 0; z-index: 30; display: grid; grid-template-columns: 1fr auto 1.4fr; gap: 8px; align-items: center; padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); background: rgba(12,14,17,.97); border-top: 1px solid var(--line); }
+  .pager button { font: 13px var(--mono); letter-spacing: .1em; text-transform: uppercase; padding: 15px 10px; border: 1px solid #3a424c; background: none; color: var(--hi); cursor: pointer; touch-action: manipulation; }
+  .pager button.nx { background: var(--acid); color: #0b0b0c; border-color: var(--acid); }
+  .pager button:disabled { opacity: .35; cursor: default; }
+  .pager .pos { font: 12px var(--mono); letter-spacing: .12em; color: var(--mid); text-align: center; min-width: 4em; }
+  .jump { position: fixed; left: 50%; bottom: calc(84px + env(safe-area-inset-bottom)); transform: translateX(-50%); z-index: 30; font: 12px var(--mono); letter-spacing: .1em; text-transform: uppercase; padding: 12px 16px; background: var(--acid); color: #0b0b0c; border: 0; max-width: calc(100vw - 32px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer; box-shadow: 0 6px 24px rgba(0,0,0,.6); }
   .vid { position: fixed; inset: 0; z-index: 50; background: #000; display: flex; flex-direction: column; }
   .vid video { flex: 1; width: 100%; min-height: 0; background: #000; }
   .vid button { font: 12px var(--mono); letter-spacing: .14em; text-transform: uppercase; padding: 14px; background: #111; color: var(--hi); border: 0; border-top: 1px solid var(--line); }
@@ -85,11 +90,12 @@
 <div class="wrap">
   <header id="hdr" hidden>
     <div class="top"><span>LOCALHOST</span><span class="me" id="me"></span><span class="sync ok" id="sync">saved</span></div>
-    <nav class="tabs" id="tabs"><button class="tab on" type="button" data-to="list">Projects</button><button class="tab" type="button" data-to="sum">My scores <span class="d" id="cnt"></span></button><button class="tab" type="button" id="refresh">↻ new projects</button></nav>
+    <nav class="tabs" id="tabs"><button class="tab on" type="button" data-to="list">One by one</button><button class="tab" type="button" data-to="sum">My scores <span class="d" id="cnt"></span></button><button class="tab" type="button" id="refresh">↻ new projects</button></nav>
   </header>
   <main id="main"><p class="empty">Loading…</p></main>
 </div>
 <button class="jump" id="jump" type="button" hidden></button>
+<nav class="pager" id="pager" hidden><button type="button" id="prev">← Prev</button><span class="pos" id="pos"></span><button type="button" class="nx" id="next">Next →</button></nav>
 
 <script type="module">
 import { FORMS_API } from "./shared/forms.js";
@@ -145,8 +151,8 @@ function buttons(prize, entry, cls = "nums") {
   return `<div class="${cls}">${[1, 2, 3, 4].map((n) => `<button type="button" class="num${v.score === n ? " on" : ""}" data-p="${esc(prize)}" data-e="${esc(entry)}" data-s="${n}">${n}</button>`).join("")}</div>`;
 }
 function video(p) {
-  if (p.file) return `<video controls playsinline preload="none" src="${esc(p.file)}"></video>`;
-  if (p.video) { const em = embedUrl(p.video); return em ? `<iframe src="${esc(em.replace("autoplay=1", "autoplay=0"))}" allow="fullscreen; picture-in-picture" loading="lazy"></iframe>` : `<div class="links"><a class="lk play" href="${esc(p.video)}" target="_blank" rel="noopener noreferrer">▶ demo (new tab)</a></div>`; }
+  if (p.file) return `<video controls playsinline preload="none" data-src="${esc(p.file)}"></video>`;
+  if (p.video) { const em = embedUrl(p.video); return em ? `<iframe data-src="${esc(em.replace("autoplay=1", "autoplay=0"))}" allow="fullscreen; picture-in-picture"></iframe>` : `<div class="links"><a class="lk play" href="${esc(p.video)}" target="_blank" rel="noopener noreferrer">▶ demo (new tab)</a></div>`; }
   return `<div class="links"><span class="lk none">no demo video</span></div>`;
 }
 function card(p) {
@@ -168,18 +174,62 @@ function summary() {
   const html = D.prizes.map((pz) => {
     const ps = D.projects.filter((p) => p.prizes.includes(pz.id));
     total += ps.length; done += ps.filter((p) => scores[k(pz.id, p.entry)]?.score).length;
-    return `<h2>${esc(pz.name)}</h2><table>${ps.length ? ps.map((p) => `<tr><td class="t"><a href="#c-${esc(p.entry)}">${esc(p.team)}</a></td><td>${buttons(pz.id, p.entry, "mini")}</td></tr>`).join("") : '<tr><td class="t">No entries.</td></tr>'}</table>`;
+    return `<h2>${esc(pz.name)}</h2><table>${ps.length ? ps.map((p) => `<tr><td class="t"><a href="#" data-goto="${esc(p.entry)}">${esc(p.team)}</a></td><td>${buttons(pz.id, p.entry, "mini")}</td></tr>`).join("") : '<tr><td class="t">No entries.</td></tr>'}</table>`;
   }).join("");
   $("cnt").textContent = `${done}/${total}`;
   return `<section class="sum" id="sum"><h2 style="font-size:22px">My scores · ${done}/${total}</h2><p class="pt" style="color:var(--mid);font-size:13px">Tap any number to change it. Every tap is saved.</p>${html}</section>`;
 }
 function render() {
   const y = scrollY, focused = document.activeElement?.classList.contains("note") ? [document.activeElement.dataset.p, document.activeElement.dataset.e] : null;
-  $("main").innerHTML = `<section id="list"><div class="head"><h1>Score 1–4</h1><p class="how">Each project shows a row of 1–4 for every prize it entered that you judge. 4 = great. Scores save as you tap.</p></div>${D.projects.length ? D.projects.map(card).join("") : '<p class="empty">No projects yet.</p>'}</section>${summary()}`;
+  $("main").innerHTML = `<section id="list"><div class="head"><p class="how">Score 1–4 for each prize this project entered that you judge (4 = great). Saves as you tap. Next when you're done.</p></div>${D.projects.length ? D.projects.map(card).join("") : '<p class="empty">No projects yet.</p>'}</section>${summary()}`;
+  const i = D.projects.findIndex((p) => p.entry === curEntry);
+  cur = i >= 0 ? i : Math.min(cur, Math.max(0, D.projects.length - 1));
+  show(false);
   scrollTo(0, y);
   if (focused) document.querySelector(`.note[data-p="${focused[0]}"][data-e="${focused[1]}"]`)?.focus();
   jumpBtn();
 }
+
+// One project at a time. The current one's video and the next two load ahead (preload="auto"),
+// so Next is instant; videos further on stay unloaded.
+let cur = 0, lastCur = -1, curEntry = null, view = "one";
+try { curEntry = sessionStorage.getItem("lh-judge-cur:" + code); } catch {}
+const AHEAD = 2;
+function show(top = true) {
+  const cards = [...document.querySelectorAll("#list .card")];
+  const n = cards.length;
+  $("list").hidden = view !== "one";
+  $("sum").hidden = view !== "sum";
+  cards.forEach((c, i) => {
+    c.hidden = i !== cur;
+    const v = c.querySelector("video"), f = c.querySelector("iframe");
+    const near = i >= cur && i <= cur + AHEAD;
+    if (v) {
+      if (i !== cur && !v.paused) v.pause();
+      if (near && !v.getAttribute("src")) { v.src = v.dataset.src; v.preload = "auto"; v.load(); }
+    }
+    if (f && near && !f.getAttribute("src")) f.src = f.dataset.src;
+    if (f && i === lastCur && i !== cur && f.getAttribute("src")) f.src = f.dataset.src; // reload the embed we left, so it stops playing
+  });
+  curEntry = D.projects[cur]?.entry || null;
+  try { sessionStorage.setItem("lh-judge-cur:" + code, curEntry || ""); } catch {}
+  $("pager").hidden = view !== "one" || !n;
+  $("pos").textContent = n ? `${cur + 1} / ${n}` : "";
+  $("prev").disabled = cur <= 0;
+  $("next").textContent = cur >= n - 1 ? "My scores →" : "Next →";
+  for (const x of document.querySelectorAll(".tab[data-to]")) x.classList.toggle("on", x.dataset.to === (view === "one" ? "list" : "sum"));
+  lastCur = cur;
+  jumpBtn();
+  if (top) scrollTo({ top: 0 });
+}
+function go(i) { view = "one"; cur = Math.max(0, Math.min(i, D.projects.length - 1)); show(); }
+$("prev").onclick = () => go(cur - 1);
+$("next").onclick = () => { if (cur >= D.projects.length - 1) { view = "sum"; show(); } else go(cur + 1); };
+document.addEventListener("keydown", (e) => {
+  if (e.target.matches?.("input, textarea") || view !== "one") return;
+  if (e.key === "ArrowRight") $("next").click();
+  if (e.key === "ArrowLeft") $("prev").click();
+});
 
 // After a tap: update just that score's buttons, label and the count, so a playing video keeps playing.
 function paint(prize, entry) {
@@ -235,7 +285,9 @@ document.addEventListener("click", (e) => {
     return;
   }
   const t = e.target.closest(".tab");
-  if (t) { for (const x of document.querySelectorAll(".tab")) x.classList.toggle("on", x === t); $(t.dataset.to)?.scrollIntoView({ behavior: "smooth" }); }
+  if (t?.dataset.to) { view = t.dataset.to === "sum" ? "sum" : "one"; show(); return; }
+  const g = e.target.closest("[data-goto]");
+  if (g) { e.preventDefault(); go(D.projects.findIndex((p) => p.entry === g.dataset.goto)); }
 });
 let noteT;
 document.addEventListener("input", (e) => {
@@ -251,8 +303,9 @@ function jumpBtn() {
   const p = D.projects.find((x) => x.entry === D.now);
   const j = $("jump");
   if (!p) { j.hidden = true; return; }
-  j.hidden = false; j.textContent = `On screen: ${p.team} ↓`;
-  j.onclick = () => document.getElementById("c-" + p.entry)?.scrollIntoView({ behavior: "smooth", block: "start" });
+  const here = view === "one" && D.projects[cur]?.entry === p.entry;
+  j.hidden = here; j.textContent = `On screen: ${p.team} →`;
+  j.onclick = () => go(D.projects.indexOf(p));
 }
 setInterval(async () => {
   if (!D) return;
