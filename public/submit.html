@@ -101,7 +101,7 @@
 <div class="corner tr hud" id="clock">—</div>
 <main class="win" id="win">
   <div class="ch"><span class="lk"></span><span class="f">localhost/submit</span><span class="k">key held on this machine</span><a class="x" href="/tracks" aria-label="Back to tracks">×</a></div>
-  <div class="head"><h1 id="h1">Submit your project</h1><p class="when" id="when">Edits until 5:00 PM · presentations 5:15</p></div>
+  <div class="head"><h1 id="h1">Submit your project</h1><p class="when" id="when">Submit by 5:00 PM · presentations 5:15</p></div>
   <p class="mode" id="mode" hidden></p>
   <form class="apf" id="form" novalidate>
     <p class="ai">Make the 1-minute demo with AI: slides, screen demo and narration. Script it with a model, voice it with TTS, cut it together. One minute, not more.</p>
@@ -147,7 +147,8 @@ import { checkFile, uploadDemo } from "./shared/demo-upload.js";
 thermal(document.getElementById("c"), { block: 5 });
 const $ = (id) => document.getElementById(id);
 const esc = (x) => String(x).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
-const DEADLINE = Date.parse("2026-11-07T17:00:00-05:00");
+const DEADLINE = Date.parse("2026-11-07T17:00:00-05:00"); // soft: the countdown
+const HARD = Date.parse("2026-11-07T23:59:00-05:00"); // the backend's closesAt
 const STORE = "localhost-project-edit";
 const form = $("form"), msg = $("msg"), go = $("go");
 let picked = null, haveFile = 0, uploading = false;
@@ -170,7 +171,8 @@ const left = () => {
 const tick = () => {
   clock.innerHTML = new Date().toISOString().replace("T", " ").slice(0, 19) + "Z<br>FRAME " + Math.floor(performance.now() / 41.7);
   const l = left();
-  if (l && DEADLINE - Date.now() < 12 * 3600e3) $("when").innerHTML = `Edits until 5:00 PM · <b>${l} left</b>`;
+  if (l && DEADLINE - Date.now() < 12 * 3600e3) $("when").innerHTML = `Submit by 5:00 PM · <b>${l} left</b>`;
+  else if (!l && Date.now() < HARD) $("when").innerHTML = `Past 5:00 PM · <b>late entries still accepted</b>`;
   else if (!l) closed();
 };
 setInterval(tick, 250);
@@ -179,9 +181,9 @@ let isClosed = false;
 function closed() {
   if (isClosed) return;
   isClosed = true;
-  $("when").textContent = "Submissions closed at 5:00 PM";
+  $("when").textContent = "Submissions are closed";
   for (const el of form.elements) el.disabled = true;
-  msg.textContent = "Closed. Presentations start 5:15.";
+  msg.textContent = "Closed.";
 }
 
 // Edit key: from the link (?e=) or this browser. With one, load the latest saved answers.
@@ -324,7 +326,7 @@ form.addEventListener("submit", async (e) => {
     if (okKey(data.edit)) { key = data.edit; try { localStorage.setItem(STORE, key); } catch {} }
     done(body, !!body.edit);
   } catch (err) {
-    fail(null, /closed/i.test(err.message) ? "Submissions closed at 5:00 PM." : err.message || "Something broke. Try again.");
+    fail(null, /closed/i.test(err.message) ? "Submissions are closed." : err.message || "Something broke. Try again.");
     if (widget !== null) window.turnstile?.reset(widget);
     go.disabled = false;
   }
@@ -388,7 +390,7 @@ function done(body, edited) {
   ok.innerHTML = `<h2>${edited ? "Saved" : "Submitted"} 🗽</h2>
     <p>${esc(body.team)} · ${esc([...TRACKS.filter((t) => body.track.includes(t.value)).map((t) => t.n), ...BOUNTIES.filter((b) => body.bounties.includes(b.value)).map((b) => b.name)].join(", "))}${body.video || haveFile || picked ? "" : " · <span style='color:var(--bad)'>no video yet</span>"}</p>
     <div id="upslot"></div>
-    <p>Your edit link, until 5:00 PM. Also sent to ${esc(body.email)}.</p>
+    <p>Your edit link. Also sent to ${esc(body.email)}.</p>
     <div class="link"><input id="lnk" readonly value="${esc(link)}" aria-label="Edit link"><button class="b" type="button" id="cp">Copy</button></div>
     <div class="row"><a class="b pri" href="${esc(location.pathname)}?e=${key}">Edit</a><a class="b" href="/tracks">Tracks</a></div>`;
   $("cp").onclick = async () => { try { await navigator.clipboard.writeText(link); $("cp").textContent = "Copied"; } catch { $("lnk").select(); } };
